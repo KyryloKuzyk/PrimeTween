@@ -4,23 +4,21 @@ PrimeTween is a high-performance, **allocation-free** animation library for Unit
 Getting started
 ---
 Without further ado, let's jump straight to the code!
-<pre>
-using PrimeTween;
-
+```csharp
 // Animate 'transform.position.y' from the current value to 5 in 1 second using the Ease.InOutSine
-<b>Tween.PositionY</b>(transform, endValue: 5, duration: 1, ease: Ease.InOutSine);
+Tween.PositionY(transform, endValue: 10, duration: 1, ease: Ease.InOutSine);
 
 // Rotate 'transform' from the current rotation to (0, 90, 0) in 1 second
-<b>Tween.Rotation</b>(transform, endValue: Quaternion.Euler(0, 90, 0), duration: 1);
+Tween.Rotation(transform, endValue: Quaternion.Euler(0, 90, 0), duration: 1);
 
 // Rotate 'transform' around y axis by 360 degrees in 1 second 
-<b>Tween.EulerAngles</b>(transform, startValue: Vector3.zero, endValue: new Vector3(0, 360), duration: 1);
+Tween.EulerAngles(transform, startValue: Vector3.zero, endValue: new Vector3(0, 360), duration: 1);
 
 // Shake camera with a frequency of 10 shakes per second, magnitude of 0.1 meters on the y axis, for the duration of 1 second
-<b>Tween.ShakeLocalPosition</b>(Camera.main.transform, frequency: 10, strength: new Vector3(0, 0.1f), duration: 1);
-</pre>
-
+Tween.ShakeLocalPosition(Camera.main.transform, frequency: 10, strength: new Vector3(0, 0.1f), duration: 1);
+```
 That's it! Simply type '**Tween.**' and let your IDE show all supported properties that can be animated with PrimeTween. Out of the box, PrimeTween can animate almost everything: UI, material properties, camera properties, sound, transform, and what not. Didn't find what you're looking for? No problem, use [**Tween.Custom()**](#custom-tweens) to animate **anything**.
+
 
 ### Callbacks
 Use **OnComplete()** to execute custom code on tween's completion.
