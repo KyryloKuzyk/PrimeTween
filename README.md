@@ -21,10 +21,10 @@ That's it!
 
 Simply type **`Tween.`** and let your IDE show all supported properties that can be animated with PrimeTween. Out of the box, PrimeTween can animate almost everything: UI, material properties, camera properties, sound, transform, and what not. 
 
-Didn't find what you're looking for? No problem, use [**`Tween.Custom()`**](#custom-tweens) to animate **anything**.
+Didn't find what you're looking for? No problem, use [`Tween.Custom()`](#custom-tweens) to animate **anything**.
 
 ### Callbacks
-Use **`OnComplete()`** to execute custom code on tween's completion.
+Use **`.OnComplete()`** to execute custom code on tween's completion.
 ```csharp
 // Call SomeMethod() when the animation completes
 Tween.Position(transform, new Vector3(10, 0), duration: 1)
@@ -49,7 +49,7 @@ Sequencing tweens
 ### Sequence
 There are several sequencing methods in PrimeTween. Let's start with the most common one: grouping tweens in **Sequences**.
 
-**Sequence** is an ordered group of tweens and callbacks. Tweens in a sequence can run in **parallel** to one another with **`Group()`** and **sequentially** with **`Chain()`**. Overlapping can be achieved by adding **`startDelay`** to a tween.
+**Sequence** is an ordered group of tweens and callbacks. Tweens in a sequence can run in **parallel** to one another with **`.Group()`** and **sequentially** with **`.Chain()`**. Overlapping can be achieved by adding **`startDelay`** to a tween.
 ```csharp
 Sequence.Create()
     // PositionX and LocalScale tweens are 'grouped', so they will run in parallel
@@ -187,7 +187,7 @@ Tween.Position(transform, new Vector3(10, 0), duration: 1)
     .OnComplete(() => SomeMethod()); // delegate allocation
 ```
 
-Here is how to fix the above code to be non-allocating. Notice how **`this`** reference is passed to the method, then the **`target`** parameter is used instead of calling SomeMethod() directly.
+Here is how to fix the above code to be non-allocating. Notice how **`this`** reference is passed to the method, then the **`target`** parameter is used instead of calling `SomeMethod()` directly.
 ```csharp
 Tween.Position(transform, new Vector3(10, 0), duration: 1)
     .OnComplete(target: this, target => target.SomeMethod());
