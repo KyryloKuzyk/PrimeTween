@@ -17,8 +17,11 @@ Tween.EulerAngles(transform, startValue: Vector3.zero, endValue: new Vector3(0, 
 // Shake camera with a frequency of 10 shakes per second, magnitude of 0.1 meters on the y axis, for the duration of 1 second
 Tween.ShakeLocalPosition(Camera.main.transform, frequency: 10, strength: new Vector3(0, 0.1f), duration: 1);
 ```
-That's it! Simply type '**Tween.**' and let your IDE show all supported properties that can be animated with PrimeTween. Out of the box, PrimeTween can animate almost everything: UI, material properties, camera properties, sound, transform, and what not. Didn't find what you're looking for? No problem, use [**Tween.Custom()**](#custom-tweens) to animate **anything**.
+That's it!
 
+Simply type '**Tween.**' and let your IDE show all supported properties that can be animated with PrimeTween. Out of the box, PrimeTween can animate almost everything: UI, material properties, camera properties, sound, transform, and what not. 
+
+Didn't find what you're looking for? No problem, use [**Tween.Custom()**](#custom-tweens) to animate **anything**.
 
 ### Callbacks
 Use **OnComplete()** to execute custom code on tween's completion.
