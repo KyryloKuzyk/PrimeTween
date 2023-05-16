@@ -46,7 +46,7 @@ Tween.Delay(duration: 1f, () => Debug.Log("Delay completed"));
 
 Sequencing tweens
 ---
-### Sequence
+#### Sequence
 There are several sequencing methods in PrimeTween. Let's start with the most common one: grouping tweens in **Sequences**.
 
 **Sequence** is an ordered group of tweens and callbacks. Tweens in a sequence can run in **parallel** to one another with **`.Group()`** and **sequentially** with **`.Chain()`**. Overlapping can be achieved by adding **`startDelay`** to a tween.
@@ -63,7 +63,7 @@ Sequence.Create()
     .ChainCallback(() => Debug.Log("Sequence completed"));
 ```
 
-### Coroutines
+#### Coroutines
 Another sequencing method is waiting for tweens and sequences in **coroutines** by calling **`.ToYieldInstruction()`**.
 ```csharp
 IEnumerator Coroutine() {
@@ -74,7 +74,7 @@ IEnumerator Coroutine() {
 }
 ```
 
-### Async/await
+#### Async/await
 And the last method is awaiting tweens and sequences using the **async/await** pattern. Async/await is a great tool to prevent the callback hell in your code.
 ```csharp
 async void AsyncMethod() {
