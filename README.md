@@ -27,7 +27,7 @@ Didn't find what you're looking for? No problem, use [`Tween.Custom()`](#custom-
 Use **`.OnComplete()`** to execute custom code on tween's completion.
 ```csharp
 // Call SomeMethod() when the animation completes
-Tween.Position(transform, new Vector3(10, 0), duration: 1)
+Tween.Position(transform, endValue: new Vector3(10, 0), duration: 1)
     .OnComplete(() => SomeMethod());
     
 // When the animation completes, wait for 0.5 seconds, then destroy the GameObject
@@ -50,6 +50,9 @@ Sequencing tweens
 There are several sequencing methods in PrimeTween. Let's start with the most common one: grouping tweens in **Sequences**.
 
 **Sequence** is an ordered group of tweens and callbacks. Tweens in a sequence can run in **parallel** to one another with **`.Group()`** and **sequentially** with **`.Chain()`**. Overlapping can be achieved by adding **`startDelay`** to a tween.
+
+Sequences can be controlled the same way as individual tweens, see [controlling tweens](#controlling-tweens) section.
+
 ```csharp
 Sequence.Create()
     // PositionX and LocalScale tweens are 'grouped', so they will run in parallel
@@ -59,7 +62,7 @@ Sequence.Create()
     .Chain(Tween.Rotation(transform, endValue: new Vector3(0f, 0f, 45f), duration: 1f)) 
     .ChainCallback(() => Debug.Log("Sequence completed"));
 ```
-> Sequences can be controlled the same way as tweens, see [controlling tweens](#controlling-tweens) section.
+
 ### Coroutines
 Another sequencing method is waiting for tweens and sequences in **coroutines** by calling **`.ToYieldInstruction()`**.
 ```csharp
@@ -72,7 +75,7 @@ IEnumerator Coroutine() {
 ```
 
 ### Async/await
-And the last method is awaiting tweens and sequences using the **async/await** pattern. All three sequencing methods produce the same result, so choose one that best suits your use case.
+And the last method is awaiting tweens and sequences using the **async/await** pattern. Async/await is a great tool to prevent the callback hell in your code.
 ```csharp
 async void AsyncMethod() {
     Tween.PositionX(transform, endValue: 10f, duration: 1.5f);
@@ -82,7 +85,7 @@ async void AsyncMethod() {
 }
 ```
 
-> While PrimeTween never allocates memory, the async/await feature in C# is allocating. Consider using [UniTask](https://github.com/Cysharp/UniTask) to address this language limitation.
+> While PrimeTween never allocates memory at runtime, the async/await feature in C# is allocating. Consider using [UniTask](https://github.com/Cysharp/UniTask) to address this language limitation.
 
 Inspector integration
 ---
@@ -90,8 +93,8 @@ Inspector integration is the cornerstone of PrimeTween's design that lets you tw
 ```csharp
 // Tweak all animation properties from the Inspector:
 //     startValue, endValue, duration, ease (or custom ease curve), etc.
-// Then pass tween settings to the animation method
 [SerializeField] TweenSettings.Float yPositionTweenSettings;
+// Then pass tween settings to the animation method
 Tween.PositionY(transform, yPositionTweenSettings);
 
 [SerializeField] TweenSettings.Vector3 rotationTweenSettings;
@@ -103,14 +106,14 @@ Tween.EulerAngles(transform, eulerAnglesTweenSettings);
 [SerializeField] ShakeSettings cameraShakeSettings;
 Tween.ShakeLocalPosition(Camera.main.transform, cameraShakeSettings);
 ```
-The noteworthy thing about setting up animation properties in the Inspector is that you can any time switch to a custom **animation curve** without touching the code.
+The neat thing about setting up animation properties in the Inspector is that you can any time switch to a custom **animation curve** without touching the code.
 
 <img height="250" src="Documentation/inspector_integration.jpg" alt="100">
 
 
 Controlling tweens
 ---
-All static Tween methods return a **`Tween`** struct. While the **`tween.IsAlive`** you can control it and access its properties such as duration, elapsedTime, progress, interpolationFactor, etc.
+All static **`Tween.`** methods return a **`Tween`** struct. While the **`tween.IsAlive`** you can control it and access its properties such as duration, elapsedTime, progress, interpolationFactor, etc.
 
 After completion, the tween becomes 'dead' and can't be reused. This ensures that completed tweens don't eat computing resources and prevents the common performance pitfalls encountered in other tween libraries.
 ```csharp
@@ -136,7 +139,7 @@ tween.Complete();
 
 As you can see, there is no way to change the direction of the currently running tween, it can only be **stopped** and **completed**. But how to play an animation **forward** and **backward**, for example to show or hide a window? Easy! Just start a new Tween in the desired direction.
 
-In the next example, the window may change its state while the previous animation is still running. Generally, there is no need to stop the previously running tween in such cases. The new tween will start from the current position and  **overwrite** all previously running tweens on this target.
+In the next example, the window may change its state while the previous animation is still running. Generally, there is no need to stop the previously running tween in such cases. The new tween will start from the current position and  **overwrite** all previously running tweens on the `window`.
 ```csharp
 [SerializeField] RectTransform window;
 
@@ -145,7 +148,7 @@ public void SetWindowOpened(bool isOpened) {
 }
 ```
 
-And to utilize the full power of PrimeTween, all window animation settings can come from the Inspector. Notice how the **`isOpened`** parameter is passed to the **`WithDirection(bool toEndValue)`** method. This helper method selects the target position based on the isOpened parameter. Nice and simple!
+And to utilize the full power of PrimeTween, all window animation settings can come from the Inspector. Notice how the **`isOpened`** parameter is passed to the **`WithDirection(bool toEndValue)`** method. This helper method selects the target position based on the `isOpened` parameter. Nice and simple!
 ```csharp
 [SerializeField] RectTransform window;
 [SerializeField] TweenSettings.Float windowAnimationSettings;
@@ -184,13 +187,13 @@ C# delegates is a powerful language feature essential for game development. It g
 Let's review the code from earlier. If SomeMethod() is an instance method, then calling it from the callback will implicitly capture **`this`** reference, allocating heap memory.
 ```csharp
 Tween.Position(transform, new Vector3(10, 0), duration: 1)
-    .OnComplete(() => SomeMethod()); // delegate allocation
+    .OnComplete(() => SomeMethod()); // delegate allocation!
 ```
 
 Here is how to fix the above code to be non-allocating. Notice how **`this`** reference is passed to the method, then the **`target`** parameter is used instead of calling `SomeMethod()` directly.
 ```csharp
 Tween.Position(transform, new Vector3(10, 0), duration: 1)
-    .OnComplete(target: this, target => target.SomeMethod());
+    .OnComplete(target: this, target => target.SomeMethod()); // no allocation
 ```
 
 That's it! The same non-allocating approach can be used in all places where PrimeTween uses delegates.
