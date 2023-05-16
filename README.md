@@ -209,4 +209,4 @@ To debug tweens select the **PrimeTweenManager** object under the DontDestroyOnL
 
 <img height="400" src="Documentation/debug_tweens.jpg" alt="100">
 
-Also, the Inspector shows the '**Max alive tweens**' for the current session. Use this number to estimate the maximum number of tweens required for your game and pass it to the **`PrimeTweenConfig.SetTweensCapacity(int capacity)`** method at the launch of your game. This will ensure PrimeTween doesn't allocate any additional memory at runtime.
+Also, the Inspector shows the '**Max alive tweens**' for the current session. Use this number to estimate the maximum number of tweens required for your game and pass it to the `PrimeTweenConfig.SetTweensCapacity(int capacity)` method at the launch of your game. This will ensure PrimeTween doesn't allocate any additional memory at runtime.
