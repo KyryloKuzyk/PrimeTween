@@ -5,7 +5,7 @@ Getting started
 ---
 Without further ado, let's jump straight to the code!
 ```csharp
-// Animate 'transform.position.y' from the current value to 5 in 1 second using the Ease.InOutSine
+// Animate 'transform.position.y' from the current value to 10 in 1 second using the Ease.InOutSine
 Tween.PositionY(transform, endValue: 10, duration: 1, ease: Ease.InOutSine);
 
 // Rotate 'transform' from the current rotation to (0, 90, 0) in 1 second
