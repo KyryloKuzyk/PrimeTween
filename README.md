@@ -19,12 +19,12 @@ Tween.ShakeLocalPosition(Camera.main.transform, frequency: 10, strength: new Vec
 ```
 That's it!
 
-Simply type '**Tween.**' and let your IDE show all supported properties that can be animated with PrimeTween. Out of the box, PrimeTween can animate almost everything: UI, material properties, camera properties, sound, transform, and what not. 
+Simply type **`Tween.`** and let your IDE show all supported properties that can be animated with PrimeTween. Out of the box, PrimeTween can animate almost everything: UI, material properties, camera properties, sound, transform, and what not. 
 
-Didn't find what you're looking for? No problem, use [**Tween.Custom()**](#custom-tweens) to animate **anything**.
+Didn't find what you're looking for? No problem, use [**`Tween.Custom()`**](#custom-tweens) to animate **anything**.
 
 ### Callbacks
-Use **OnComplete()** to execute custom code on tween's completion.
+Use **`OnComplete()`** to execute custom code on tween's completion.
 ```csharp
 // Call SomeMethod() when the animation completes
 Tween.Position(transform, new Vector3(10, 0), duration: 1)
@@ -35,7 +35,7 @@ Tween.LocalScale(transform, endValue: 0, duration: 1, endDelay: 0.5f)
     .OnComplete(() => Destroy(gameObject));
 ```
 
->"But wait! There is a **memory allocation** in the example above" you would say. And you would be right: calling SomeMethod() or Destroy() captures 'this' reference in a closure and allocates heap memory. See how to address this in the [zero allocations](#zero-allocations-with-delegates) section.
+>"But wait! There is a **memory allocation** in the example above" you would say. And you would be right: calling `SomeMethod()` or `Destroy()` captures `this` reference in a closure and allocates heap memory. See how to address this in the [zero allocations](#zero-allocations-with-delegates) section.
 
 ### Delays
 Creating delays is by far the most useful feature in game development. Delays in PrimeTween behave like normal tweens and can be used with sequences, coroutines, and async/await methods. All while being completely [allocation-free](#zero-allocations-with-delegates).
@@ -49,7 +49,7 @@ Sequencing tweens
 ### Sequence
 There are several sequencing methods in PrimeTween. Let's start with the most common one: grouping tweens in **Sequences**.
 
-**Sequence** is an ordered group of tweens and callbacks. Tweens in a sequence can run in **parallel** to one another with **Group()** and **sequentially** with **Chain()**. Overlapping can be achieved by adding '**startDelay**' to a tween.
+**Sequence** is an ordered group of tweens and callbacks. Tweens in a sequence can run in **parallel** to one another with **`Group()`** and **sequentially** with **`Chain()`**. Overlapping can be achieved by adding **`startDelay`** to a tween.
 ```csharp
 Sequence.Create()
     // PositionX and LocalScale tweens are 'grouped', so they will run in parallel
@@ -61,7 +61,7 @@ Sequence.Create()
 ```
 > Sequences can be controlled the same way as tweens, see [controlling tweens](#controlling-tweens) section.
 ### Coroutines
-Another sequencing method is waiting for tweens and sequences in **coroutines**.
+Another sequencing method is waiting for tweens and sequences in **coroutines** by calling **`.ToYieldInstruction()`**.
 ```csharp
 IEnumerator Coroutine() {
     Tween.PositionX(transform, endValue: 10f, duration: 1.5f);
@@ -110,7 +110,7 @@ The noteworthy thing about setting up animation properties in the Inspector is t
 
 Controlling tweens
 ---
-All static Tween methods return a **Tween** struct. While the '**tween.IsAlive**' you can control it and access its properties such as duration, elapsedTime, progress, interpolationFactor, etc.
+All static Tween methods return a **`Tween`** struct. While the **`tween.IsAlive`** you can control it and access its properties such as duration, elapsedTime, progress, interpolationFactor, etc.
 
 After completion, the tween becomes 'dead' and can't be reused. This ensures that completed tweens don't eat computing resources and prevents the common performance pitfalls encountered in other tween libraries.
 ```csharp
@@ -145,7 +145,7 @@ public void SetWindowOpened(bool isOpened) {
 }
 ```
 
-And to utilize the full power of PrimeTween, all window animation settings can come from the Inspector. Notice how the **isOpened** parameter is passed to the **WithDirection(bool toEndValue)** method. This helper method selects the target position based on the isOpened parameter. Nice and simple!
+And to utilize the full power of PrimeTween, all window animation settings can come from the Inspector. Notice how the **`isOpened`** parameter is passed to the **`WithDirection(bool toEndValue)`** method. This helper method selects the target position based on the isOpened parameter. Nice and simple!
 ```csharp
 [SerializeField] RectTransform window;
 [SerializeField] TweenSettings.Float windowAnimationSettings;
@@ -157,7 +157,7 @@ public void SetWindowOpened(bool isOpened) {
 
 Custom tweens
 ---
-Use **Tween.Custom()** to animate literary anything. The supported types for custom tweens are float, Color, Vector2/3/4, Quaternion, and Rect.
+Use **`Tween.Custom()`** to animate literary anything. The supported types for custom tweens are `float, Color, Vector2/3/4, Quaternion, and Rect`.
 ```csharp
 float floatField;
 Color colorField;
@@ -181,13 +181,13 @@ Zero allocations with delegates
 ---
 C# delegates is a powerful language feature essential for game development. It gives us the ability to receive callbacks and pass methods to other methods. But when delegates are used in hot code paths carelessly, they can create [performance issues](https://www.jacksondunstan.com/articles/3765).
 
-Let's review the code from earlier. If SomeMethod() is an instance method, then calling it from the callback will implicitly capture **'this'** reference, allocating heap memory.
+Let's review the code from earlier. If SomeMethod() is an instance method, then calling it from the callback will implicitly capture **`this`** reference, allocating heap memory.
 ```csharp
 Tween.Position(transform, new Vector3(10, 0), duration: 1)
     .OnComplete(() => SomeMethod()); // delegate allocation
 ```
 
-Here is how to fix the above code to be non-allocating. Notice how '**this**' reference is passed to the method, then the '**target**' parameter is used instead of calling SomeMethod() directly.
+Here is how to fix the above code to be non-allocating. Notice how **`this`** reference is passed to the method, then the **`target`** parameter is used instead of calling SomeMethod() directly.
 ```csharp
 Tween.Position(transform, new Vector3(10, 0), duration: 1)
     .OnComplete(target: this, target => target.SomeMethod());
@@ -209,4 +209,4 @@ To debug tweens select the **PrimeTweenManager** object under the DontDestroyOnL
 
 <img height="300" src="Documentation/debug_tweens.jpg" alt="100">
 
-Also, the Inspector shows the '**Max alive tweens**' for the current session. Use this number to estimate the maximum number of tweens required for your game and pass it to the **PrimeTweenConfig.SetTweensCapacity(int capacity)** method at the launch of your game. This will ensure PrimeTween doesn't allocate any additional memory at runtime.
+Also, the Inspector shows the '**Max alive tweens**' for the current session. Use this number to estimate the maximum number of tweens required for your game and pass it to the **`PrimeTweenConfig.SetTweensCapacity(int capacity)`** method at the launch of your game. This will ensure PrimeTween doesn't allocate any additional memory at runtime.
