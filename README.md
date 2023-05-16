@@ -19,7 +19,7 @@ Tween.ShakeLocalPosition(Camera.main.transform, frequency: 10, strength: new Vec
 ```
 That's it!
 
-Simply type **`Tween.`** and let your IDE show all supported properties that can be animated with PrimeTween. Out of the box, PrimeTween can animate almost everything: UI, material properties, camera properties, sound, transform, and what not. 
+Simply type **`Tween.`** and let your IDE all supported animation. Out of the box, PrimeTween can animate almost everything: UI, materials, camera properties, transforms, audio, and what not.
 
 Didn't find what you're looking for? No problem, use [`Tween.Custom()`](#custom-tweens) to animate **anything**.
 
