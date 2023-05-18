@@ -1,4 +1,6 @@
-# PrimeTween
+PrimeTween
+===
+
 PrimeTween is a high-performance, **allocation-free** animation library for Unity. **Animate anything** with just one line of code, tweak all animation properties directly from the Inspector, and create complex animation sequences. No runtime memory allocations, ever.
 
 Table of Contents
