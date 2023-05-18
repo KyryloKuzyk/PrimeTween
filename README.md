@@ -233,11 +233,13 @@ PrimeTween and DOTween don't conflict with each other and can be used in one pro
 #### DOTween adapter
 
 PrimeTween comes with the built-in migration adapter that can help you migrate even big projects in a matter of hours. First, to enable the adapter , add the **`PRIME_TWEEN_DOTWEEN_ADAPTER`** define to the `ProjectSettings/Player/Script Compilation` and press Apply.
+
 <img src="Documentation/adapter_define.png">
 
 The migration process may vary from project to project. In many cases, simply replacing `using DG.Tweening;` with the `using PrimeTween;` is enough to switch a script from DOTween to PrimeTween. See how easy was to migrate the [MotionDesignFES](https://github.com/KirillKuzyk/MotionDesignFES-PrimeTween/commit/077829d838c4916a5f7d8a72552dbe763bad5f73) project with dozens of complex animations.
 
-These are the most common migration code changes that require a **manual fix**.
+
+Here are the most common places that require a **manual fix** to the existing code.
 ```csharp
 // using DG.Tweening;
 using PrimeTween;
@@ -259,8 +261,8 @@ tween.Complete();
 // DOTween.SetTweensCapacity(tweenersCapacity: 200, sequencesCapacity: 50);
 PrimeTweenConfig.SetTweensCapacity(capacity: 250); // sequences in PrimeTween use the same tweens pool as regular tweens
 ```
-The cheatsheet of the most common API migrations that **already covered** by the adapter. 
 
+The adapter covers the majority of cases simply by replacing the `using DG.Tweening;` with the `using PrimeTween;` statement. Here is a non-exhaustive list of what the adapter does **automatically**.
 ```csharp
 // All animations are supported, here are only few of them as an example
 transform.DOMove()          -->  Tween.Position(transform)
