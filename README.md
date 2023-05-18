@@ -6,23 +6,22 @@ PrimeTween is a high-performance, **allocation-free** animation library for Unit
 Table of Contents
 ---
 - [Getting started](#getting-started)
-    * [Callbacks](#callbacks)
-    * [Delays](#delays)
+  * [Callbacks](#callbacks)
+  * [Delays](#delays)
 - [Sequencing tweens](#sequencing-tweens)
-    + [Sequence](#sequence)
-    + [Coroutines](#coroutines)
-    + [Async/await](#async-await)
+  + [Sequence](#sequence)
+  + [Coroutines](#coroutines)
+  + [Async/await](#async-await)
 - [Inspector integration](#inspector-integration)
 - [Controlling tweens](#controlling-tweens)
 - [Custom tweens](#custom-tweens)
 - [Zero allocations with delegates](#zero-allocations-with-delegates)
 - [Debugging tweens](#debugging-tweens)
 - [Migrating from DOTween to PrimeTween](#migrating-from-dotween-to-primetween)
-    + [DOTween adapter](#dotween-adapter)
-    * [Other differences](#other-differences)
-        + [Tween.PlayForward/PlayBackwards](#tweenplayforward-playbackwards)
-        + [Unsupported APIs](#unsupported-apis)
-      
+  + [DOTween adapter](#dotween-adapter)
+  + [Tween.PlayForward/PlayBackwards](#tweenplayforward-playbackwards)
+  + [Unsupported APIs](#unsupported-apis)
+
 Getting started
 ---
 Without further ado, let's jump straight to the code!
@@ -167,7 +166,7 @@ public void SetWindowOpened(bool isOpened) {
     Tween.UIAnchoredPositionY(window, endValue: isOpened ? 0 : -500, duration: 0.5f);
 }
 ```
- In this example, the `SetWindowOpened()` can be called again while the previous animation is still running. Generally, there is no need to stop the previously running tween in such cases. The new tween will semlessly start from the current position and  **overwrite** all previously running tweens on the `window`. Several duplicated tweens are fine, but if your code can potentially start the same tween every frame, then consider stopping the previous tween.
+In this example, the `SetWindowOpened()` can be called again while the previous animation is still running. Generally, there is no need to stop the previously running tween in such cases. The new tween will semlessly start from the current position and  **overwrite** all previously running tweens on the `window`. Several duplicated tweens are fine, but if your code can potentially start the same tween every frame, then consider stopping the previous tween.
 
 And to utilize the full power of PrimeTween, all window animation settings can come from the Inspector. Notice how the **`isOpened`** parameter is passed to the **`WithDirection(bool toEndValue)`** method. This helper method selects the target position based on the `isOpened` parameter. Nice and simple!
 ```csharp
@@ -247,9 +246,9 @@ PrimeTween is **simple**, **consistent**, covered by **tests**, and behaves exac
 
 PrimeTween and DOTween don't conflict with each other and can be used in one project. So you can try PrimeTween in your existing project without breaking anything.
 > Migration is an **optional** feature designed to speed up PrimeTween's adoption. The migrated code may still be allocating because of the [delegate allocations](#zero-allocations-with-delegates).
-> 
+>
 > You should **test** the migrated code thoroughly before releasing it to production.
-> 
+>
 > Please **back up** your project before proceeding.
 
 #### DOTween adapter
@@ -312,11 +311,8 @@ yield return tween.WaitForCompletion()   -->  yield return tween.ToYieldInstruct
 await tween.AsyncWaitForCompletion()     -->  await tween // PrimeTween doesn't use threads, so you can write async methods even on WebGL
 ```
 
-### Other differences
-
-PrimeTween's main design goals are **performance** and **reliability**. So there are a few things that don't have an exact mapping when migrating from DOTween.
-
 #### Tween.PlayForward/PlayBackwards
+PrimeTween's main design goals are **performance** and **reliability**. So there are a few things that don't have an exact mapping when migrating from DOTween.
 
 PrimeTween offers a different approach to animating things forward and backward that is simpler and has greater performance.
 
