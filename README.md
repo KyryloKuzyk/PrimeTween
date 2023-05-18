@@ -138,8 +138,6 @@ tween.Complete();
 ```
 
 As you can see, there is no way to change the direction of the currently running tween, it can only be **stopped** and **completed**. But how to play an animation **forward** and **backward**, for example to show or hide a window? Easy! Just start a new Tween in the desired direction.
-
-In the next example, the window may change its state while the previous animation is still running. Generally, there is no need to stop the previously running tween in such cases. The new tween will start from the current position and  **overwrite** all previously running tweens on the `window`.
 ```csharp
 [SerializeField] RectTransform window;
 
@@ -147,6 +145,7 @@ public void SetWindowOpened(bool isOpened) {
     Tween.UIAnchoredPositionY(window, endValue: isOpened ? 0 : -500, duration: 0.5f);
 }
 ```
+ In this example, the `SetWindowOpened()` can be called again while the previous animation is still running. Generally, there is no need to stop the previously running tween in such cases. The new tween will semlessly start from the current position and  **overwrite** all previously running tweens on the `window`. Several duplicated tweens are fine, but if your code can potentially start the same tween every frame, then consider stopping the previous tween.
 
 And to utilize the full power of PrimeTween, all window animation settings can come from the Inspector. Notice how the **`isOpened`** parameter is passed to the **`WithDirection(bool toEndValue)`** method. This helper method selects the target position based on the `isOpened` parameter. Nice and simple!
 ```csharp
@@ -210,6 +209,157 @@ Debugging tweens
 ---
 To debug tweens select the **PrimeTweenManager** object under the DontDestroyOnLoad foldout in the scene Hierarchy. Here you can inspect all currently running tweens and their properties.
 
+If the tween's `target` is `UnityEngine.Object`, you can quickly show it in the Hierarchy by clicking on the `Unity Target` field. This is a good reason to supply the target even when it's optional, like in the case of `Tween.Delay()` and `Tween.Custom()`.
+
 <img height="400" src="Documentation/debug_tweens.jpg" alt="100">
 
 Also, the Inspector shows the '**Max alive tweens**' for the current session. Use this number to estimate the maximum number of tweens required for your game and pass it to the `PrimeTweenConfig.SetTweensCapacity(int capacity)` method at the launch of your game. This will ensure PrimeTween doesn't allocate any additional memory at runtime.
+
+Migrating from DOTween to PrimeTween
+---
+DOTween made a long way in its development and brought a lot of value to the game industry. But for almost 10 years it accumulated a lot of [technical debt](https://github.com/Demigiant/dotween/issues) and inconsistencies.
+
+DOTween gives a huge heads-up for game jams and early prototypes, but when a project becomes bigger, its quirks become to pile up. While with years it was getting better with memory allocations, it still allocates memory on every animation start and puts a lot of pressure on the garbage collector.
+
+PrimeTween is **simple**, **consistent**, covered by **tests**, and behaves exactly like you would expect. High performance and zero allocations out of the box.
+
+PrimeTween and DOTween don't conflict with each other and can be used in one project. So you can try PrimeTween in your existing project without breaking anything.
+> Migration is an **optional** feature designed to speed up PrimeTween's adoption. The migrated code may still be allocating because of the [delegate allocations](#zero-allocations-with-delegates).   
+> You should **test** the migrated code thoroughly before releasing it to production.  
+> Please **back up** your project before proceeding.
+
+#### DOTween adapter
+
+PrimeTween comes with the built-in migration adapter that can help you migrate even big projects in a matter of hours. First, to enable the adapter , add the **`PRIME_TWEEN_DOTWEEN_ADAPTER`** define to the `ProjectSettings/Player/Script Compilation` and press Apply.
+<img src="Documentation/adapter_define.png">
+
+The migration process may vary from project to project. In many cases, simply replacing `using DG.Tweening;` with the `using PrimeTween;` is enough to switch a script from DOTween to PrimeTween. See how easy was to migrate the [MotionDesignFES](https://github.com/KirillKuzyk/MotionDesignFES-PrimeTween/commit/077829d838c4916a5f7d8a72552dbe763bad5f73) project with dozens of complex animations.
+
+These are the most common migration code changes that require a **manual fix**.
+```csharp
+// using DG.Tweening;
+using PrimeTween;
+
+// Tweener tween;
+// TweenerCore tween;
+// ABSSequentiable tween;
+Tween tween; // just Tween ;)
+
+// if (tween != null && tween.IsPlaying())
+if (tween.IsAlive) // null check is not needed becase Tween in PrimeTween is a struct
+
+// if (tween != null && tween.IsActive()) {
+//     tween.Kill(complete: true);
+//     tween = null;
+// }
+tween.Complete();
+
+// DOTween.SetTweensCapacity(tweenersCapacity: 200, sequencesCapacity: 50);
+PrimeTweenConfig.SetTweensCapacity(capacity: 250); // sequences in PrimeTween use the same tweens pool as regular tweens
+```
+The cheatsheet of the most common API migrations that **already covered** by the adapter. 
+
+```csharp
+// All animations are supported, here are only few of them as an example
+transform.DOMove()          -->  Tween.Position(transform)
+uiImage.DOFade()            -->  Tween.Alpha(uiImage)
+material.DOColor()          -->  Tween.Color(material)
+transform.DOShakePosition() -->  Tween.ShakeLocalPosition(transform)
+
+DOVirtual.DelayedCall()     -->  Tween.Delay()
+DOTween.To()                -->  Tween.Custom()
+DOVirtual.Vector3()         -->  Tween.Custom()
+
+DOTween.Sequence()          -->  Sequence.Create()
+sequence.Join()             -->  sequence.Group()
+sequence.Append()           -->  sequence.Chain()
+
+// The 'Kill()' naming may be misleading when even for experienced developers.
+// Does it kill the GameObject? Does it kill the MonoBehaviour? Does it kill other animations running on the same target?
+// PrimeTween gives confidence in what the code actually does.
+DOTween.Kill(target, true)  -->  Tween.CompleteAll(target)
+DOTween.Kill(target, false) -->  Tween.StopAll(target)
+tween.Kill(true)            -->  tween.Complete()
+tween.Kill(false)           -->  tween.Stop()
+
+yield return tween.WaitForCompletion()   -->  yield return tween.ToYieldInstruction()
+await tween.AsyncWaitForCompletion()     -->  await tween // PrimeTween doesn't use threads, so you can write async methods even on WebGL
+```
+
+### Other differences
+
+PrimeTween's main design goals are **performance** and **reliability**. So there are a few things that don't have an exact mapping when migrating from DOTween.
+
+#### Tween.PlayForward/PlayBackwards
+
+PrimeTween offers a different approach to animating things forward and backward that is simpler and has greater performance.
+
+Let's consider the common DOTween usage pattern: creating a tween once, then calling PlayForward() and PlayBackwards() when needed.
+<details>
+<summary>DOTweenWindow.cs example</summary>
+
+```csharp
+public class DOTweenWindow : MonoBehaviour {
+    // Bad: disable auto-kill and store tween reference to reuse the tween later.
+    // Disabling auto-kill wastes resources: even when tween is not running, it still receives an update every frame and consumes memory.
+    Tween tween;
+
+    void Awake() {
+        tween = transform.DOLocalMove(Vector3.zero, 1)
+            .ChangeStartValue(new Vector3(0, -500))
+            .SetEase(Ease.InOutSine)
+            .SetAutoKill(false)
+            // Bad: don't forget to link the tween to this GameObject, so the tween is killed when the GameObject is destroyed
+            .SetLink(gameObject)
+            // Bad: paused tweens still receive updates every frame and consume resources
+            .Pause();
+    }
+
+    public void SetWindowOpened(bool isOpened) {
+        if (isOpened) {
+            tween.PlayForward();
+        } else {
+            tween.PlayBackwards();
+        }
+    }
+    
+    void OnDestroy() {
+        // Bad: don't forget to kill the tween before destroying an object.
+        // I bet the majority of developers don't even know about the SetLink() API and kill tweens in OnDestroy()
+        // 'Safe Mode' is NOT SAFE, and you should never rely on it because it silently swallows potential errors.
+        //     Also, 'Safe Mode' doesn't work on WebGL and with 'Fast and no exceptions' on iOS.
+        tween.Kill();
+    }
+}
+```
+</details>
+
+PrimeTween offers a much more elegant way of doing the same that comes with much better performance. Destroying the target while the animation is playing is perfectly fine.
+```csharp
+public class PrimeTweenWindow : MonoBehaviour {
+    public void SetWindowOpened(bool isOpened) {
+        Tween.LocalPosition(transform, isOpened ? Vector3.zero : new Vector3(0, -500), 1, Ease.InOutSine);
+    }
+}
+```
+
+And with PrimeTween's [inspector integration](#inspector-integration), all animation properties can be tweaked from the Inspector, eliminating hard-coded magic values.
+```csharp
+public class PrimeTweenWindowWithInspectorIntegration : MonoBehaviour {
+    // Tweak all animation properties from the Inspector
+    [SerializeField] TweenSettings.Vector3 windowAnimationSettings;
+
+    public void SetWindowOpened(bool isOpened) {
+        // Use windowAnimationSettings.WithDirection() to animate the window to a closed or opened position
+        Tween.LocalPosition(transform, windowAnimationSettings.WithDirection(isOpened));
+    }
+}
+```
+
+#### Unsupported APIs
+There are a few things PrimeTween currently **doesn't support**.
+```csharp
+Sequence.PlayForward/PlayBackwards()
+transform.DOPath()
+```
+Adding these features to PrimeTween is technically possible, but I decided to gather feedback from users first to see if they really need it. Please drop me a note if your project needs any of these.
