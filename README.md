@@ -1,6 +1,26 @@
 # PrimeTween
 PrimeTween is a high-performance, **allocation-free** animation library for Unity. **Animate anything** with just one line of code, tweak all animation properties directly from the Inspector, and create complex animation sequences. No runtime memory allocations, ever.
 
+Table of Contents
+---
+- [Getting started](#getting-started)
+    * [Callbacks](#callbacks)
+    * [Delays](#delays)
+- [Sequencing tweens](#sequencing-tweens)
+    + [Sequence](#sequence)
+    + [Coroutines](#coroutines)
+    + [Async/await](#async-await)
+- [Inspector integration](#inspector-integration)
+- [Controlling tweens](#controlling-tweens)
+- [Custom tweens](#custom-tweens)
+- [Zero allocations with delegates](#zero-allocations-with-delegates)
+- [Debugging tweens](#debugging-tweens)
+- [Migrating from DOTween to PrimeTween](#migrating-from-dotween-to-primetween)
+    + [DOTween adapter](#dotween-adapter)
+    * [Other differences](#other-differences)
+        + [Tween.PlayForward/PlayBackwards](#tweenplayforward-playbackwards)
+        + [Unsupported APIs](#unsupported-apis)
+      
 Getting started
 ---
 Without further ado, let's jump straight to the code!
