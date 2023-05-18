@@ -219,13 +219,15 @@ Migrating from DOTween to PrimeTween
 ---
 DOTween made a long way in its development and brought a lot of value to the game industry. But for almost 10 years it accumulated a lot of [technical debt](https://github.com/Demigiant/dotween/issues) and inconsistencies.
 
-DOTween gives a huge heads-up for game jams and early prototypes, but when a project becomes bigger, its quirks become to pile up. While with years it was getting better with memory allocations, it still allocates memory on every animation start and puts a lot of pressure on the garbage collector.
+DOTween gives a huge heads-up for game jams and early prototypes, but when a project becomes bigger, its quirks become to pile up. And while with years it was getting better with memory allocations, it still allocates memory on every animation start and puts a lot of pressure on the garbage collector.
 
 PrimeTween is **simple**, **consistent**, covered by **tests**, and behaves exactly like you would expect. High performance and zero allocations out of the box.
 
 PrimeTween and DOTween don't conflict with each other and can be used in one project. So you can try PrimeTween in your existing project without breaking anything.
-> Migration is an **optional** feature designed to speed up PrimeTween's adoption. The migrated code may still be allocating because of the [delegate allocations](#zero-allocations-with-delegates).   
-> You should **test** the migrated code thoroughly before releasing it to production.  
+> Migration is an **optional** feature designed to speed up PrimeTween's adoption. The migrated code may still be allocating because of the [delegate allocations](#zero-allocations-with-delegates).
+> 
+> You should **test** the migrated code thoroughly before releasing it to production.
+> 
 > Please **back up** your project before proceeding.
 
 #### DOTween adapter
@@ -245,8 +247,8 @@ using PrimeTween;
 // ABSSequentiable tween;
 Tween tween; // just Tween ;)
 
-// if (tween != null && tween.IsPlaying())
-if (tween.IsAlive) // null check is not needed becase Tween in PrimeTween is a struct
+// if (tween != null && tween.IsPlaying()) {}
+if (tween.IsAlive) {} // null check is not needed becase Tween in PrimeTween is a struct
 
 // if (tween != null && tween.IsActive()) {
 //     tween.Kill(complete: true);
