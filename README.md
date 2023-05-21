@@ -259,8 +259,41 @@ PrimeTween comes with the built-in migration adapter that can help you migrate e
 
 The migration process may vary from project to project. In many cases, simply replacing `using DG.Tweening;` with the `using PrimeTween;` is enough to switch a script from DOTween to PrimeTween. See how easy was to migrate the [MotionDesignFES](https://github.com/KirillKuzyk/MotionDesignFES-PrimeTween/commit/077829d838c4916a5f7d8a72552dbe763bad5f73) project with dozens of complex animations.
 
+The adapter covers the majority of cases simply by replacing the `using DG.Tweening;` with the `using PrimeTween;` statement. Here is a non-exhaustive list of what the adapter does **automatically**.
+```csharp
+DOTween API on the left     -->  PrimeTween API on the right
 
-Here are the most common places that require a **manual fix** to the existing code.
+// All animations are supported, here are only few of them as an example
+transform.DOMove()          -->  Tween.Position(transform)
+uiImage.DOFade()            -->  Tween.Alpha(uiImage)
+material.DOColor()          -->  Tween.Color(material)
+transform.DOShakePosition() -->  Tween.ShakeLocalPosition(transform)
+
+DOVirtual.DelayedCall()     -->  Tween.Delay()
+DOTween.To()                -->  Tween.Custom()
+DOVirtual.Vector3()         -->  Tween.Custom()
+
+DOTween.Sequence()          -->  Sequence.Create()
+sequence.Join()             -->  sequence.Group()
+sequence.Append()           -->  sequence.Chain()
+
+// The 'Kill()' naming may be misleading even for experienced developers.
+// Does it kill the GameObject? Does it kill the MonoBehaviour? Does it kill other animations running on the same target?
+// PrimeTween gives confidence in what the code actually does.
+DOTween.Kill(target, true)  -->  Tween.CompleteAll(target)
+DOTween.Kill(target, false) -->  Tween.StopAll(target)
+tween.Kill(true)            -->  tween.Complete()
+tween.Kill(false)           -->  tween.Stop()
+
+yield return tween.WaitForCompletion()    -->  yield return tween.ToYieldInstruction()
+yield return sequence.WaitForCompletion() -->  yield return sequence.ToYieldInstruction()
+
+// PrimeTween doesn't use threads, so you can write async methods even on WebGL
+await tween.AsyncWaitForCompletion()      -->  await tween
+await sequence.AsyncWaitForCompletion()   -->  await sequence 
+```
+
+Although, here are the most common places that require a **manual fix** to the existing code base.
 ```csharp
 // using DG.Tweening;
 using PrimeTween;
@@ -277,48 +310,20 @@ if (tween.IsAlive) {} // null check is not needed becase Tween in PrimeTween is 
 //     tween.Kill(complete: true);
 //     tween = null;
 // }
-tween.Complete();
+tween.Complete(); // null check and setting tween to null is not needed 
 
 // DOTween.SetTweensCapacity(tweenersCapacity: 200, sequencesCapacity: 50);
 PrimeTweenConfig.SetTweensCapacity(capacity: 250); // sequences in PrimeTween use the same tweens pool as regular tweens
 ```
 
-The adapter covers the majority of cases simply by replacing the `using DG.Tweening;` with the `using PrimeTween;` statement. Here is a non-exhaustive list of what the adapter does **automatically**.
-```csharp
-// All animations are supported, here are only few of them as an example
-transform.DOMove()          -->  Tween.Position(transform)
-uiImage.DOFade()            -->  Tween.Alpha(uiImage)
-material.DOColor()          -->  Tween.Color(material)
-transform.DOShakePosition() -->  Tween.ShakeLocalPosition(transform)
-
-DOVirtual.DelayedCall()     -->  Tween.Delay()
-DOTween.To()                -->  Tween.Custom()
-DOVirtual.Vector3()         -->  Tween.Custom()
-
-DOTween.Sequence()          -->  Sequence.Create()
-sequence.Join()             -->  sequence.Group()
-sequence.Append()           -->  sequence.Chain()
-
-// The 'Kill()' naming may be misleading when even for experienced developers.
-// Does it kill the GameObject? Does it kill the MonoBehaviour? Does it kill other animations running on the same target?
-// PrimeTween gives confidence in what the code actually does.
-DOTween.Kill(target, true)  -->  Tween.CompleteAll(target)
-DOTween.Kill(target, false) -->  Tween.StopAll(target)
-tween.Kill(true)            -->  tween.Complete()
-tween.Kill(false)           -->  tween.Stop()
-
-yield return tween.WaitForCompletion()   -->  yield return tween.ToYieldInstruction()
-await tween.AsyncWaitForCompletion()     -->  await tween // PrimeTween doesn't use threads, so you can write async methods even on WebGL
-```
-
-#### Tween.PlayForward/PlayBackwards
+#### Tween.PlayForward/PlayBackwards/Restart
 PrimeTween's main design goals are **performance** and **reliability**. So there are a few things that don't have an exact mapping when migrating from DOTween.
 
 PrimeTween offers a different approach to animating things forward and backward that is simpler and has greater performance.
 
 Let's consider the common DOTween usage pattern: creating a tween once, then calling PlayForward() and PlayBackwards() when needed.
 <details>
-<summary>DOTweenWindow.cs example</summary>
+<summary><b>DOTweenWindow.cs</b> (click to expand)</summary>
 
 ```csharp
 public class DOTweenWindow : MonoBehaviour {
@@ -381,7 +386,14 @@ public class PrimeTweenWindowWithInspectorIntegration : MonoBehaviour {
 #### Unsupported APIs
 There are a few things PrimeTween currently **doesn't support**.
 ```csharp
-Sequence.PlayForward/PlayBackwards()
+// Not supported, but technically possible
+sequence.OnComplete() // alternative: if a sequence has one loop, use ChainCallback() instead
 transform.DOPath()
+
+// Not supported because sequences and tweens are non-reusable in PrimeTween
+sequence.OnStart() // alternative: execute the code before creating a sequence
+tween.OnStart() // alternative: execute the code before starting a tween
+sequence.PlayForward/PlayBackwards/Restart() // LoopType.Yoyo is also not supported
 ```
-Adding these features to PrimeTween is technically possible, but I decided to gather feedback from users first to see if they really need it. Please drop me a note if your project needs any of these.
+
+Adding all the above features to PrimeTween is technically possible in one or another way, but I decided to gather feedback from users first to see if they really need it. Please drop me a note if your project needs any of these and describe your use case.
