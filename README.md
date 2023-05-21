@@ -257,7 +257,7 @@ PrimeTween comes with the built-in migration adapter that can help you migrate e
 
 <img src="Documentation/adapter_define.png">
 
-The migration process may vary from project to project. In many cases, simply replacing `using DG.Tweening;` with the `using PrimeTween;` is enough to switch a script from DOTween to PrimeTween. See how easy was to migrate the [MotionDesignFES](https://github.com/KirillKuzyk/MotionDesignFES-PrimeTween/commit/077829d838c4916a5f7d8a72552dbe763bad5f73) project with dozens of complex animations.
+The migration process may vary from project to project. In many cases, simply replacing `using DG.Tweening;` with the `using PrimeTween;` is enough to switch a script from DOTween to PrimeTween. See how easy was to migrate the [MotionDesignFES](https://github.com/KirillKuzyk/MotionDesignFES-PrimeTween/commit/628cb17d027e9648add45e0b2d9b431983a1bde6) project with dozens of complex animations.
 
 The adapter covers the majority of cases simply by replacing the `using DG.Tweening;` with the `using PrimeTween;` statement. Here is a non-exhaustive list of what the adapter does **automatically**.
 ```csharp
