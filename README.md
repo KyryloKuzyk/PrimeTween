@@ -32,15 +32,15 @@ Tween.PositionY(transform, endValue: 10, duration: 1, ease: Ease.InOutSine);
 // Rotate 'transform' from the current rotation to (0, 90, 0) in 1 second
 Tween.Rotation(transform, endValue: Quaternion.Euler(0, 90, 0), duration: 1);
 
-// Rotate 'transform' around y axis by 360 degrees in 1 second 
+// Rotate 'transform' around the y-axis by 360 degrees in 1 second 
 Tween.EulerAngles(transform, startValue: Vector3.zero, endValue: new Vector3(0, 360), duration: 1);
 
-// Shake camera with a frequency of 10 shakes per second, magnitude of 0.1 meters on the y axis, for the duration of 1 second
+// Shake camera with a frequency of 10 shakes per second, magnitude of 0.1 meters on the y-axis, for the duration of 1 second
 Tween.ShakeLocalPosition(Camera.main.transform, frequency: 10, strength: new Vector3(0, 0.1f), duration: 1);
 ```
 That's it!
 
-Simply type **`Tween.`** and let your IDE all supported animation. Out of the box, PrimeTween can animate almost everything: UI, materials, camera properties, transforms, audio, and what not.
+Simply type **`Tween.`** and let your IDE suggest all supported animations. Out of the box, PrimeTween can animate almost everything: UI, materials, camera properties, transforms, audio, and whatnot.
 
 Didn't find what you're looking for? No problem, use [`Tween.Custom()`](#custom-tweens) to animate **anything**.
 
@@ -110,7 +110,7 @@ async void AsyncMethod() {
 
 Inspector integration
 ---
-Inspector integration is the cornerstone of PrimeTween's design that lets you tweak all animation properties from the Inspector without changing the code. It **saves time** and gives **creative freedom**. All animation settings can be **serialized** in MonoBehaviour or ScriptableObject and passed to the corresponding Tween methods.
+Inspector integration is the cornerstone of PrimeTween's design. It lets you tweak all animation properties from the Inspector without changing the code. It **saves time** and gives **creative freedom**. All animation settings can be **serialized** in MonoBehaviour or ScriptableObject and passed to the corresponding Tween methods.
 ```csharp
 // Tweak all animation properties from the Inspector:
 //     startValue, endValue, duration, ease (or custom ease curve), etc.
@@ -158,7 +158,7 @@ tween.Stop();
 tween.Complete();
 ```
 
-As you can see, there is no way to change the direction of the currently running tween, it can only be **stopped** and **completed**. But how to play an animation **forward** and **backward**, for example to show or hide a window? Easy! Just start a new Tween in the desired direction.
+As you can see, there is no way to change the direction of the currently running tween, it can only be **stopped** and **completed**. But how to play an animation **forward** and **backward**, for example, to show or hide a window? Easy! Just start a new Tween in the desired direction.
 ```csharp
 [SerializeField] RectTransform window;
 
@@ -166,7 +166,7 @@ public void SetWindowOpened(bool isOpened) {
     Tween.UIAnchoredPositionY(window, endValue: isOpened ? 0 : -500, duration: 0.5f);
 }
 ```
-In this example, the `SetWindowOpened()` can be called again while the previous animation is still running. Generally, there is no need to stop the previously running tween in such cases. The new tween will semlessly start from the current position and  **overwrite** all previously running tweens on the `window`. Several duplicated tweens are fine, but if your code can potentially start the same tween every frame, then consider stopping the previous tween.
+In this example, the `SetWindowOpened()` can be called again while the previous animation is still running. Generally, there is no need to stop the previously running tween in such cases. The new tween will seamlessly start from the current position and **overwrite** all previously running tweens on the `window`. Several duplicated tweens are fine, but if your code can potentially start the same tween every frame, then consider stopping the previous tween.
 
 And to utilize the full power of PrimeTween, all window animation settings can come from the Inspector. Notice how the **`isOpened`** parameter is passed to the **`WithDirection(bool toEndValue)`** method. This helper method selects the target position based on the `isOpened` parameter. Nice and simple!
 ```csharp
@@ -253,7 +253,7 @@ PrimeTween and DOTween don't conflict with each other and can be used in one pro
 
 #### DOTween adapter
 
-PrimeTween comes with the built-in migration adapter that can help you migrate even big projects in a matter of hours. First, to enable the adapter , add the **`PRIME_TWEEN_DOTWEEN_ADAPTER`** define to the `ProjectSettings/Player/Script Compilation` and press Apply.
+PrimeTween comes with a built-in migration adapter that can help you migrate even big projects in a matter of hours. First, to enable the adapter, add the **`PRIME_TWEEN_DOTWEEN_ADAPTER`** define to the `ProjectSettings/Player/Script Compilation` and press Apply.
 
 <img src="Documentation/adapter_define.png">
 
@@ -263,7 +263,7 @@ The adapter covers the majority of cases simply by replacing the `using DG.Tween
 ```csharp
 DOTween API on the left     -->  PrimeTween API on the right
 
-// All animations are supported, here are only few of them as an example
+// All animations are supported, here are only a few of them as an example
 transform.DOMove()          -->  Tween.Position(transform)
 uiImage.DOFade()            -->  Tween.Alpha(uiImage)
 material.DOColor()          -->  Tween.Color(material)
@@ -304,7 +304,7 @@ using PrimeTween;
 Tween tween; // just Tween ;)
 
 // if (tween != null && tween.IsPlaying()) {}
-if (tween.IsAlive) {} // null check is not needed becase Tween in PrimeTween is a struct
+if (tween.IsAlive) {} // null check is not needed because Tween in PrimeTween is a struct
 
 // if (tween != null && tween.IsActive()) {
 //     tween.Kill(complete: true);
@@ -328,7 +328,7 @@ Let's consider the common DOTween usage pattern: creating a tween once, then cal
 ```csharp
 public class DOTweenWindow : MonoBehaviour {
     // Bad: disable auto-kill and store tween reference to reuse the tween later.
-    // Disabling auto-kill wastes resources: even when tween is not running, it still receives an update every frame and consumes memory.
+    // Disabling auto-kill wastes resources: even when the tween is not running, it still receives an update every frame and consumes memory.
     Tween tween;
 
     void Awake() {
