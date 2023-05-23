@@ -19,8 +19,7 @@ Table of Contents
 - [Debugging tweens](#debugging-tweens)
 - [Migrating from DOTween to PrimeTween](#migrating-from-dotween-to-primetween)
   + [DOTween adapter](#dotween-adapter)
-  + [Tween.PlayForward/PlayBackwards](#tweenplayforward-playbackwards)
-  + [Unsupported APIs](#unsupported-apis)
+  + [Tween.PlayForward/PlayBackwards](#tweenplayforwardplaybackwardsrestart)
 
 Getting started
 ---
