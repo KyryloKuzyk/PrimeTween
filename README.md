@@ -254,7 +254,7 @@ PrimeTween and DOTween don't conflict with each other and can be used in one pro
 
 PrimeTween comes with a built-in migration adapter that can help you migrate even big projects in a matter of hours. First, to enable the adapter, add the **`PRIME_TWEEN_DOTWEEN_ADAPTER`** define to the `ProjectSettings/Player/Script Compilation` and press Apply.
 
-<img src="Documentation/adapter_define.png" width="80%">
+<img src="Documentation/adapter_define.png" width="60%">
 
 The migration process may vary from project to project. In many cases, simply replacing `using DG.Tweening;` with the `using PrimeTween;` is enough to switch a script from DOTween to PrimeTween. See how easy was to migrate the [MotionDesignFES](https://github.com/KirillKuzyk/MotionDesignFES-PrimeTween/commit/628cb17d027e9648add45e0b2d9b431983a1bde6) project with dozens of complex animations.
 
