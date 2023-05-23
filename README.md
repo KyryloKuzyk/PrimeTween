@@ -80,6 +80,7 @@ Sequence.Create()
     .Group(Tween.LocalScale(transform, endValue: 2f, duration: 0.5f, startDelay: 1))
     // Rotation tween is 'chained' so it will start when both previous tweens are finished (after 1.5 seconds)
     .Chain(Tween.Rotation(transform, endValue: new Vector3(0f, 0f, 45f), duration: 1f)) 
+    .ChainDelay(1)
     .ChainCallback(() => Debug.Log("Sequence completed"));
 ```
 
@@ -90,6 +91,8 @@ IEnumerator Coroutine() {
     Tween.PositionX(transform, endValue: 10f, duration: 1.5f);
     yield return Tween.LocalScale(transform, 2f, 0.5f, startDelay: 1).ToYieldInstruction();
     yield return Tween.Rotation(transform, new Vector3(0f, 0f, 45f), 1f).ToYieldInstruction();
+    // Non-allocating alternative to 'yield return new WaitForSeconds(1f)'
+    yield return Tween.Delay(1).ToYieldInstruction(); 
     Debug.Log("Sequence completed");
 }
 ```
@@ -101,6 +104,7 @@ async void AsyncMethod() {
     Tween.PositionX(transform, endValue: 10f, duration: 1.5f);
     await Tween.LocalScale(transform, endValue: 2f, duration: 0.5f, startDelay: 1);
     await Tween.Rotation(transform, endValue: new Vector3(0f, 0f, 45f), duration: 1f);
+    await Tween.Delay(1); 
     Debug.Log("Sequence completed");
 }
 ```
