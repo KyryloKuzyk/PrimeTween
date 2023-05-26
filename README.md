@@ -247,15 +247,17 @@ DOTween gives a huge heads-up for game jams and early prototypes, but when a pro
 PrimeTween is **simple**, **consistent**, covered by **tests**, and behaves exactly like you would expect. High performance and zero allocations out of the box.
 
 PrimeTween and DOTween don't conflict with each other and can be used in one project. So you can try PrimeTween in your existing project without breaking anything.
-> Migration is an **optional** feature designed to speed up PrimeTween's adoption. The migrated code may still be allocating because of the [delegate allocations](#zero-allocations-with-delegates).
+#### DOTween adapter
+
+PrimeTween comes with a built-in migration adapter that can help you migrate even big projects in a matter of hours.
+> Adapter is an **optional** feature designed to speed up PrimeTween's adoption. The migrated code may still be allocating because of the [delegate allocations](#zero-allocations-with-delegates).
 >
 > You should **test** the migrated code thoroughly before releasing it to production.
 >
 > Please **back up** your project before proceeding.
 
-#### DOTween adapter
 
-PrimeTween comes with a built-in migration adapter that can help you migrate even big projects in a matter of hours. First, to enable the adapter, add the **`PRIME_TWEEN_DOTWEEN_ADAPTER`** define to the `ProjectSettings/Player/Script Compilation` and press Apply.
+First, to enable the adapter, add the **`PRIME_TWEEN_DOTWEEN_ADAPTER`** define to the `ProjectSettings/Player/Script Compilation` and press Apply.
 
 <img src="Documentation/adapter_define.png" width="60%">
 
@@ -282,8 +284,8 @@ sequence.Append()           -->  sequence.Chain()
 // The 'Kill()' naming may be misleading even for experienced developers.
 // Does it kill the GameObject? Does it kill the MonoBehaviour? Does it kill other animations running on the same target?
 // PrimeTween gives confidence in what the code actually does.
-DOTween.Kill(target, true)  -->  Tween.CompleteAll(target)
-DOTween.Kill(target, false) -->  Tween.StopAll(target)
+DOTween.Kill(target, true)  -->  Tween.CompleteAll(onTarget: target)
+DOTween.Kill(target, false) -->  Tween.StopAll(onTarget: target)
 tween.Kill(true)            -->  tween.Complete()
 tween.Kill(false)           -->  tween.Stop()
 
@@ -315,7 +317,7 @@ if (tween.IsAlive) {} // null check is not needed because Tween in PrimeTween is
 tween.Complete(); // null check and setting tween to null is not needed 
 
 // DOTween.SetTweensCapacity(tweenersCapacity: 200, sequencesCapacity: 50);
-PrimeTweenConfig.SetTweensCapacity(capacity: 250); // sequences in PrimeTween use the same tweens pool as regular tweens
+PrimeTweenConfig.SetTweensCapacity(capacity: 250); // sequences in PrimeTween use the same pool as regular tweens
 ```
 
 #### Tween.PlayForward/PlayBackwards/Restart
@@ -363,7 +365,7 @@ public class DOTweenWindow : MonoBehaviour {
 ```
 </details>
 
-PrimeTween offers a much more elegant way of doing the same that comes with much better performance. Destroying the target while the animation is playing is perfectly fine.
+PrimeTween offers a much more elegant way of doing the same that comes with much better performance. Destroying the window while the animation is playing is perfectly fine.
 ```csharp
 public class PrimeTweenWindow : MonoBehaviour {
     public void SetWindowOpened(bool isOpened) {
@@ -386,7 +388,7 @@ public class PrimeTweenWindowWithInspectorIntegration : MonoBehaviour {
 ```
 
 #### Unsupported APIs
-There are a few things PrimeTween currently **doesn't support**.
+There are a few other things PrimeTween currently **doesn't support**.
 ```csharp
 // Not supported, but technically possible
 sequence.OnComplete() // alternative: if a sequence has one loop, use ChainCallback() instead
