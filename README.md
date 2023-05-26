@@ -98,7 +98,7 @@ IEnumerator Coroutine() {
 ```
 
 #### Async/await
-And the last method is awaiting tweens and sequences using the **async/await** pattern. Async/await is a great tool to prevent the callback hell in your code.
+And the last method is awaiting tweens and sequences using the **async/await** pattern. Async/await is a great tool to prevent the callback hell in your code. PrimeTween doesn't use threads, so tweens can be awaited on all platforms, even on WebGL.
 ```csharp
 async void AsyncMethod() {
     Tween.PositionX(transform, endValue: 10f, duration: 1.5f);
