@@ -212,7 +212,7 @@ Tween.Position(transform, new Vector3(10, 0), duration: 1)
     .OnComplete(() => SomeMethod()); // delegate allocation!
 ```
 
-Here is how to fix the above code to be non-allocating. Notice how **`this`** reference is passed to the method, then the **`target`** parameter is used instead of calling `SomeMethod()` directly.
+Here is how to fix the above code to be non-allocating. Notice how **`this`** reference is passed to the `OnComplete` method, then the **`target`** parameter is used instead of calling `SomeMethod()` directly.
 ```csharp
 Tween.Position(transform, new Vector3(10, 0), duration: 1)
     .OnComplete(target: this, target => target.SomeMethod()); // no allocation
@@ -247,14 +247,23 @@ DOTween gives a huge heads-up for game jams and early prototypes, but when a pro
 PrimeTween is **simple**, **consistent**, covered by **tests**, and behaves exactly like you would expect. High performance and zero allocations out of the box.
 
 PrimeTween and DOTween don't conflict with each other and can be used in one project. So you can try PrimeTween in your existing project without breaking anything.
+
+#### Performance comparison
+
+In real-world scenarios, PrimeTween is about 10-30% faster than DOTween in terms of runtime performance. But this is far from the whole picture.
+
+Where PrimeTween really shines is in the absence of **memory allocations**. PrimeTween never allocates heap memory and never produces garbage collection spikes. Create millions of animations, delays, and sequences with **0KB of GC**!
+
+Another important performance factor is **frame pacing**. To create a smooth experience for a user, frames in your game should be evenly spaced. A several-frame hiccup will still be noticeable to the eye even when the profiler tells that the game runs at 60 FPS. In this image, you can see that PrimeTween evenly distributes the load maintaining smooth frame times, while DOTween produces a lot of fluctuations. The testing scenario is identical.
+
+![frame_pacing.png](Documentation%2Fframe_pacing.png)
+
 #### DOTween adapter
 
-PrimeTween comes with a built-in migration adapter that can help you migrate even big projects in a matter of hours.
-> Adapter is an **optional** feature designed to speed up PrimeTween's adoption. The migrated code may still be allocating because of the [delegate allocations](#zero-allocations-with-delegates).
->
-> You should **test** the migrated code thoroughly before releasing it to production.
->
-> Please **back up** your project before proceeding.
+PrimeTween comes with a built-in migration adapter that can help you migrate even big projects relatively quickly.
+
+Adapter is an **optional** feature designed to speed up PrimeTween's adoption. The migrated code may still be allocating because of the [delegate allocations](#zero-allocations-with-delegates).
+> Please **back up** your project before proceeding. You should **test** the migrated code thoroughly before releasing it to production.
 
 
 First, to enable the adapter, add the **`PRIME_TWEEN_DOTWEEN_ADAPTER`** define to the `ProjectSettings/Player/Script Compilation` and press Apply.
