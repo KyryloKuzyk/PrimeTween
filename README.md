@@ -251,11 +251,11 @@ PrimeTween and DOTween don't conflict with each other and can be used in one pro
 
 #### Performance comparison
 
-In real-world scenarios, PrimeTween is about **10-30%** faster than DOTween in terms of runtime performance. But this is far from the whole picture.
+In real-world scenarios, PrimeTween is about **10-30%** faster than DOTween in terms of average runtime performance. But this is not the most important performance indicator most of the time.
 
-Where PrimeTween really shines is in the absence of **memory allocations**. PrimeTween never allocates heap memory and never produces garbage collection spikes. Create millions of animations, delays, and sequences with **0KB of GC**!
+Where PrimeTween really shines is in the absence of **memory allocations**. PrimeTween never allocates heap memory and never produces garbage collection spikes. Create millions of animations, delays, and sequences with **0KB of GC** and without hiccups!
 
-Another important performance factor is **frame pacing**. To create a smooth experience for a user, frames in your game should be evenly spaced. A several-frame hiccup will still be noticeable to the eye even when the profiler tells that the game runs at 60 FPS. In this image, you can see that PrimeTween evenly distributes the load maintaining smooth frame times, while DOTween produces a lot of fluctuations. The testing scenario is identical.
+Another important performance factor is **frame pacing**. To create a smooth experience for a user, frames in your game should be evenly spaced in time. A one-frame hiccup is still noticeable to the eye even when the profiler tells that the game runs at an average of 60 FPS. In this image, you can see that PrimeTween evenly distributes the load maintaining smooth frame times, while DOTween produces a lot of fluctuations. The testing scenario is identical in both cases.
 
 ![frame_pacing.png](Documentation%2Fframe_pacing.png)
 
