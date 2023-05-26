@@ -18,6 +18,7 @@ Table of Contents
 - [Zero allocations with delegates](#zero-allocations-with-delegates)
 - [Debugging tweens](#debugging-tweens)
 - [Migrating from DOTween to PrimeTween](#migrating-from-dotween-to-primetween)
+  + [Performance comparison](#performance-comparison)
   + [DOTween adapter](#dotween-adapter)
   + [Tween.PlayForward/PlayBackwards](#tweenplayforwardplaybackwardsrestart)
 
@@ -250,7 +251,7 @@ PrimeTween and DOTween don't conflict with each other and can be used in one pro
 
 #### Performance comparison
 
-In real-world scenarios, PrimeTween is about 10-30% faster than DOTween in terms of runtime performance. But this is far from the whole picture.
+In real-world scenarios, PrimeTween is about **10-30%** faster than DOTween in terms of runtime performance. But this is far from the whole picture.
 
 Where PrimeTween really shines is in the absence of **memory allocations**. PrimeTween never allocates heap memory and never produces garbage collection spikes. Create millions of animations, delays, and sequences with **0KB of GC**!
 
