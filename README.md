@@ -6,6 +6,7 @@ PrimeTween is a high-performance, **allocation-free** animation library for Unit
 Table of Contents
 ---
 - [Getting started](#getting-started)
+  * [Animations](#animations)
   * [Callbacks](#callbacks)
   * [Delays](#delays)
 - [Sequencing tweens](#sequencing-tweens)
@@ -24,6 +25,12 @@ Table of Contents
 
 Getting started
 ---
+
+### Installation
+Import PrimeTween from [Asset Store](https://assetstore.unity.com/packages/slug/252960).
+> Unity 2018: selected the `Assets/Plugins/PrimeTween/PrimeTweenInstaller` and press the Install button. To run the Demo, add the `PRIME_TWEEN_INSTALLED` define to the `Project Settings/Player/Scripting Define Symbols`
+
+### Animations
 Without further ado, let's jump straight to the code!
 ```csharp
 // Animate 'transform.position.y' from the current value to 10 in 1 second using the Ease.InOutSine
