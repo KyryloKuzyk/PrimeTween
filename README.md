@@ -112,6 +112,7 @@ async void AsyncMethod() {
     Tween.PositionX(transform, endValue: 10f, duration: 1.5f);
     await Tween.LocalScale(transform, endValue: 2f, duration: 0.5f, startDelay: 1);
     await Tween.Rotation(transform, endValue: new Vector3(0f, 0f, 45f), duration: 1f);
+    // Alternative to 'await Task.Delay(1000)' that doesn't use 'System.Threading'. Tweens and sequences can be awaited on all platforms, even on WebGL
     await Tween.Delay(1); 
     Debug.Log("Sequence completed");
 }
