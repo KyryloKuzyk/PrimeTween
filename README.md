@@ -7,6 +7,7 @@ Table of Contents
 ---
 - [Getting started](#getting-started)
   * [Animations](#animations)
+  * [Shakes](#shakes)
   * [Callbacks](#callbacks)
   * [Delays](#delays)
 - [Sequencing tweens](#sequencing-tweens)
@@ -28,7 +29,6 @@ Getting started
 
 ### Installation
 Import PrimeTween from [Asset Store](https://assetstore.unity.com/packages/slug/252960).
-> Unity 2018: selected the `Assets/Plugins/PrimeTween/PrimeTweenInstaller` and press the Install button. To run the Demo, add the `PRIME_TWEEN_INSTALLED` define to the `Project Settings/Player/Scripting Define Symbols`
 
 ### Animations
 Without further ado, let's jump straight to the code!
@@ -41,15 +41,31 @@ Tween.Rotation(transform, endValue: Quaternion.Euler(0, 90, 0), duration: 1);
 
 // Rotate 'transform' around the y-axis by 360 degrees in 1 second 
 Tween.EulerAngles(transform, startValue: Vector3.zero, endValue: new Vector3(0, 360), duration: 1);
-
-// Shake camera with a frequency of 10 shakes per second, magnitude of 0.1 meters on the y-axis, for the duration of 1 second
-Tween.ShakeLocalPosition(Camera.main.transform, frequency: 10, strength: new Vector3(0, 0.1f), duration: 1);
 ```
 That's it!
 
 Simply type **`Tween.`** and let your IDE suggest all supported animations. Out of the box, PrimeTween can animate almost everything: UI, materials, camera properties, transforms, audio, and whatnot.
 
 Didn't find what you're looking for? No problem, use [`Tween.Custom()`](#custom-tweens) to animate **anything**.
+
+### Shakes
+```csharp
+// Shake the camera with medium strength (0.5f) 
+Tween.ShakeCamera(camera, strengthFactor: 0.5f);
+
+// Shake the camera with heavy strength (1.0f) for a duration of 0.5f seconds and a frequency of 10 shakes per second 
+Tween.ShakeCamera(camera, strengthFactor: 1.0f, duration: 0.5f, frequency: 10);
+
+// Shake the y-axis position with an amplitude of 1 unit 
+Tween.ShakeLocalPosition(transform, strength: new Vector3(0, 1), duration: 1, frequency: 10);
+
+// Shake the z-axis rotation with an amplitude of 15 degrees
+Tween.ShakeLocalRotation(transform, strength: new Vector3(0, 0, 15), duration: 1, frequency: 10);
+
+// Punch localPosition in the direction of 'punchDir'
+var punchDir = transform.up;
+Tween.PunchLocalPosition(transform, strength: punchDir, duration: 0.5f, frequency: 10);
+```
 
 ### Callbacks
 Use **`.OnComplete()`** to execute custom code on tween's completion.
@@ -112,13 +128,13 @@ async void AsyncMethod() {
     Tween.PositionX(transform, endValue: 10f, duration: 1.5f);
     await Tween.LocalScale(transform, endValue: 2f, duration: 0.5f, startDelay: 1);
     await Tween.Rotation(transform, endValue: new Vector3(0f, 0f, 45f), duration: 1f);
-    // Alternative to 'await Task.Delay(1000)' that doesn't use 'System.Threading'. Tweens and sequences can be awaited on all platforms, even on WebGL
+    // Non-allocating alternative to 'await Task.Delay(1000)' that doesn't use 'System.Threading'. Tweens and sequences can be awaited on all platforms, even on WebGL
     await Tween.Delay(1); 
     Debug.Log("Sequence completed");
 }
 ```
 
-> While PrimeTween never allocates memory at runtime, the async/await feature in C# is allocating: awaiting an async method allocates a small amount of garbage comparable to starting a coroutine. Consider using [UniTask](https://github.com/Cysharp/UniTask) to address this language limitation.
+> While PrimeTween never allocates memory at runtime, the async/await feature in C# is allocating: awaiting an async method allocates a small amount of garbage. Consider using [UniTask](https://github.com/Cysharp/UniTask) to address this language limitation.
 
 Inspector integration
 ---
@@ -234,7 +250,7 @@ Tween.Delay(this, duration: 1f, target => target.SomeMethod());
 Tween.Custom(this, 0, 10, duration: 1, (target, newVal) => target.floatField = newVal);
 
 var shakeSettings = new ShakeSettings(frequency: 10, strength: Vector3.one, duration: 1);
-Tween.ShakeCustom(this, shakeSettings, vector3Field, (target, val) => target.vector3Field = val);
+Tween.ShakeCustom(this, shakeSettings, startValue: vector3Field, (target, val) => target.vector3Field = val);
 ```
 
 Debugging tweens
@@ -408,14 +424,18 @@ public class PrimeTweenWindowWithInspectorIntegration : MonoBehaviour {
 #### Unsupported APIs
 There are a few other things PrimeTween currently **doesn't support**.
 ```csharp
+// Alternative available
+sequence.Insert(atPosition: 1.5f, transform.DOMoveX(0, 1));  -->  sequence.Group(Tween.PositionX(transform, 0, 1, startDelay: 1.5f)); (at the beginning of a Sequence)
+sequence.InsertCallback(atPosition: 1f, callback: delegate { });  -->  sequence.Group(Tween.Delay(duration: 1, onComplete: delegate { })); (at the beginning of a Sequence)
+
 // Not supported, but technically possible
 sequence.OnComplete() // alternative: if a sequence has one loop, use ChainCallback() instead
 transform.DOPath()
 
 // Not supported because sequences and tweens are non-reusable in PrimeTween
+sequence.PlayForward/PlayBackwards/Rewind/Restart()
 sequence.OnStart() // alternative: execute the code before creating a sequence
-tween.OnStart() // alternative: execute the code before starting a tween
-sequence.PlayForward/PlayBackwards/Restart() // LoopType.Yoyo is also not supported
+tween.OnStart() // alternative: execute the code before creating a tween
 ```
 
 Adding all the above features to PrimeTween is technically possible in one or another way, but I decided to gather feedback from users first to see if they really need it. Please drop me a note if your project needs any of these and describe your use case.
