@@ -295,9 +295,9 @@ First, to enable the adapter, add the **`PRIME_TWEEN_DOTWEEN_ADAPTER`** define t
 
 <img src="Documentation/adapter_define.png" width="60%">
 
-The migration process may vary from project to project. In many cases, simply replacing `using DG.Tweening;` with the `using PrimeTween;` is enough to switch a script from DOTween to PrimeTween. See how easy was to migrate the [MotionDesignFES](https://github.com/KirillKuzyk/MotionDesignFES-PrimeTween/commit/628cb17d027e9648add45e0b2d9b431983a1bde6) project with dozens of complex animations.
-
-The adapter covers the majority of cases simply by replacing the `using DG.Tweening;` with the `using PrimeTween;` statement. Here is a non-exhaustive list of what the adapter does **automatically**.
+The migration process may vary from project to project. In many cases, simply replacing `using DG.Tweening;` with `using PrimeTween;` is enough to switch a script from DOTween to PrimeTween. See how easy was to migrate the [MotionDesignFES](https://github.com/KirillKuzyk/MotionDesignFES-PrimeTween/commit/628cb17d027e9648add45e0b2d9b431983a1bde6) project with dozens of complex animations.
+ 
+Open a script that uses DOTween, change `using DG.Tweening;` to `using PrimeTween;` and the adapter will handle the majority of cases **automatically**.
 ```csharp
 DOTween API on the left     -->  PrimeTween API on the right
 
