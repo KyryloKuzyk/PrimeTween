@@ -142,14 +142,14 @@ Inspector integration is the cornerstone of PrimeTween's design. It lets you twe
 ```csharp
 // Tweak all animation properties from the Inspector:
 //     startValue, endValue, duration, ease (or custom ease curve), etc.
-[SerializeField] TweenSettings.Float yPositionTweenSettings;
+[SerializeField] TweenSettings<float> yPositionTweenSettings;
 // Then pass tween settings to the animation method
 Tween.PositionY(transform, yPositionTweenSettings);
 
-[SerializeField] TweenSettings.Vector3 rotationTweenSettings;
+[SerializeField] TweenSettings<Vector3> rotationTweenSettings;
 Tween.Rotation(transform, rotationTweenSettings);
 
-[SerializeField] TweenSettings.Vector3 eulerAnglesTweenSettings;
+[SerializeField] TweenSettings<Vector3> eulerAnglesTweenSettings;
 Tween.EulerAngles(transform, eulerAnglesTweenSettings);
 
 [SerializeField] ShakeSettings cameraShakeSettings;
@@ -198,7 +198,7 @@ In this example, the `SetWindowOpened()` can be called again while the previous 
 And to utilize the full power of PrimeTween, all window animation settings can come from the Inspector. Notice how the **`isOpened`** parameter is passed to the **`WithDirection(bool toEndValue)`** method. This helper method selects the target position based on the `isOpened` parameter. Nice and simple!
 ```csharp
 [SerializeField] RectTransform window;
-[SerializeField] TweenSettings.Float windowAnimationSettings;
+[SerializeField] TweenSettings<float> windowAnimationSettings;
 
 public void SetWindowOpened(bool isOpened) {
     Tween.UIAnchoredPositionY(window, windowAnimationSettings.WithDirection(toEndValue: isOpened));
@@ -221,7 +221,7 @@ Tween.Custom(Color.white, Color.black, duration: 1, onValueChange: newVal => col
 
 As you may expect, custom tweens work with [inspector integration](#inspector-integration) the same way as regular tweens do.
 ```csharp
-[SerializeField] TweenSettings.Float tweenSettings;
+[SerializeField] TweenSettings<float> tweenSettings;
 float floatField;
 
 Tween.Custom(tweenSettings, onValueChange: newVal => floatField = newVal);    
@@ -412,7 +412,7 @@ And with PrimeTween's [inspector integration](#inspector-integration), all anima
 ```csharp
 public class PrimeTweenWindowWithInspectorIntegration : MonoBehaviour {
     // Tweak all animation properties from the Inspector
-    [SerializeField] TweenSettings.Vector3 windowAnimationSettings;
+    [SerializeField] TweenSettings<Vector3> windowAnimationSettings;
 
     public void SetWindowOpened(bool isOpened) {
         // Use windowAnimationSettings.WithDirection() to animate the window to a closed or opened position
