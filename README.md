@@ -23,6 +23,7 @@ Table of Contents
   + [Performance comparison](#performance-comparison)
   + [DOTween adapter](#dotween-adapter)
   + [Tween.PlayForward/PlayBackwards](#tweenplayforwardplaybackwardsrestart)
+- [Support](#support)
 
 Getting started
 ---
@@ -193,7 +194,7 @@ public void SetWindowOpened(bool isOpened) {
     Tween.UIAnchoredPositionY(window, endValue: isOpened ? 0 : -500, duration: 0.5f);
 }
 ```
-In this example, the `SetWindowOpened()` can be called again while the previous animation is still running. Generally, there is no need to stop the previously running tween in such cases. The new tween will seamlessly start from the current position and **overwrite** all previously running tweens on the `window`. Several duplicated tweens are fine, but if your code can potentially start the same tween every frame, then consider stopping the previous tween.
+In this example, the `SetWindowOpened()` can be called again while the previous animation is still running. Generally, there is no need to stop the previously running tween in such cases. The new tween will seamlessly start from the current position and **overwrite** all previously running tweens on the `window`. Several duplicated tweens are fine, but if your code can potentially create duplicated tweens every frame, then consider stopping the previous tween.
 
 And to utilize the full power of PrimeTween, all window animation settings can come from the Inspector. Notice how the **`isOpened`** parameter is passed to the **`WithDirection(bool toEndValue)`** method. This helper method selects the target position based on the `isOpened` parameter. Nice and simple!
 ```csharp
@@ -296,7 +297,7 @@ First, to enable the adapter, add the **`PRIME_TWEEN_DOTWEEN_ADAPTER`** define t
 <img src="Documentation/adapter_define.png" width="60%">
 
 The migration process may vary from project to project. In many cases, simply replacing `using DG.Tweening;` with `using PrimeTween;` is enough to switch a script from DOTween to PrimeTween. See how easy was to migrate the [MotionDesignFES](https://github.com/KirillKuzyk/MotionDesignFES-PrimeTween/commit/628cb17d027e9648add45e0b2d9b431983a1bde6) project with dozens of complex animations.
- 
+
 Open a script that uses DOTween, change `using DG.Tweening;` to `using PrimeTween;` and the adapter will handle the majority of cases **automatically**.
 ```csharp
 DOTween API on the left     -->  PrimeTween API on the right
@@ -439,3 +440,9 @@ tween.OnStart() // alternative: execute the code before creating a tween
 ```
 
 Adding all the above features to PrimeTween is technically possible in one or another way, but I decided to gather feedback from users first to see if they really need it. Please drop me a note if your project needs any of these and describe your use case.
+
+Support
+---
+Please submit bug reports [here](https://github.com/KyryloKuzyk/PrimeTween/issues).  
+Submit your questions and feature requests [here](https://github.com/KyryloKuzyk/PrimeTween/discussions).  
+If you want to contact me privately, please drop me an email: kuzykkirill@gmail.com
