@@ -30,6 +30,7 @@ Getting started
 
 ### Installation
 Import PrimeTween from [Asset Store](https://assetstore.unity.com/packages/slug/252960).
+> To generate XML documentation and view PrimeTween's source code in your IDE, enable this setting: _'Unity Preferences/External Tools/Generate .csproj files for/**Local tarbal**'_ and press the _'Regenerate project files'_ button.
 
 ### Animations
 Without further ado, let's jump straight to the code!
