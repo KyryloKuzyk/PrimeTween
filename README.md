@@ -435,9 +435,9 @@ sequence.OnComplete() // alternative: if a sequence has one loop, use ChainCallb
 transform.DOPath()
 
 // Not supported because sequences and tweens are non-reusable in PrimeTween
-sequence.PlayForward/PlayBackwards/Rewind/Restart()
-sequence.OnStart() // alternative: execute the code before creating a sequence
-tween.OnStart() // alternative: execute the code before creating a tween
+sequence.PlayForward/PlayBackwards/Rewind/Restart() // alternative: start a new tween in the desired direction
+sequence.OnStart() // alternative: execute the code before starting a sequence
+tween.OnStart() // alternative: execute the code before starting a tween
 ```
 
 Adding all the above features to PrimeTween is technically possible in one or another way, but I decided to gather feedback from users first to see if they really need it. Please drop me a note if your project needs any of these and describe your use case.
