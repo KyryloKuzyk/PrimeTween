@@ -277,7 +277,7 @@ PrimeTween and DOTween don't conflict with each other and can be used in one pro
 
 #### Performance comparison
 
-In real-world scenarios, PrimeTween is about **10-30%** faster than DOTween in terms of average runtime performance. But this is not the most important performance indicator most of the time.
+In real-world scenarios, PrimeTween is up to **30%** faster than DOTween in terms of average runtime performance. But this is not the most important performance indicator most of the time.
 
 Where PrimeTween really shines is in the absence of **memory allocations**. PrimeTween never allocates heap memory and never produces garbage collection spikes. Create millions of animations, delays, and sequences with **0KB of GC** and without hiccups!
 
