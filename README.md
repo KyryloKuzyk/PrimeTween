@@ -1,7 +1,9 @@
 PrimeTween
 ===
 
-PrimeTween is a high-performance, **allocation-free** animation library for Unity. **Animate anything** with just one line of code, tweak all animation properties directly from the Inspector, and create complex animation sequences. No runtime memory allocations, ever.
+PrimeTween is a high-performance, **allocation-free** animation library for Unity. **Animate anything** with just one line of code, tweak all animation properties directly from the Inspector, and create complex animation sequences. No runtime memory allocations, ever.  
+
+**[Asset Store](https://assetstore.unity.com/packages/slug/252960)** | **[Forum](https://forum.unity.com/threads/1479609/)** | **[FAQ](https://github.com/KyryloKuzyk/PrimeTween/discussions)**
 
 Table of Contents
 ---
@@ -444,6 +446,7 @@ Adding all the above features to PrimeTween is technically possible in one or an
 
 Support
 ---
+Join the discussion on [Unity Forum](https://forum.unity.com/threads/1479609/).  
 Please submit bug reports [here](https://github.com/KyryloKuzyk/PrimeTween/issues).  
 Submit your questions and feature requests [here](https://github.com/KyryloKuzyk/PrimeTween/discussions).  
 If you want to contact me privately, please drop me an email: kuzykkirill@gmail.com
