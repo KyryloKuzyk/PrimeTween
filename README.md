@@ -46,9 +46,9 @@ Tween.EulerAngles(transform, startValue: Vector3.zero, endValue: new Vector3(0, 
 That's it!
 
 Simply type **`Tween.`** and let your IDE suggest all supported animations. Out of the box, PrimeTween can animate almost everything: UI, materials, camera properties, transforms, audio, and whatnot.
-> To generate XML documentation and view PrimeTween's source code in your IDE, enable this setting: _'Unity Preferences/External Tools/Generate .csproj files for/**Local tarbal**'_ and press the _'Regenerate project files'_ button.
 
 Didn't find what you're looking for? No problem, use [`Tween.Custom()`](#custom-tweens) to animate **anything**.
+> To generate XML documentation and view PrimeTween's source code in your IDE, enable this setting: _'Unity Preferences/External Tools/Generate .csproj files for/**Local tarbal**'_ and press the _'Regenerate project files'_ button.
 
 ### Shakes
 ```csharp
