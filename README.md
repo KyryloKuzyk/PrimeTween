@@ -12,6 +12,7 @@ Table of Contents
   * [Shakes](#shakes)
   * [Callbacks](#callbacks)
   * [Delays](#delays)
+  * [Cycles](#cycles)
 - [Sequencing tweens](#sequencing-tweens)
   + [Sequence](#sequence)
   + [Coroutines](#coroutines)
@@ -36,6 +37,8 @@ Import PrimeTween from [Asset Store](https://assetstore.unity.com/packages/slug/
 ### Animations
 Without further ado, let's jump straight to the code!
 ```csharp
+using PrimeTween;
+
 // Animate 'transform.position.y' from the current value to 10 in 1 second using the Ease.InOutSine
 Tween.PositionY(transform, endValue: 10, duration: 1, ease: Ease.InOutSine);
 
@@ -87,10 +90,31 @@ Tween.LocalScale(transform, endValue: 0, duration: 1, endDelay: 0.5f)
 
 ### Delays
 Creating delays is by far the most useful feature in game development. Delays in PrimeTween behave like normal tweens and can be used with sequences, coroutines, and async/await methods. All while being completely [allocation-free](#zero-allocations-with-delegates).
-
 ```csharp
 Tween.Delay(duration: 1f, () => Debug.Log("Delay completed"));
 ```
+
+### Cycles
+Animations and sequences can be repeated with the help of cycles. To apply cycles to an animation, pass the `int cycles = 1` and `CycleMode cycleMode` parameters to a `Tween.` method. Setting cycles to -1 will repeat the tween indefinitely.
+```csharp
+Tween.PositionY(transform, endValue: 10, duration: 0.5f, cycles: 2, cycleMode: CycleMode.Yoyo);
+```
+
+#### enum CycleMode
+- `Restart` (default): restarts the tween from the beginning.
+- `Yoyo`: animates forth and back, like a yoyo. Easing is normal on the backward cycle.
+- `Incremental`: at the end of a cycle increments `startValue` and `endValue` like this: `(startValue = endValue, endValue += deltaValue)`. For example, if a tween moves position.x from 0 to 1, then after the first cycle, the tween will move the position.x from 1 to 2, and so on.
+- `Rewind`: rewinds the tween as if time was reversed. Easing is reversed on the backward cycle.
+> Sequences don't support CycleMode and can't be played backward.
+
+#### void SetCycles(int cycles)
+Sets the number of remaining cycles to a tween or sequence.  
+This method modifies the cyclesTotal so that the tween will complete after the number of cycles.
+
+#### void SetCycles(bool stopAtEndValue)
+Stops the tween when it reaches 'startValue' or 'endValue' for the next time.  
+For example, if you have an infinite tween (cycles == -1) with CycleMode.Yoyo/Rewind, and you wish to stop it when it reaches the 'endValue' (odd cycle), then set stopAtEndValue to true.  
+To stop the animation at the 'startValue' (even cycle), set stopAtEndValue to false.
 
 Sequencing tweens
 ---
@@ -431,7 +455,8 @@ There are a few other things PrimeTween currently **doesn't support**.
 // Alternative available
 sequence.Insert(atPosition: 1.5f, transform.DOMoveX(0, 1));  -->  sequence.Group(Tween.PositionX(transform, 0, 1, startDelay: 1.5f)); (at the beginning of a Sequence)
 sequence.InsertCallback(atPosition: 1f, callback: delegate { });  -->  sequence.Group(Tween.Delay(duration: 1, onComplete: delegate { })); (at the beginning of a Sequence)
-
+transform.DOJump() // https://forum.unity.com/threads/1479609/#post-9226566
+    
 // Not supported, but technically possible
 sequence.OnComplete() // alternative: if a sequence has one loop, use ChainCallback() instead
 transform.DOPath()
