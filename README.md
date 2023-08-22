@@ -95,7 +95,7 @@ Tween.Delay(duration: 1f, () => Debug.Log("Delay completed"));
 ```
 
 ### Cycles
-Animations and sequences can be repeated with the help of cycles. To apply cycles to an animation, pass the `int cycles` and `CycleMode cycleMode` parameters to a `Tween.` method. Setting cycles to -1 will repeat the tween indefinitely.
+Animations can be repeated with the help of cycles. To apply cycles to an animation, pass the `int cycles` and `CycleMode cycleMode` parameters to a `Tween.` method. Setting cycles to -1 will repeat the tween indefinitely.
 ```csharp
 Tween.PositionY(transform, endValue: 10, duration: 0.5f, cycles: 2, cycleMode: CycleMode.Yoyo);
 ```
