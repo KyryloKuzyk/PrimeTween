@@ -1,7 +1,7 @@
 PrimeTween
 ===
 
-PrimeTween is a high-performance, **allocation-free** animation library for Unity. **Animate anything** with just one line of code, tweak all animation properties directly from the Inspector, and create complex animation sequences. No runtime memory allocations, ever.  
+PrimeTween is a high-performance, **allocation-free** animation library for Unity. **Animate anything** with just one line of code, tweak all animation properties directly from the Inspector, and create complex animation sequences. No runtime memory allocations, ever.
 
 **[Asset Store](https://assetstore.unity.com/packages/slug/252960)** | **[Forum](https://forum.unity.com/threads/1479609/)** | **[FAQ](https://github.com/KyryloKuzyk/PrimeTween/discussions)**
 
@@ -278,7 +278,7 @@ Tween.Delay(this, duration: 1f, target => target.SomeMethod());
 Tween.Custom(this, 0, 10, duration: 1, (target, newVal) => target.floatField = newVal);
 
 var shakeSettings = new ShakeSettings(frequency: 10, strength: Vector3.one, duration: 1);
-Tween.ShakeCustom(this, shakeSettings, startValue: vector3Field, (target, val) => target.vector3Field = val);
+Tween.ShakeCustom(this, startValue: vector3Field, shakeSettings, (target, val) => target.vector3Field = val);
 ```
 
 Debugging tweens
