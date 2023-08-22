@@ -101,10 +101,10 @@ Tween.PositionY(transform, endValue: 10, duration: 0.5f, cycles: 2, cycleMode: C
 ```
 
 #### enum CycleMode
-- Restart (default): restarts the tween from the beginning.
-- Yoyo: animates forth and back, like a yoyo. Easing is normal on the backward cycle.
-- Incremental: at the end of a cycle increments `startValue` and `endValue`, like this: `(startValue = endValue, endValue += deltaValue)`. For example, if a tween moves position.x from 0 to 1, then after the first cycle, the tween will move the position.x from 1 to 2, and so on.
-- Rewind: rewinds the tween as if time was reversed. Easing is reversed on the backward cycle.
+- **Restart** (default): restarts the tween from the beginning.
+- **Yoyo**: animates forth and back, like a yoyo. Easing is normal on the backward cycle.
+- **Incremental**: at the end of a cycle increments `startValue` and `endValue`, like this: `(startValue = endValue, endValue += deltaValue)`. For example, if a tween moves position.x from 0 to 1, then after the first cycle, the tween will move the position.x from 1 to 2, and so on.
+- **Rewind**: rewinds the tween as if time was reversed. Easing is reversed on the backward cycle.
 > Sequences don't support CycleMode and can't be played backward.
 
 #### void SetCycles(int cycles)
