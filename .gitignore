@@ -8,3 +8,4 @@ Benchmark/obj
 Benchmark/.idea/.idea.Benchmark/.idea
 *.sln
 packages-lock.json
+SceneTemplateSettings.json
