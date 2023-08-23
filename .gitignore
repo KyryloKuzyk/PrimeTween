@@ -1,1 +1,9 @@
 .idea/.idea.PrimeTweenSupport.dir/.idea
+Benchmark/Library
+Benchmark/Temp
+Benchmark/UserSettings
+Benchmark/Logs
+Benchmark/obj
+*.csproj
+Benchmark/.idea/.idea.Benchmark/.idea
+*.sln
