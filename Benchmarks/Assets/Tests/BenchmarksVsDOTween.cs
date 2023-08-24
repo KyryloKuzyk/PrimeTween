@@ -12,9 +12,8 @@ using UnityEngine.TestTools;
 using Ease = DG.Tweening.Ease;
 using Tween = PrimeTween.Tween;
 
-// todo rename folder to Benchmarks
 // todo add test to install PrimeTween
-public class Tests {
+public class BenchmarksVsDOTween {
     const int warmups = 1;
     const int iterations = 100000;
     Transform transform;
@@ -159,7 +158,7 @@ public class Tests {
     [UnityTest, Performance] public IEnumerator _10_Delay_StartEnd_PrimeTween() {
         using (Measure.Frames().Scope()) {
             numCallbackCalled = 0;
-            Action<Tests> onComplete = _this => _this.numCallbackCalled++;
+            Action<BenchmarksVsDOTween> onComplete = _this => _this.numCallbackCalled++;
             for (int i = 0; i < delayStartEndCount; i++) {
                 Tween.Delay(this, delayStartEndDuration, onComplete);
             }

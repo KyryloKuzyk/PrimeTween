@@ -1,5 +1,5 @@
 {
-    "name": "Tests",
+    "name": "BenchmarksVsDOTween",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
