@@ -108,7 +108,7 @@ public class BenchmarksVsDOTween {
         Measure.Method(action)
             .MeasurementCount(1)
             .IterationsPerMeasurement(iterations)
-            .GC() // wierd units, seems li
+            .GC()
             .Run();
     }
 
