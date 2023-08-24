@@ -54,8 +54,12 @@ public class BenchmarksVsDOTween {
     
     [Test] public void _0_IsProfilerDisabled() => Assert.IsFalse(Profiler.enabled, "Please disable Profiler because it influences test results.");
     [Test] public void _0_IsRunningOnDevice() => Assert.IsFalse(Application.isEditor, "Please run the test on a real device, not in Editor.");
+    [Test] public void _0_IsPrimeTweenAssertionsDisabled() {
+        #if !PRIME_TWEEN_DISABLE_ASSERTIONS
+        Debug.LogError("Please disable PrimeTween asserts by adding the define: PRIME_TWEEN_DISABLE_ASSERTIONS. This will ensure you're measuring the release performance.");
+        #endif
+    }
 
-    
     readonly Vector3 endValue = Vector3.one;
     const float longDuration = 10f;
     [UnityTest, Performance] public IEnumerator _01_Animation_DOTween() {
