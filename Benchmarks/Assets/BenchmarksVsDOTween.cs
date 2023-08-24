@@ -64,36 +64,36 @@ public class BenchmarksVsDOTween {
     readonly Vector3 endValue = Vector3.one;
     const float longDuration = 10f;
     [UnityTest, Performance] public IEnumerator _01_Animation_DOTween() {
-        yield return measureFrameTimeAfter(() => transform.DOMove(endValue, longDuration));
+        yield return measureAverageFrameTimes(() => transform.DOMove(endValue, longDuration));
     }
     [UnityTest, Performance] public IEnumerator _01_Animation_PrimeTween() {
-        yield return measureFrameTimeAfter(() => Tween.Position(transform, endValue, longDuration));
+        yield return measureAverageFrameTimes(() => Tween.Position(transform, endValue, longDuration));
     }
     
   
     float floatField;
     [UnityTest, Performance] public IEnumerator _02_CustomAnimation_DOTween() {
-        yield return measureFrameTimeAfter(() => DOVirtual.Float(0, 1, longDuration, val => floatField = val));
+        yield return measureAverageFrameTimes(() => DOVirtual.Float(0, 1, longDuration, val => floatField = val));
     }
     [UnityTest, Performance] public IEnumerator _02_CustomAnimation_PrimeTween() {
-        yield return measureFrameTimeAfter(() => Tween.Custom(this, 0, 1, longDuration, (_this, val) => _this.floatField = val));
+        yield return measureAverageFrameTimes(() => Tween.Custom(this, 0, 1, longDuration, (_this, val) => _this.floatField = val));
     }
 
     
     readonly AnimationCurve animationCurve = AnimationCurve.EaseInOut(0,0,1,1);
     [UnityTest, Performance] public IEnumerator _03_AnimationWithCustomEase_DOTween() {
-        yield return measureFrameTimeAfter(() => transform.DOMove(endValue, longDuration).SetEase(animationCurve));
+        yield return measureAverageFrameTimes(() => transform.DOMove(endValue, longDuration).SetEase(animationCurve));
     }
     [UnityTest, Performance] public IEnumerator _03_AnimationWithCustomEase_PrimeTween() {
-        yield return measureFrameTimeAfter(() => Tween.Position(transform, endValue, longDuration, animationCurve));
+        yield return measureAverageFrameTimes(() => Tween.Position(transform, endValue, longDuration, animationCurve));
     }
 
     
     [UnityTest, Performance] public IEnumerator _04_Delay_DOTween() {
-        yield return measureFrameTimeAfter(() => DOVirtual.DelayedCall(longDuration, () => numCallbackCalled++));
+        yield return measureAverageFrameTimes(() => DOVirtual.DelayedCall(longDuration, () => numCallbackCalled++));
     }
     [UnityTest, Performance] public IEnumerator _04_Delay_PrimeTween() {
-        yield return measureFrameTimeAfter(() => Tween.Delay(this, longDuration, _this => _this.numCallbackCalled++));
+        yield return measureAverageFrameTimes(() => Tween.Delay(this, longDuration, _this => _this.numCallbackCalled++));
     }
 
 
@@ -192,12 +192,10 @@ public class BenchmarksVsDOTween {
                 action();
             }
             GC.Collect();
-            for (int i = 0; i < 1; i++) {
-                yield return null;
-            }
+            yield return null;
         }
     }
-    static IEnumerator measureFrameTimeAfter(Action action) {
+    static IEnumerator measureAverageFrameTimes(Action action) {
         for (int i = 0; i < warmups; i++) {
             action();
         }
