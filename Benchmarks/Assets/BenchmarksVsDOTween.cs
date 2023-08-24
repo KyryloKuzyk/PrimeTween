@@ -52,9 +52,9 @@ public class BenchmarksVsDOTween {
     }
 
     
-    [Test] public void _0_IsProfilerDisabled() => Assert.IsFalse(Profiler.enabled, "Please disable Profiler because it influences test results.");
-    [Test] public void _0_IsRunningOnDevice() => Assert.IsFalse(Application.isEditor, "Please run the test on a real device, not in Editor.");
-    [Test] public void _0_IsPrimeTweenAssertionsDisabled() {
+    [Test] public void _0_ProfilerDisabled() => Assert.IsFalse(Profiler.enabled, "Please disable Profiler because it influences test results.");
+    [Test] public void _0_RunningOnDevice() => Assert.IsFalse(Application.isEditor, "Please run the test on a real device, not in Editor.");
+    [Test] public void _0_PrimeTweenAssertionsDisabled() {
         #if !PRIME_TWEEN_DISABLE_ASSERTIONS
         Debug.LogError("Please disable PrimeTween asserts by adding the define: PRIME_TWEEN_DISABLE_ASSERTIONS. This will ensure you're measuring the release performance.");
         #endif
@@ -149,8 +149,9 @@ public class BenchmarksVsDOTween {
     
     const float delayStartEndDuration = 0.1f;
     int numCallbackCalled;
-    const int delayStartEndCount = iterations; // DOTween counts time incorrectly with more than 10000 delays (Mac M1 IL2CPP, Mac M1 Editor)
-    [UnityTest, Performance] public IEnumerator _10_Delay_StartEnd_DOTween() {
+    const int delayStartEndCount = iterations;
+    /// DOTween measures time incorrectly with more than 5000 delays (Mac M1 IL2CPP; Mac M1 Editor) 
+    [UnityTest, Performance] public IEnumerator _10_Delay_StartEnd_DOTween_BUGGED() {
         using (Measure.Frames().Scope()) {
             numCallbackCalled = 0;
             TweenCallback tweenCallback = () => numCallbackCalled++;
