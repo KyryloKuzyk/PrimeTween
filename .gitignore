@@ -1,11 +1,11 @@
 .idea/.idea.PrimeTweenSupport.dir/.idea
-Benchmark/Library
-Benchmark/Temp
-Benchmark/UserSettings
-Benchmark/Logs
-Benchmark/obj
+Benchmarks/Library
+Benchmarks/Temp
+Benchmarks/UserSettings
+Benchmarks/Logs
+Benchmarks/obj
 *.csproj
-Benchmark/.idea/.idea.Benchmark/.idea
+Benchmarks/.idea/.idea.Benchmark/.idea
 *.sln
 packages-lock.json
 SceneTemplateSettings.json
