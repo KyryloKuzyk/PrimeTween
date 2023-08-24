@@ -1,19 +1,25 @@
 #if PRIME_TWEEN_INSTALLED
+using PrimeTween;
+using Tween = PrimeTween.Tween;
+#endif
+using UnityEngine;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using DG.Tweening;
-using NUnit.Framework;
-using PrimeTween;
 using Unity.PerformanceTesting;
-using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.Scripting;
 using UnityEngine.TestTools;
 using Ease = DG.Tweening.Ease;
-using Tween = PrimeTween.Tween;
 
-// todo add test to install PrimeTween
 public class BenchmarksVsDOTween {
+    #if !PRIME_TWEEN_INSTALLED
+    [Test]
+    public void PrimeTweenIsNotInstalled() {
+        Debug.LogError("Please install PrimeTween from Asset Store: https://assetstore.unity.com/packages/slug/252960");
+    }
+    #else
     const int warmups = 1;
     const int iterations = 100000;
     Transform transform;
@@ -197,5 +203,5 @@ public class BenchmarksVsDOTween {
         GC.Collect();
         yield return Measure.Frames().MeasurementCount(50).Run();
     }
+    #endif // PRIME_TWEEN_INSTALLED
 }
-#endif
