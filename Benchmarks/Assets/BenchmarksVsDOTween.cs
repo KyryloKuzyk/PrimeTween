@@ -59,6 +59,7 @@ public class BenchmarksVsDOTween {
         Debug.LogError("Please disable PrimeTween asserts by adding the define: PRIME_TWEEN_DISABLE_ASSERTIONS. This will ensure you're measuring the release performance.");
         #endif
     }
+    
 
     readonly Vector3 endValue = Vector3.one;
     const float longDuration = 10f;
@@ -117,10 +118,9 @@ public class BenchmarksVsDOTween {
         yield return measureFrameTime(() => _ = transform.DOMove(endValue, shortDuration));
     }
     [UnityTest, Performance] public IEnumerator _07_Animation_Start_PrimeTween() {
-        yield return measureFrameTime(() => {
-            Tween.Position(transform, endValue, shortDuration);
-        });
+        yield return measureFrameTime(() => Tween.Position(transform, endValue, shortDuration));
     }
+    
     
     [UnityTest, Performance] public IEnumerator _08_Animation_Start_AllParams_DOTween() {
         yield return measureFrameTime(() => {
