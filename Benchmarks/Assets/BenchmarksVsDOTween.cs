@@ -98,10 +98,10 @@ public class BenchmarksVsDOTween {
 
 
     const float shortDuration = 0.0001f;
-    [Test, Performance] public void _05_Animation_GC_DOTween() => measureMethod(() => transform.DOMove(endValue, shortDuration));
-    [Test, Performance] public void _05_Animation_GC_PrimeTween() => measureMethod(() => Tween.Position(transform, endValue, shortDuration));
-    [Test, Performance] public void _06_Delay_GC_DOTween() => measureMethod(() => DOVirtual.DelayedCall(shortDuration, () => numCallbackCalled++));
-    [Test, Performance] public void _06_Delay_GC_PrimeTween() => measureMethod(() => Tween.Delay(this, shortDuration, _this => _this.numCallbackCalled++));
+    [Test, Performance] public void _05_Animation_GCAlloc_DOTween() => measureMethod(() => transform.DOMove(endValue, shortDuration));
+    [Test, Performance] public void _05_Animation_GCAlloc_PrimeTween() => measureMethod(() => Tween.Position(transform, endValue, shortDuration));
+    [Test, Performance] public void _06_Delay_GCAlloc_DOTween() => measureMethod(() => DOVirtual.DelayedCall(shortDuration, () => numCallbackCalled++));
+    [Test, Performance] public void _06_Delay_GCAlloc_PrimeTween() => measureMethod(() => Tween.Delay(this, shortDuration, _this => _this.numCallbackCalled++));
     static void measureMethod(Action action) {
         for (int i = 0; i < warmups; i++) {
             action();
