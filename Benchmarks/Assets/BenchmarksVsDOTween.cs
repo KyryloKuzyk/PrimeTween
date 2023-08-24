@@ -44,8 +44,8 @@ public class BenchmarksVsDOTween {
         }
         DOTween.KillAll();
         Tween.StopAll();
-        GC.Collect();
         yield return null;
+        GC.Collect();
         Assert.AreEqual(0, DOTween.TotalActiveSequences());
         Assert.AreEqual(0, DOTween.TotalActiveTweeners());
         Assert.AreEqual(0, DOTween.TotalActiveTweens());
