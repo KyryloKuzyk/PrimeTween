@@ -24,6 +24,11 @@
             "name": "com.kyrylokuzyk.primetween",
             "expression": "1.0.4",
             "define": "PRIME_TWEEN_INSTALLED"
+        },
+        {
+            "name": "com.unity.modules.uielements",
+            "expression": "1.0.0",
+            "define": "UI_ELEMENTS_MODULE_INSTALLED"
         }
     ],
     "noEngineReferences": false

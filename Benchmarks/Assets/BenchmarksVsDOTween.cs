@@ -186,7 +186,7 @@ public class BenchmarksVsDOTween {
             .Append(transform.DORotate(Vector3.zero, longDuration));
     void createSequencePrimeTween() =>
         Tween.Position(transform, Vector3.zero, longDuration)
-            .Chain(Tween.LocalScale(transform, Vector3.zero, longDuration))
+            .Chain(Tween.Scale(transform, Vector3.zero, longDuration))
             .Chain(Tween.Rotation(transform, Vector3.zero, longDuration));
 
     
