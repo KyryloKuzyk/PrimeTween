@@ -54,12 +54,12 @@ public class PrimeTween_VS_UIToolkit {
     }
     
     
-    [UnityTest, Performance] public IEnumerator _01_VisualElement_Animation__UIToolkit() {
+    [UnityTest, Performance] public IEnumerator _01_Animation__UIToolkit() {
         startAnimationsUIToolkit();
         yield return measureAverageFrameTimes();
         numUIToolkitTestsDone++;
     }
-    [UnityTest, Performance] public IEnumerator _01_VisualElement_Animation_PrimeTween() {
+    [UnityTest, Performance] public IEnumerator _01_Animation_PrimeTween() {
         startAnimationsPrimeTween();
         yield return measureAverageFrameTimes();
     }

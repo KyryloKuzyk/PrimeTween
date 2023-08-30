@@ -143,9 +143,8 @@ public class PrimeTween_VS_DOTween {
     [UnityTest, Performance] public IEnumerator _10_Delay_StartEnd_DOTween() {
         using (Measure.Frames().Scope()) {
             numCallbackCalled = 0;
-            TweenCallback tweenCallback = () => numCallbackCalled++;
             for (int i = 0; i < delayStartEndCount; i++) {
-                DOVirtual.DelayedCall(delayStartEndDuration, tweenCallback);
+                DOVirtual.DelayedCall(delayStartEndDuration, () => numCallbackCalled++);
             }
             GC.Collect();
             while (numCallbackCalled != delayStartEndCount) {
@@ -158,9 +157,8 @@ public class PrimeTween_VS_DOTween {
     [UnityTest, Performance] public IEnumerator _10_Delay_StartEnd_PrimeTween() {
         using (Measure.Frames().Scope()) {
             numCallbackCalled = 0;
-            Action<PrimeTween_VS_DOTween> onComplete = _this => _this.numCallbackCalled++;
             for (int i = 0; i < delayStartEndCount; i++) {
-                Tween.Delay(this, delayStartEndDuration, onComplete);
+                Tween.Delay(this, delayStartEndDuration, _this => _this.numCallbackCalled++);
             }
             GC.Collect();
             while (numCallbackCalled != delayStartEndCount) {
