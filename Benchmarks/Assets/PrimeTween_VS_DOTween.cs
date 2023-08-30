@@ -14,7 +14,7 @@ using UnityEngine.TestTools;
 using Ease = DG.Tweening.Ease;
 using Assert = UnityEngine.Assertions.Assert;
 
-public class BenchmarksVsDOTween {
+public class PrimeTween_VS_DOTween {
     #if !PRIME_TWEEN_INSTALLED
     [Test]
     public void PrimeTweenIsInstalled() {
@@ -158,7 +158,7 @@ public class BenchmarksVsDOTween {
     [UnityTest, Performance] public IEnumerator _10_Delay_StartEnd_PrimeTween() {
         using (Measure.Frames().Scope()) {
             numCallbackCalled = 0;
-            Action<BenchmarksVsDOTween> onComplete = _this => _this.numCallbackCalled++;
+            Action<PrimeTween_VS_DOTween> onComplete = _this => _this.numCallbackCalled++;
             for (int i = 0; i < delayStartEndCount; i++) {
                 Tween.Delay(this, delayStartEndDuration, onComplete);
             }
