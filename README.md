@@ -81,8 +81,8 @@ Use **`.OnComplete()`** to execute custom code on tween's completion.
 Tween.Position(transform, endValue: new Vector3(10, 0), duration: 1)
     .OnComplete(() => SomeMethod());
     
-// When the animation completes, wait for 0.5 seconds, then destroy the GameObject
-Tween.LocalScale(transform, endValue: 0, duration: 1, endDelay: 0.5f)
+// After the animation completes, wait for 0.5 seconds, then destroy the GameObject
+Tween.Scale(transform, endValue: 0, duration: 1, endDelay: 0.5f)
     .OnComplete(() => Destroy(gameObject));
 ```
 
@@ -127,9 +127,9 @@ Sequences can be controlled the same way as individual tweens, see [controlling 
 
 ```csharp
 Sequence.Create()
-    // PositionX and LocalScale tweens are 'grouped', so they will run in parallel
+    // PositionX and Scale tweens are 'grouped', so they will run in parallel
     .Group(Tween.PositionX(transform, endValue: 10f, duration: 1.5f))
-    .Group(Tween.LocalScale(transform, endValue: 2f, duration: 0.5f, startDelay: 1))
+    .Group(Tween.Scale(transform, endValue: 2f, duration: 0.5f, startDelay: 1))
     // Rotation tween is 'chained' so it will start when both previous tweens are finished (after 1.5 seconds)
     .Chain(Tween.Rotation(transform, endValue: new Vector3(0f, 0f, 45f), duration: 1f)) 
     .ChainDelay(1)
@@ -141,7 +141,7 @@ Another sequencing method is waiting for tweens and sequences in **coroutines** 
 ```csharp
 IEnumerator Coroutine() {
     Tween.PositionX(transform, endValue: 10f, duration: 1.5f);
-    yield return Tween.LocalScale(transform, 2f, 0.5f, startDelay: 1).ToYieldInstruction();
+    yield return Tween.Scale(transform, 2f, 0.5f, startDelay: 1).ToYieldInstruction();
     yield return Tween.Rotation(transform, new Vector3(0f, 0f, 45f), 1f).ToYieldInstruction();
     // Non-allocating alternative to 'yield return new WaitForSeconds(1f)'
     yield return Tween.Delay(1).ToYieldInstruction(); 
@@ -154,7 +154,7 @@ And the last method is awaiting tweens and sequences using the **async/await** p
 ```csharp
 async void AsyncMethod() {
     Tween.PositionX(transform, endValue: 10f, duration: 1.5f);
-    await Tween.LocalScale(transform, endValue: 2f, duration: 0.5f, startDelay: 1);
+    await Tween.Scale(transform, endValue: 2f, duration: 0.5f, startDelay: 1);
     await Tween.Rotation(transform, endValue: new Vector3(0f, 0f, 45f), duration: 1f);
     // Non-allocating alternative to 'await Task.Delay(1000)' that doesn't use 'System.Threading'. Tweens and sequences can be awaited on all platforms, even on WebGL
     await Tween.Delay(1); 
@@ -189,22 +189,22 @@ The neat thing about setting up animation properties in the Inspector is that yo
 
 Controlling tweens
 ---
-All static **`Tween.`** methods return a **`Tween`** struct. While the **`tween.IsAlive`** you can control it and access its properties such as duration, elapsedTime, progress, interpolationFactor, etc.
+All static **`Tween.`** methods return a **`Tween`** struct. While the **`tween.isAlive`** you can control it and access its properties such as duration, elapsedTime, progress, interpolationFactor, etc.
 
 After completion, the tween becomes 'dead' and can't be reused. This ensures that completed tweens don't eat computing resources and prevents the common performance pitfalls encountered in other tween libraries.
 ```csharp
 Tween tween = Tween.LocalPositionX(transform, endValue: 1.5f, duration: 1f);
 // ...
  
-if (tween.IsAlive) {
-    // 'IsAlive' means the tween was created and not completed (or manually stopped) yet.
-    // While the tween 'IsAlive' you can access its properties such as duration,
+if (tween.isAlive) {
+    // '.isAlive' means the tween was created and not completed (or manually stopped) yet.
+    // While the tween '.isAlive' you can access its properties such as duration,
     //     elapsedTime, progress, interpolationFactor, etc.
     Debug.Log($"Animation is still running, elapsed time: {tween.elapsedTime}.");
 }
 
 // Pause the tween
-tween.IsPaused = true;
+tween.isPaused = true;
 
 // Interrupt the tween, leaving the animated value at the current value
 tween.Stop();
@@ -369,14 +369,14 @@ using PrimeTween;
 // ABSSequentiable tween;
 Tween tween; // just Tween ;)
 
-// if (tween != null && tween.IsPlaying()) {}
-if (tween.IsAlive) {} // null check is not needed because Tween in PrimeTween is a struct
+// if (tween.IsPlaying()) {}
+if (tween.isAlive) {}
 
-// if (tween != null && tween.IsActive()) {
+// if (tween.IsActive()) {
 //     tween.Kill(complete: true);
 //     tween = null;
 // }
-tween.Complete(); // null check and setting tween to null is not needed 
+tween.Complete(); // setting tween to null is not needed 
 
 // DOTween.SetTweensCapacity(tweenersCapacity: 200, sequencesCapacity: 50);
 PrimeTweenConfig.SetTweensCapacity(capacity: 250); // sequences in PrimeTween use the same pool as regular tweens
@@ -462,7 +462,7 @@ sequence.OnComplete() // alternative: if a sequence has one loop, use ChainCallb
 transform.DOPath()
 
 // Not supported because sequences and tweens are non-reusable in PrimeTween
-sequence.PlayForward/PlayBackwards/Rewind/Restart() // alternative: start a new tween in the desired direction
+tween/sequence.PlayForward/PlayBackwards/Rewind/Restart() // alternative: start a new tween/sequence in the desired direction
 sequence.OnStart() // alternative: execute the code before starting a sequence
 tween.OnStart() // alternative: execute the code before starting a tween
 ```
