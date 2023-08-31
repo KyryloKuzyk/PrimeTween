@@ -1,6 +1,7 @@
 #if UI_ELEMENTS_MODULE_INSTALLED
 using System;
 using System.Collections;
+using System.Reflection;
 using NUnit.Framework;
 using PrimeTween;
 using Unity.PerformanceTesting;
@@ -8,29 +9,34 @@ using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.TestTools;
 using UnityEngine.UIElements;
+using UnityEngine.UIElements.Experimental;
 using Assert = UnityEngine.Assertions.Assert;
 
 public class PrimeTween_VS_UIToolkit {
-    const int iterations = 10000;
-    const int duration = 2;
-    readonly VisualElement[] visualElements = new VisualElement[iterations];
+    const int iterations = 100000;
+    const int duration = 1;
+    readonly VisualElement visualElement = new VisualElement();
     readonly WaitForSeconds wait = new WaitForSeconds(duration);
-    int numUIToolkitTestsDone;
+    readonly MethodInfo cancelAllAnimationsMethod = typeof(VisualElement).GetMethod("UnityEngine.UIElements.IStylePropertyAnimations.CancelAllAnimations", BindingFlags.NonPublic | BindingFlags.Instance);
 
     [OneTimeSetUp] public void oneTimeSetup() {
         PrimeTweenConfig.SetTweensCapacity(iterations);
-        initUIToolkitTests();
-    }
-
-    [UnitySetUp]
-    public IEnumerator setUp() {
         if (!Application.isEditor) {
             GarbageCollector.GCMode = GarbageCollector.Mode.Disabled;
         }
+        initUIToolkitTests();
+    }
+    
+    [UnitySetUp]
+    public IEnumerator setUp() {
         Tween.StopAll();
-        yield return null;
+        if (cancelAllAnimationsMethod != null) {
+            cancelAllAnimationsMethod.Invoke(visualElement, null);
+        } else {
+            Debug.LogWarning("CancelAllAnimations() method is not found on VisualElement. Please run UIToolkit one by one to measure performance correctly.");
+        }
+        yield return wait;
         GC.Collect();
-        Assert.IsTrue(numUIToolkitTestsDone <= 1, "Please run UIToolkit tests one by one because there is no way to reset UI Toolkit animation library without influencing test results.");
     }
     
     void initUIToolkitTests() {
@@ -38,12 +44,7 @@ public class PrimeTween_VS_UIToolkit {
         Assert.IsNotNull(panelSettings);
         var uiDocument = new GameObject("UIToolkit_test_object").AddComponent<UIDocument>();
         uiDocument.panelSettings = panelSettings;
-        
-        for (int i = 0; i < iterations; i++) {
-            var visualElement = new VisualElement();
-            visualElements[i] = visualElement;
-            uiDocument.rootVisualElement.Add(visualElement);
-        }
+        uiDocument.rootVisualElement.Add(visualElement);
     }
     
     
@@ -55,61 +56,72 @@ public class PrimeTween_VS_UIToolkit {
     
     
     [UnityTest, Performance] public IEnumerator _01_Animation__UIToolkit() {
-        startAnimationsUIToolkit();
-        yield return measureAverageFrameTimes();
-        numUIToolkitTestsDone++;
+        yield return measureAverageFrameTimes(startAnimationUIToolkit);
+        yield return wait;
     }
     [UnityTest, Performance] public IEnumerator _01_Animation_PrimeTween() {
-        startAnimationsPrimeTween();
-        yield return measureAverageFrameTimes();
+        yield return measureAverageFrameTimes(startAnimationPrimeTween);
     }
-
-
-    [UnityTest, Performance]
-    public IEnumerator _02_Animation_GCAlloc__UIToolkit() {
-        measureGCAlloc(startAnimationsUIToolkit);
+    
+    
+    [UnityTest, Performance] public IEnumerator _02_AnimationLinearEase__UIToolkit() {
+        yield return measureAverageFrameTimes(() => {
+            visualElement.experimental.animation.Position(Vector3.one, duration * 1000).autoRecycle = true;
+        });
         yield return wait;
-        numUIToolkitTestsDone++;
     }
-    [Test, Performance] public void _02_Animation_GCAlloc_PrimeTween() => measureGCAlloc(startAnimationsPrimeTween);
+    [UnityTest, Performance] public IEnumerator _02_AnimationLinearEase_PrimeTween() {
+        yield return measureAverageFrameTimes(() => {
+            Tween.Position(visualElement, Vector3.one, duration, Ease.Linear);
+        });
+    }
 
 
-    [UnityTest, Performance]
-    public IEnumerator _03_Animation_Start__UIToolkit() {
-        yield return measureFrameTime(startAnimationsUIToolkit);
+    [UnityTest, Performance] public IEnumerator _03_Animation_GCAlloc__UIToolkit() {
+        measureGCAlloc(startAnimationUIToolkit);
         yield return wait;
-        numUIToolkitTestsDone++;
     }
-    [UnityTest, Performance]
-    public IEnumerator _03_Animation_Start_PrimeTween() { yield return measureFrameTime(startAnimationsPrimeTween); }
-    
-    
-    void startAnimationsUIToolkit() {
-        foreach (var visualElement in visualElements) {
-            visualElement.experimental.animation.Position(Vector3.one, duration * 1000);
-        }
+    [Test, Performance] public void _03_Animation_GCAlloc_PrimeTween() => measureGCAlloc(startAnimationPrimeTween);
+
+
+    [UnityTest, Performance] public IEnumerator _04_Animation_Start__UIToolkit() {
+        yield return measureFrameTime(startAnimationUIToolkit);
+        yield return wait;
     }
-    void startAnimationsPrimeTween() {
-        foreach (var visualElement in visualElements) {
-            Tween.Position(visualElement.transform, Vector3.one, duration, Ease.Linear);
-        }
-    }
+    [UnityTest, Performance] public IEnumerator _04_Animation_Start_PrimeTween() { yield return measureFrameTime(startAnimationPrimeTween); }
+
     
+    readonly Func<float, float> uiToolkitInOutSineEase = Easing.InOutSine;
+    void startAnimationUIToolkit() {
+        visualElement.experimental.animation.Position(Vector3.one, duration * 1000).Ease(uiToolkitInOutSineEase).autoRecycle = true;
+    }
+    void startAnimationPrimeTween() {
+        Tween.Position(visualElement, Vector3.one, duration, Ease.InOutSine);
+    }
+
     static void measureGCAlloc(Action action) {
         GC.Collect();
         var allocatedMemoryBefore = GC.GetTotalMemory(true);
-        action();
+        for (int i = 0; i < iterations; i++) {
+            action();
+        }
         var gcAllocPerIteration = (GC.GetTotalMemory(true) - allocatedMemoryBefore) / iterations;
         Measure.Custom(new SampleGroup("GCAlloc", SampleUnit.Byte), gcAllocPerIteration);
     }
     static IEnumerator measureFrameTime(Action action) {
         using (Measure.Frames().Scope()) {
-            action();
+            for (int i = 0; i < iterations; i++) {
+                action();
+            }
             GC.Collect();
             yield return null;
         }
     }
-    static IEnumerator measureAverageFrameTimes() {
+    static IEnumerator measureAverageFrameTimes(Action action) {
+        for (int i = 0; i < iterations; i++) {
+            action();
+        }
+        GC.Collect();
         return Measure.Frames().MeasurementCount(50).Run();
     }
 }
