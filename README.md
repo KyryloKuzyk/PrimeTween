@@ -16,7 +16,7 @@ Table of Contents
 - [Sequencing tweens](#sequencing-tweens)
   + [Sequence](#sequence)
   + [Coroutines](#coroutines)
-  + [Async/await](#async-await)
+  + [Async/await](#asyncawait)
 - [Inspector integration](#inspector-integration)
 - [Controlling tweens](#controlling-tweens)
 - [Custom tweens](#custom-tweens)
