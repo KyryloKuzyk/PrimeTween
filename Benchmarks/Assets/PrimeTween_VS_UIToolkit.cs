@@ -33,7 +33,7 @@ public class PrimeTween_VS_UIToolkit {
         if (cancelAllAnimationsMethod != null) {
             cancelAllAnimationsMethod.Invoke(visualElement, null);
         } else {
-            Debug.LogWarning("CancelAllAnimations() method is not found on VisualElement. Please run UIToolkit one by one to measure performance correctly.");
+            Debug.LogWarning("CancelAllAnimations() method is not found on VisualElement. Please run UIToolkit tests one by one independently of other tests to measure performance correctly.");
         }
         yield return wait;
         GC.Collect();
