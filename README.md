@@ -53,7 +53,7 @@ That's it!
 Simply type **`Tween.`** and let your IDE suggest all supported animations. Out of the box, PrimeTween can animate almost everything: UI, materials, camera properties, transforms, audio, and whatnot.
 
 Didn't find what you're looking for? No problem, use [`Tween.Custom()`](#custom-tweens) to animate **anything**.
-> To generate XML documentation and view PrimeTween's source code in your IDE, enable this setting: _'Unity Preferences/External Tools/Generate .csproj files for/**Local tarbal**'_ and press the _'Regenerate project files'_ button.
+> To view PrimeTween's XML documentation in your IDE, enable this setting: _'Unity Preferences/External Tools/Generate .csproj files for/**Local tarbal**'_ and press the _'Regenerate project files'_ button.
 
 ### Shakes
 ```csharp
@@ -303,7 +303,7 @@ PrimeTween and DOTween don't conflict with each other and can be used in one pro
 
 #### Performance comparison
 
-In real-world scenarios, PrimeTween is up to **30%** faster than DOTween in terms of average runtime performance. But this is not the most important performance indicator most of the time.
+In performance tests, PrimeTween is up to **2.2x** faster than DOTween in the most common use case of [animating position](https://github.com/KyryloKuzyk/PrimeTween/blob/f8717ce7f58d1c5620026c70b09d0b3d41309a48/Benchmarks/Assets/PrimeTween_VS_DOTween.cs#L67-L68). But this is not the most important performance indicator most of the time.
 
 Where PrimeTween really shines is in the absence of **memory allocations**. PrimeTween never allocates heap memory and never produces garbage collection spikes. Create millions of animations, delays, and sequences with **0KB of GC** and without hiccups!
 
@@ -459,6 +459,8 @@ transform.DOJump() // https://forum.unity.com/threads/1479609/#post-9226566
     
 // Not supported, but technically possible
 sequence.OnComplete() // alternative: if a sequence has one loop, use ChainCallback() instead
+sequence.SetEase() // alternative: apply eases to individual tweens in a sequence
+sequence.SetUpdate(bool isIndependentUpdate) // alternative: apply 'useUnscaledTime' parameter to all tweens in a sequence
 transform.DOPath()
 
 // Not supported because sequences and tweens are non-reusable in PrimeTween
