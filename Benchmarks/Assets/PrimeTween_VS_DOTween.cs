@@ -104,7 +104,7 @@ public class PrimeTween_VS_DOTween {
     
     
     [UnityTest, Performance] public IEnumerator _07_Animation_Start_DOTween() {
-        yield return measureFrameTime(() => _ = transform.DOMove(endValue, shortDuration));
+        yield return measureFrameTime(() => transform.DOMove(endValue, shortDuration));
     }
     [UnityTest, Performance] public IEnumerator _07_Animation_Start_PrimeTween() {
         yield return measureFrameTime(() => Tween.Position(transform, endValue, shortDuration));
@@ -175,7 +175,7 @@ public class PrimeTween_VS_DOTween {
     [UnityTest, Performance] public IEnumerator _11_Sequence_PrimeTween() { yield return measureAverageFrameTimes(createSequencePrimeTween, sequenceIterations); }
     [Test, Performance] public void _12_Sequence_GCAlloc_DOTween() => measureGCAlloc(createSequenceDOTween, sequenceIterations);
     [Test, Performance] public void _12_Sequence_GCAlloc_PrimeTween() => measureGCAlloc(createSequencePrimeTween, sequenceIterations);
-    [UnityTest, Performance] public IEnumerator _13_SequenceStart_DOTweeTween() { yield return measureFrameTime(createSequenceDOTween, sequenceIterations); }
+    [UnityTest, Performance] public IEnumerator _13_SequenceStart_DOTween() { yield return measureFrameTime(createSequenceDOTween, sequenceIterations); }
     [UnityTest, Performance] public IEnumerator _13_SequenceStart_PrimeTween() { yield return measureFrameTime(createSequencePrimeTween, sequenceIterations); }
     void createSequenceDOTween() =>
         DOTween.Sequence()
