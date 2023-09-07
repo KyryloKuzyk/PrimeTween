@@ -293,13 +293,16 @@ Also, the Inspector shows the '**Max alive tweens**' for the current session. Us
 
 Migrating from DOTween to PrimeTween
 ---
-DOTween made a long way in its development and brought a lot of value to the game industry. But for almost 10 years it accumulated a lot of [technical debt](https://github.com/Demigiant/dotween/issues) and inconsistencies.
+PrimeTween and DOTween don't conflict with each other and can be used in one project. You can check out all PrimeTween's performance benefits in your current DOTween project without breaking anything.
 
-DOTween gives a huge heads-up for game jams and early prototypes, but when a project becomes bigger, its quirks become to pile up. And while with years it was getting better with memory allocations, it still allocates memory on every animation start and puts a lot of pressure on the garbage collector.
-
-PrimeTween is **simple**, **consistent**, covered by **tests**, and behaves exactly like you would expect. High performance and zero allocations out of the box.
-
-PrimeTween and DOTween don't conflict with each other and can be used in one project. So you can try PrimeTween in your existing project without breaking anything.
+What are the reasons to try PrimeTween instead of DOTween? I'm currently working on an expansive article comparing these two products, but the quick takeaways are:
+* **Performance**! DOTween allocates garbage on every animation start, which can result in small freezes and framerate drops.
+* **Seamless installation** that never produces compilation errors regardless of what other packages or plugins your project already uses.
+* PrimeTween's usage is [straightforward and more readable](https://github.com/KyryloKuzyk/PrimeTween/discussions/3).
+* PrimeTween is extremely easy to learn. It has only 7 top-level concepts, and you can learn the API even without the documentation by simply typing `PrimeTween` and pressing `.`
+* PrimeTween is extensively covered by more than **150 automatic tests** that ensure that every bit works perfectly. At the same time, DOTween has more than [200 open issues](https://github.com/Demigiant/dotween/issues) and sometimes breaks little things in new versions.
+* With PrimeTween it's safe to [destroy objects](https://github.com/KyryloKuzyk/PrimeTween/discussions/4) with running animations. While by default DOTween silently ignores OnComplete() and hides exceptions inside custom DOTween.To(...) animations.
+* PrimeTween is truly multiplatform, while some DOTween features don't work on WebGL (Safe Mode, async operations) and with the 'fast and no exceptions' setting on iOS (Safe Mode).
 
 #### Performance comparison
 
@@ -364,22 +367,16 @@ Although, here are the most common places that require a **manual fix** to the e
 // using DG.Tweening;
 using PrimeTween;
 
+// Tween tween;
 // Tweener tween;
 // TweenerCore tween;
-// ABSSequentiable tween;
-Tween tween; // just Tween ;)
+Tween tween;
 
-// if (tween.IsPlaying()) {}
-if (tween.isAlive) {}
-
-// if (tween.IsActive()) {
+// if (tween != null) {
 //     tween.Kill(complete: true);
 //     tween = null;
 // }
-tween.Complete(); // setting tween to null is not needed 
-
-// DOTween.SetTweensCapacity(tweenersCapacity: 200, sequencesCapacity: 50);
-PrimeTweenConfig.SetTweensCapacity(capacity: 250); // sequences in PrimeTween use the same pool as regular tweens
+tween.Complete(); // null checking and setting tween to null is not needed
 ```
 
 #### Tween.PlayForward/PlayBackwards/Restart
