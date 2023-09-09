@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.unity.test-framework.performance": "3.0.2",
-    "com.unity.modules.uielements": "1.0.0"
+    "com.kyrylokuzyk.primetween": "file:com.kyrylokuzyk.primetween.tgz",
+    "com.unity.test-framework.performance": "3.0.2"
   }
 }

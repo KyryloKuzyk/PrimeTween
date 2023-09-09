@@ -99,7 +99,7 @@ public class PrimeTween_VS_DOTween {
 
     const float shortDuration = 0.0001f;
     [Test, Performance] public void _05_Animation_GCAlloc_DOTween() => measureGCAlloc(() => transform.DOMove(endValue, shortDuration));
-    [Test, Performance] public void _14_Animation_GCAlloc_DOTween_Recycle_ClearRef() => _05_Animation_GCAlloc_DOTween_Recycle_internal(() => {
+    [Test, Performance] public void _14_Animation_GCAlloc_DOTween_Recycle_ClearRef() => Animation_GCAlloc_DOTween_Recycle_internal(() => {
         Tweener testTweenReference = transform.DOMove(endValue, shortDuration).OnKill(() => {
             // Clear the tween reference because it will be reused for another tween, leading to unpredictable and hard-to-detect bugs
             // This operation doesn't do anything useful under the test, but shows the unavoidable delegate allocation
@@ -107,12 +107,13 @@ public class PrimeTween_VS_DOTween {
             testTweenReference = null;
         });
     });
-    [Test, Performance] public void _14_Animation_GCAlloc_DOTween_Recycle() => _05_Animation_GCAlloc_DOTween_Recycle_internal(() => transform.DOMove(endValue, shortDuration));
+    [Test, Performance] public void _14_Animation_GCAlloc_DOTween_Recycle() => Animation_GCAlloc_DOTween_Recycle_internal(() => transform.DOMove(endValue, shortDuration));
     
+    /// Run the DOTween_Recycle one by one for the correct measurement.
     /// Warning! DOTween's 'Recycle Tweens' setting is very dangerous.
     /// This test only shows that with setting DOTween still allocates 470 B of GCAlloc for every animation.
     /// Also, for some reason, this setting causes huge freezes.
-    void _05_Animation_GCAlloc_DOTween_Recycle_internal(Action action) {
+    void Animation_GCAlloc_DOTween_Recycle_internal(Action action) {
         var settings = Resources.Load<DOTweenSettings>(nameof(DOTweenSettings));
         Assert.IsNotNull(settings);
         settings.defaultRecyclable = true;
