@@ -10,3 +10,4 @@ Benchmarks/.idea/.idea.Benchmark/.idea
 packages-lock.json
 SceneTemplateSettings.json
 Benchmarks/.idea
+*.user

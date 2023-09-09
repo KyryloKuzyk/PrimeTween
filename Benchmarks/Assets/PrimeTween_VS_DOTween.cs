@@ -7,6 +7,7 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 using DG.Tweening;
+using DG.Tweening.Core;
 using Unity.PerformanceTesting;
 using UnityEngine.Profiling;
 using UnityEngine.Scripting;
@@ -24,7 +25,7 @@ public class PrimeTween_VS_DOTween {
     const int warmups = 1;
     const int iterations = 100000;
     Transform transform;
-    
+
     [OneTimeSetUp] public void oneTimeSetup() {
         Application.targetFrameRate = SystemInfo.deviceType == DeviceType.Handheld ? 120 : -1;
         transform = new GameObject().transform;
@@ -98,6 +99,35 @@ public class PrimeTween_VS_DOTween {
 
     const float shortDuration = 0.0001f;
     [Test, Performance] public void _05_Animation_GCAlloc_DOTween() => measureGCAlloc(() => transform.DOMove(endValue, shortDuration));
+    [Test, Performance] public void _14_Animation_GCAlloc_DOTween_Recycle_ClearRef() => _05_Animation_GCAlloc_DOTween_Recycle_internal(() => {
+        Tweener testTweenReference = transform.DOMove(endValue, shortDuration).OnKill(() => {
+            // Clear the tween reference because it will be reused for another tween, leading to unpredictable and hard-to-detect bugs
+            // This operation doesn't do anything useful under the test, but shows the unavoidable delegate allocation
+            // https://dotween.demigiant.com/documentation.php?api=DOTween.Init
+            testTweenReference = null;
+        });
+    });
+    [Test, Performance] public void _14_Animation_GCAlloc_DOTween_Recycle() => _05_Animation_GCAlloc_DOTween_Recycle_internal(() => transform.DOMove(endValue, shortDuration));
+    
+    /// Warning! DOTween's 'Recycle Tweens' setting is very dangerous.
+    /// This test only shows that with setting DOTween still allocates 470 B of GCAlloc for every animation.
+    /// Also, for some reason, this setting causes huge freezes.
+    void _05_Animation_GCAlloc_DOTween_Recycle_internal(Action action) {
+        var settings = Resources.Load<DOTweenSettings>(nameof(DOTweenSettings));
+        Assert.IsNotNull(settings);
+        settings.defaultRecyclable = true;
+        
+        // Create tweens and recycle them
+        for (int i = 0; i < iterations; i++) {
+            transform.DOMove(endValue, shortDuration);
+        }
+        DOTween.KillAll();
+        GC.Collect();
+        // Do the actual measurement
+        measureGCAlloc(action);
+        
+        settings.defaultRecyclable = false;
+    }
     [Test, Performance] public void _05_Animation_GCAlloc_PrimeTween() => measureGCAlloc(() => Tween.Position(transform, endValue, shortDuration));
     [Test, Performance] public void _06_Delay_GCAlloc_DOTween() => measureGCAlloc(() => DOVirtual.DelayedCall(shortDuration, () => numCallbackCalled++));
     [Test, Performance] public void _06_Delay_GCAlloc_PrimeTween() => measureGCAlloc(() => Tween.Delay(this, shortDuration, _this => _this.numCallbackCalled++));
