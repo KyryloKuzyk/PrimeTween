@@ -46,11 +46,11 @@ public class PrimeTween_VS_DOTween {
         }
         DOTween.KillAll();
         Tween.StopAll();
-        yield return null;
         GC.Collect();
         Assert.AreEqual(0, DOTween.TotalActiveSequences());
         Assert.AreEqual(0, DOTween.TotalActiveTweeners());
         Assert.AreEqual(0, DOTween.TotalActiveTweens());
+        yield return null;
     }
 
     
@@ -111,12 +111,13 @@ public class PrimeTween_VS_DOTween {
     
     /// Run the DOTween_Recycle one by one for the correct measurement.
     /// Warning! DOTween's 'Recycle Tweens' setting is very dangerous.
-    /// This test only shows that with setting DOTween still allocates 470 B of GCAlloc for every animation.
+    /// This test only shows that with the 'Recycle Tweens' setting DOTween still allocates a considerable amount of GC.
     /// Also, for some reason, this setting causes huge freezes.
     void Animation_GCAlloc_DOTween_Recycle_internal(Action action) {
         var settings = Resources.Load<DOTweenSettings>(nameof(DOTweenSettings));
         Assert.IsNotNull(settings);
         settings.defaultRecyclable = true;
+        DOTween.defaultRecyclable = true;
         
         // Create tweens and recycle them
         for (int i = 0; i < iterations; i++) {
@@ -128,6 +129,7 @@ public class PrimeTween_VS_DOTween {
         measureGCAlloc(action);
         
         settings.defaultRecyclable = false;
+        DOTween.defaultRecyclable = false;
     }
     [Test, Performance] public void _05_Animation_GCAlloc_PrimeTween() => measureGCAlloc(() => Tween.Position(transform, endValue, shortDuration));
     [Test, Performance] public void _06_Delay_GCAlloc_DOTween() => measureGCAlloc(() => DOVirtual.DelayedCall(shortDuration, () => numCallbackCalled++));
