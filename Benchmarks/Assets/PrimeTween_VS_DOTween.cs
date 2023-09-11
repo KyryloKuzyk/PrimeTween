@@ -109,10 +109,6 @@ public class PrimeTween_VS_DOTween {
     });
     [Test, Performance] public void _14_Animation_GCAlloc_DOTween_Recycle() => Animation_GCAlloc_DOTween_Recycle_internal(() => transform.DOMove(endValue, shortDuration));
     
-    /// Run the DOTween_Recycle one by one for the correct measurement.
-    /// Warning! DOTween's 'Recycle Tweens' setting is very dangerous.
-    /// This test only shows that with the 'Recycle Tweens' setting DOTween still allocates a considerable amount of GC.
-    /// Also, for some reason, this setting causes huge freezes.
     void Animation_GCAlloc_DOTween_Recycle_internal(Action action) {
         var settings = Resources.Load<DOTweenSettings>(nameof(DOTweenSettings));
         Assert.IsNotNull(settings);
