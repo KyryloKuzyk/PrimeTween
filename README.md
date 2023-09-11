@@ -298,25 +298,24 @@ Migrating from DOTween to PrimeTween
 ---
 PrimeTween and DOTween don't conflict with each other and can be used in one project. You can check out all PrimeTween's performance benefits in your current DOTween project without breaking anything.
 
-What are the reasons to try PrimeTween instead of DOTween? I'm currently working on an expansive article comparing these two products, but the quick takeaways are:
-* **[Performance](https://github.com/KyryloKuzyk/PrimeTween/discussions/8)**! DOTween allocates garbage on every animation start, which can result in small freezes and framerate drops.
+What are the reasons to try PrimeTween?
+* See [performance](https://github.com/KyryloKuzyk/PrimeTween/discussions/8) comparison.
 * **Seamless installation** that never produces compilation errors regardless of what other packages or plugins your project already uses.
-* PrimeTween's usage is [straightforward and more readable](https://github.com/KyryloKuzyk/PrimeTween/discussions/3).
 * PrimeTween is extremely easy to learn. It has only 7 top-level concepts, and you can learn the API even without the documentation by simply typing `PrimeTween` and pressing `.`
-* PrimeTween is extensively covered by more than **150 automatic tests** that ensure that every bit works perfectly. At the same time, DOTween has more than [200 open issues](https://github.com/Demigiant/dotween/issues) and sometimes breaks little things in new versions.
-* With PrimeTween it's safe to [destroy objects](https://github.com/KyryloKuzyk/PrimeTween/discussions/4) with running animations. While by default DOTween silently ignores OnComplete() and hides exceptions inside custom DOTween.To(...) animations.
-* PrimeTween is truly multiplatform, while some DOTween features don't work on WebGL (Safe Mode, async operations) and with the 'fast and no exceptions' setting on iOS (Safe Mode).
+* PrimeTween is extensively covered by more than **150 automatic tests** that ensure that every bit works perfectly.
+* With PrimeTween it's safe to [destroy objects](https://github.com/KyryloKuzyk/PrimeTween/discussions/4) with running animations.
+* PrimeTween is truly multiplatform with no exceptions. Awaiting tweens in async methods works even on WebGL!
 
 #### Performance comparison
 
-Please visit the full article comparing [PrimeTween with DOTween](https://github.com/KyryloKuzyk/PrimeTween/discussions/8). The quick summary:
--   PrimeTween is about **6x faster** in starting animations, which means that starting an animation has almost no overhead in comparison to actually running it. After all, there is little sense in processing animations quickly if you can't  **start** them quickly in the first place.  
--   PrimeTween is **1.4 - 1.9x faster**  in the most common use cases in terms of runtime performance. This is the performance gain that occurs every frame.  
--   PrimeTween **never allocates garbage**, while DOTween allocates 734B **per every** animation start and 584B per delay.  
+Please visit the full performance comparison [article](https://github.com/KyryloKuzyk/PrimeTween/discussions/8), but the quick summary is:
+-   PrimeTween is about **6x faster** in starting animations, which means that starting an animation has almost no overhead in comparison to actually running it. After all, there is little sense in processing animations quickly if you can't  **start** them quickly in the first place.
+-   PrimeTween is **1.4 - 1.9x faster**  in the most common use cases in terms of runtime performance. This is the performance gain that occurs every frame.
+-   PrimeTween **never allocates garbage**.
 
 #### DOTween adapter
 
-PrimeTween comes with a built-in migration adapter that can help you migrate even big projects relatively quickly.
+PrimeTween comes with a built-in migration adapter that can help you migrate even big projects relatively quickly. The adapter can also be used if you're missing extension methods you've gotten used to.
 
 Adapter is an **optional** feature designed to speed up PrimeTween's adoption. The migrated code may still be allocating because of the [delegate allocations](#zero-allocations-with-delegates).
 > Please **back up** your project before proceeding. You should **test** the migrated code thoroughly before releasing it to production.
@@ -346,9 +345,6 @@ DOTween.Sequence()          -->  Sequence.Create()
 sequence.Join()             -->  sequence.Group()
 sequence.Append()           -->  sequence.Chain()
 
-// The 'Kill()' naming may be misleading even for experienced developers.
-// Does it kill the GameObject? Does it kill the MonoBehaviour? Does it kill other animations running on the same target?
-// PrimeTween gives confidence in what the code actually does.
 DOTween.Kill(target, true)  -->  Tween.CompleteAll(onTarget: target)
 DOTween.Kill(target, false) -->  Tween.StopAll(onTarget: target)
 tween.Kill(true)            -->  tween.Complete()
@@ -380,13 +376,12 @@ tween.Complete(); // null checking and setting tween to null is not needed
 ```
 
 #### Tween.PlayForward/PlayBackwards/Restart
-PrimeTween's main design goals are **performance** and **reliability**. So there are a few things that don't have an exact mapping when migrating from DOTween.
 
 PrimeTween offers a different approach to animating things forward and backward that is simpler and has greater performance.
 
 Let's consider the common DOTween usage pattern: creating a tween once, then calling PlayForward() and PlayBackwards() when needed.
 <details>
-<summary><b>DOTweenWindow.cs</b> (click to expand)</summary>
+<summary>DOTweenWindow.cs (click to expand)</summary>
 
 ```csharp
 public class DOTweenWindow : MonoBehaviour {
@@ -426,24 +421,11 @@ public class DOTweenWindow : MonoBehaviour {
 ```
 </details>
 
-PrimeTween offers a much more elegant way of doing the same that comes with much better performance. Destroying the window while the animation is playing is perfectly fine.
+PrimeTween offers a much more elegant way of doing the same that comes with much better performance. Destroying the window while the animation is playing is perfectly fine:
 ```csharp
 public class PrimeTweenWindow : MonoBehaviour {
     public void SetWindowOpened(bool isOpened) {
         Tween.LocalPosition(transform, isOpened ? Vector3.zero : new Vector3(0, -500), 1, Ease.InOutSine);
-    }
-}
-```
-
-And with PrimeTween's [inspector integration](#inspector-integration), all animation properties can be tweaked from the Inspector, eliminating hard-coded magic values.
-```csharp
-public class PrimeTweenWindowWithInspectorIntegration : MonoBehaviour {
-    // Tweak all animation properties from the Inspector
-    [SerializeField] TweenSettings<Vector3> windowAnimationSettings;
-
-    public void SetWindowOpened(bool isOpened) {
-        // Use windowAnimationSettings.WithDirection() to animate the window to a closed or opened position
-        Tween.LocalPosition(transform, windowAnimationSettings.WithDirection(isOpened));
     }
 }
 ```
