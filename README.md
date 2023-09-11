@@ -390,7 +390,7 @@ Let's consider the common DOTween usage pattern: creating a tween once, then cal
 
 ```csharp
 public class DOTweenWindow : MonoBehaviour {
-    // Bad: disable auto-kill and store tween reference to reuse the tween later.
+    // Disable auto-kill and store tween reference to reuse the tween later.
     // Disabling auto-kill wastes resources: even when the tween is not running, it still receives an update every frame and consumes memory.
     Tween tween;
 
@@ -399,9 +399,9 @@ public class DOTweenWindow : MonoBehaviour {
             .ChangeStartValue(new Vector3(0, -500))
             .SetEase(Ease.InOutSine)
             .SetAutoKill(false)
-            // Bad: don't forget to link the tween to this GameObject, so the tween is killed when the GameObject is destroyed
+            // Option 1: link the tween to this GameObject, so the tween is killed when the GameObject is destroyed
             .SetLink(gameObject)
-            // Bad: paused tweens still receive updates every frame and consume resources
+            // Paused tweens still receive updates every frame and consume resources
             .Pause();
     }
 
@@ -414,11 +414,13 @@ public class DOTweenWindow : MonoBehaviour {
     }
     
     void OnDestroy() {
-        // Bad: don't forget to kill the tween before destroying an object.
-        // I bet the majority of developers don't even know about the SetLink() API and kill tweens in OnDestroy()
-        // 'Safe Mode' is NOT SAFE, and you should never rely on it because it silently swallows potential errors.
-        //     Also, 'Safe Mode' doesn't work on WebGL and with 'Fast and no exceptions' on iOS.
+        // Option 2: kill the tween before destroying an object.
         tween.Kill();
+        
+        // Option 3: enable 'Safe Mode' and don't use SetLink() and don't kill the tween in OnDestroy(). 
+        // BUT:
+        // - 'Safe Mode' will silence other potential errors or exceptions
+        // - 'Safe Mode' doesn't work on WebGL and with 'Fast and no exceptions' on iOS
     }
 }
 ```
