@@ -46,11 +46,13 @@ public class PrimeTween_VS_DOTween {
         }
         DOTween.KillAll();
         Tween.StopAll();
-        GC.Collect();
         Assert.AreEqual(0, DOTween.TotalActiveSequences());
         Assert.AreEqual(0, DOTween.TotalActiveTweeners());
         Assert.AreEqual(0, DOTween.TotalActiveTweens());
-        yield return null;
+        GC.Collect();
+        for (int i = 0; i < 10; i++) {
+            yield return null;
+        }
     }
 
     
@@ -81,20 +83,12 @@ public class PrimeTween_VS_DOTween {
 
     
     readonly AnimationCurve animationCurve = AnimationCurve.EaseInOut(0,0,1,1);
-    [UnityTest, Performance] public IEnumerator _03_AnimationWithCustomEase_DOTween() {
-        yield return measureAverageFrameTimes(() => transform.DOMove(endValue, longDuration).SetEase(animationCurve));
-    }
-    [UnityTest, Performance] public IEnumerator _03_AnimationWithCustomEase_PrimeTween() {
-        yield return measureAverageFrameTimes(() => Tween.Position(transform, endValue, longDuration, animationCurve));
-    }
+    [UnityTest, Performance] public IEnumerator _03_AnimationWithCustomEase_DOTween() => measureAverageFrameTimes(() => transform.DOMove(endValue, longDuration).SetEase(animationCurve));
+    [UnityTest, Performance] public IEnumerator _03_AnimationWithCustomEase_PrimeTween() => measureAverageFrameTimes(() => Tween.Position(transform, endValue, longDuration, animationCurve));
 
-    
-    [UnityTest, Performance] public IEnumerator _04_Delay_DOTween() {
-        yield return measureAverageFrameTimes(() => DOVirtual.DelayedCall(longDuration, () => numCallbackCalled++));
-    }
-    [UnityTest, Performance] public IEnumerator _04_Delay_PrimeTween() {
-        yield return measureAverageFrameTimes(() => Tween.Delay(this, longDuration, _this => _this.numCallbackCalled++));
-    }
+
+    [UnityTest, Performance] public IEnumerator _04_Delay_DOTween() => measureAverageFrameTimes(() => DOVirtual.DelayedCall(longDuration, () => numCallbackCalled++));
+    [UnityTest, Performance] public IEnumerator _04_Delay_PrimeTween() => measureAverageFrameTimes(() => Tween.Delay(this, longDuration, _this => _this.numCallbackCalled++));
 
 
     const float shortDuration = 0.0001f;
@@ -108,7 +102,6 @@ public class PrimeTween_VS_DOTween {
         });
     });
     [Test, Performance] public void _14_Animation_GCAlloc_DOTween_Recycle() => Animation_GCAlloc_DOTween_Recycle_internal(() => transform.DOMove(endValue, shortDuration));
-    
     void Animation_GCAlloc_DOTween_Recycle_internal(Action action) {
         var settings = Resources.Load<DOTweenSettings>(nameof(DOTweenSettings));
         Assert.IsNotNull(settings);
@@ -132,16 +125,12 @@ public class PrimeTween_VS_DOTween {
     [Test, Performance] public void _06_Delay_GCAlloc_PrimeTween() => measureGCAlloc(() => Tween.Delay(this, shortDuration, _this => _this.numCallbackCalled++));
     
     
-    [UnityTest, Performance] public IEnumerator _07_Animation_Start_DOTween() {
-        yield return measureFrameTime(() => transform.DOMove(endValue, shortDuration));
-    }
-    [UnityTest, Performance] public IEnumerator _07_Animation_Start_PrimeTween() {
-        yield return measureFrameTime(() => Tween.Position(transform, endValue, shortDuration));
-    }
+    [UnityTest, Performance] public IEnumerator _07_Animation_Start_DOTween() => measureFrameTime(() => transform.DOMove(endValue, shortDuration));
+    [UnityTest, Performance] public IEnumerator _07_Animation_Start_PrimeTween() => measureFrameTime(() => Tween.Position(transform, endValue, shortDuration));
     
     
-    [UnityTest, Performance] public IEnumerator _08_Animation_Start_AllParams_DOTween() {
-        yield return measureFrameTime(() => {
+    [UnityTest, Performance] public IEnumerator _08_Animation_Start_AllParams_DOTween() => 
+         measureFrameTime(() => {
             transform.DOMove(endValue, shortDuration)
                 .From(Vector3.zero)
                 .SetEase(Ease.InOutBounce)
@@ -149,20 +138,14 @@ public class PrimeTween_VS_DOTween {
                 .SetDelay(shortDuration)
                 .SetUpdate(true);
         });
-    }
-    [UnityTest, Performance] public IEnumerator _08_Animation_Start_AllParams_PrimeTween() {
-        yield return measureFrameTime(() => {
+    [UnityTest, Performance] public IEnumerator _08_Animation_Start_AllParams_PrimeTween() =>
+        measureFrameTime(() => {
             Tween.Position(transform, Vector3.zero, Vector3.one, shortDuration, PrimeTween.Ease.InOutBounce, 2, CycleMode.Yoyo, shortDuration, 0, true);
         });
-    }
 
     
-    [UnityTest, Performance] public IEnumerator _09_Delay_Start_DOTween() {
-        yield return measureFrameTime(() => DOVirtual.DelayedCall(longDuration, () => numCallbackCalled++));
-    }
-    [UnityTest, Performance] public IEnumerator _09_Delay_Start_PrimeTween() {
-        yield return measureFrameTime(() => Tween.Delay(this, longDuration, _this => _this.numCallbackCalled++));
-    }
+    [UnityTest, Performance] public IEnumerator _09_Delay_Start_DOTween() => measureFrameTime(() => DOVirtual.DelayedCall(longDuration, () => numCallbackCalled++));
+    [UnityTest, Performance] public IEnumerator _09_Delay_Start_PrimeTween() => measureFrameTime(() => Tween.Delay(this, longDuration, _this => _this.numCallbackCalled++));
 
     
     const float delayStartEndDuration = 0.05f;
@@ -230,6 +213,7 @@ public class PrimeTween_VS_DOTween {
         var gcAllocPerIteration = (GC.GetTotalMemory(true) - allocatedMemoryBefore) / _iterations;
         Measure.Custom(new SampleGroup("GCAlloc", SampleUnit.Byte), gcAllocPerIteration);
     }
+    
     static IEnumerator measureFrameTime(Action action, int _iterations = iterations) {
         for (int i = 0; i < warmups; i++) {
             action();
@@ -242,6 +226,7 @@ public class PrimeTween_VS_DOTween {
             yield return null;
         }
     }
+    
     static IEnumerator measureAverageFrameTimes(Action action, int _iterations = iterations) {
         for (int i = 0; i < warmups; i++) {
             action();
@@ -251,7 +236,8 @@ public class PrimeTween_VS_DOTween {
             action();
         }
         GC.Collect();
-        yield return Measure.Frames().MeasurementCount(50).Run();
+        yield return null;
+        yield return Measure.Frames().MeasurementCount(200).Run();
     }
     #endif // PRIME_TWEEN_INSTALLED
 }
