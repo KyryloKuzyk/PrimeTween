@@ -67,19 +67,15 @@ public class PrimeTween_VS_DOTween {
 
     readonly Vector3 endValue = new Vector3(0,0,10);
     const float longDuration = 10f;
-    [UnityTest, Performance] public IEnumerator _01_PositionAnimation_DOTween() { yield return measureAverageFrameTimes(() => transform.DOMove(endValue, longDuration)); }
-    [UnityTest, Performance] public IEnumerator _01_PositionAnimation_PrimeTween() { yield return measureAverageFrameTimes(() => Tween.Position(transform, endValue, longDuration)); }
-    [UnityTest, Performance] public IEnumerator _01_RotationAnimation_DOTween() { yield return measureAverageFrameTimes(() => transform.DORotate(endValue, longDuration)); }
-    [UnityTest, Performance] public IEnumerator _01_RotationAnimation_PrimeTween() { yield return measureAverageFrameTimes(() => Tween.Rotation(transform, endValue, longDuration)); }
+    [UnityTest, Performance] public IEnumerator _01_PositionAnimation_DOTween() => measureAverageFrameTimes(() => transform.DOMove(endValue, longDuration));
+    [UnityTest, Performance] public IEnumerator _01_PositionAnimation_PrimeTween() => measureAverageFrameTimes(() => Tween.Position(transform, endValue, longDuration));
+    [UnityTest, Performance] public IEnumerator _01_RotationAnimation_DOTween() => measureAverageFrameTimes(() => transform.DORotate(endValue, longDuration));
+    [UnityTest, Performance] public IEnumerator _01_RotationAnimation_PrimeTween() => measureAverageFrameTimes(() => Tween.Rotation(transform, endValue, longDuration));
 
 
     float floatField;
-    [UnityTest, Performance] public IEnumerator _02_CustomAnimation_DOTween() {
-        yield return measureAverageFrameTimes(() => DOVirtual.Float(0, 1, longDuration, val => floatField = val));
-    }
-    [UnityTest, Performance] public IEnumerator _02_CustomAnimation_PrimeTween() {
-        yield return measureAverageFrameTimes(() => Tween.Custom(this, 0, 1, longDuration, (_this, val) => _this.floatField = val));
-    }
+    [UnityTest, Performance] public IEnumerator _02_CustomAnimation_DOTween() => measureAverageFrameTimes(() => DOVirtual.Float(0, 1, longDuration, val => floatField = val));
+    [UnityTest, Performance] public IEnumerator _02_CustomAnimation_PrimeTween() => measureAverageFrameTimes(() => Tween.Custom(this, 0, 1, longDuration, (_this, val) => _this.floatField = val));
 
     
     readonly AnimationCurve animationCurve = AnimationCurve.EaseInOut(0,0,1,1);
@@ -183,12 +179,12 @@ public class PrimeTween_VS_DOTween {
 
 
     const int sequenceIterations = iterations / 3 - warmups;
-    [UnityTest, Performance] public IEnumerator _11_Sequence_DOTween() { yield return measureAverageFrameTimes(createSequenceDOTween, sequenceIterations); }
-    [UnityTest, Performance] public IEnumerator _11_Sequence_PrimeTween() { yield return measureAverageFrameTimes(createSequencePrimeTween, sequenceIterations); }
+    [UnityTest, Performance] public IEnumerator _11_Sequence_DOTween() => measureAverageFrameTimes(createSequenceDOTween, sequenceIterations);
+    [UnityTest, Performance] public IEnumerator _11_Sequence_PrimeTween() => measureAverageFrameTimes(createSequencePrimeTween, sequenceIterations);
     [Test, Performance] public void _12_Sequence_GCAlloc_DOTween() => measureGCAlloc(createSequenceDOTween, sequenceIterations);
     [Test, Performance] public void _12_Sequence_GCAlloc_PrimeTween() => measureGCAlloc(createSequencePrimeTween, sequenceIterations);
-    [UnityTest, Performance] public IEnumerator _13_SequenceStart_DOTween() { yield return measureFrameTime(createSequenceDOTween, sequenceIterations); }
-    [UnityTest, Performance] public IEnumerator _13_SequenceStart_PrimeTween() { yield return measureFrameTime(createSequencePrimeTween, sequenceIterations); }
+    [UnityTest, Performance] public IEnumerator _13_SequenceStart_DOTween() => measureFrameTime(createSequenceDOTween, sequenceIterations);
+    [UnityTest, Performance] public IEnumerator _13_SequenceStart_PrimeTween() => measureFrameTime(createSequencePrimeTween, sequenceIterations);
     void createSequenceDOTween() =>
         DOTween.Sequence()
             .Append(transform.DOMove(Vector3.zero, longDuration))
