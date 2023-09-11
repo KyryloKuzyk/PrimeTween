@@ -1,7 +1,10 @@
+
 PrimeTween
 ===
 
 PrimeTween is a high-performance, **allocation-free** animation library for Unity. **Animate anything** with just one line of code, tweak all animation properties directly from the Inspector, and create complex animation sequences. No runtime memory allocations, ever.
+
+[**Performance Comparison with DOTween**](https://github.com/KyryloKuzyk/PrimeTween/discussions/8)
 
 **[Asset Store](https://assetstore.unity.com/packages/slug/252960)** | **[Forum](https://forum.unity.com/threads/1479609/)** | **[FAQ](https://github.com/KyryloKuzyk/PrimeTween/discussions)** | **[YouTube](https://www.youtube.com/watch?v=MuMKwxOzc3M)**
 
@@ -296,7 +299,7 @@ Migrating from DOTween to PrimeTween
 PrimeTween and DOTween don't conflict with each other and can be used in one project. You can check out all PrimeTween's performance benefits in your current DOTween project without breaking anything.
 
 What are the reasons to try PrimeTween instead of DOTween? I'm currently working on an expansive article comparing these two products, but the quick takeaways are:
-* **Performance**! DOTween allocates garbage on every animation start, which can result in small freezes and framerate drops.
+* **[Performance](https://github.com/KyryloKuzyk/PrimeTween/discussions/8)**! DOTween allocates garbage on every animation start, which can result in small freezes and framerate drops.
 * **Seamless installation** that never produces compilation errors regardless of what other packages or plugins your project already uses.
 * PrimeTween's usage is [straightforward and more readable](https://github.com/KyryloKuzyk/PrimeTween/discussions/3).
 * PrimeTween is extremely easy to learn. It has only 7 top-level concepts, and you can learn the API even without the documentation by simply typing `PrimeTween` and pressing `.`
@@ -306,13 +309,10 @@ What are the reasons to try PrimeTween instead of DOTween? I'm currently working
 
 #### Performance comparison
 
-In performance tests, PrimeTween is up to **2.2x** faster than DOTween in the most common use case of [animating position](https://github.com/KyryloKuzyk/PrimeTween/blob/f8717ce7f58d1c5620026c70b09d0b3d41309a48/Benchmarks/Assets/PrimeTween_VS_DOTween.cs#L67-L68). But this is not the most important performance indicator most of the time.
-
-Where PrimeTween really shines is in the absence of **memory allocations**. PrimeTween never allocates heap memory and never produces garbage collection spikes. Create millions of animations, delays, and sequences with **0KB of GC** and without hiccups!
-
-Another important performance factor is **frame pacing**. To create a smooth experience for a user, frames in your game should be evenly spaced in time. A one-frame hiccup is still noticeable to the eye even when the profiler tells that the game runs at an average of 60 FPS. In this image, you can see that PrimeTween evenly distributes the load maintaining smooth frame times, while DOTween produces a lot of fluctuations. The testing scenario is identical in both cases.
-
-![frame_pacing.png](Documentation%2Fframe_pacing.png)
+Please visit the full article comparing [PrimeTween with DOTween](https://github.com/KyryloKuzyk/PrimeTween/discussions/8). The quick summary:
+-   PrimeTween is about **6x faster** in starting animations, which means that starting an animation has almost no overhead in comparison to actually running it. After all, there is little sense in processing animations quickly if you can't  **start** them quickly in the first place.  
+-   PrimeTween is **1.4 - 1.9x faster**  in the most common use cases in terms of runtime performance. This is the performance gain that occurs every frame.  
+-   PrimeTween **never allocates garbage**, while DOTween allocates 734B **per every** animation start and 584B per delay.  
 
 #### DOTween adapter
 
