@@ -308,10 +308,7 @@ What are the reasons to try PrimeTween?
 
 #### Performance comparison
 
-Please visit the full performance comparison [article](https://github.com/KyryloKuzyk/PrimeTween/discussions/8), but the quick summary is:
--   PrimeTween is about **6x faster** in starting animations, which means that starting an animation has almost no overhead in comparison to actually running it. After all, there is little sense in processing animations quickly if you can't  **start** them quickly in the first place.
--   PrimeTween is **1.4 - 1.9x faster**  in the most common use cases in terms of runtime performance. This is the performance gain that occurs every frame.
--   PrimeTween **never allocates garbage**.
+Please visit the full performance comparison [article](https://github.com/KyryloKuzyk/PrimeTween/discussions/8).
 
 #### DOTween adapter
 
