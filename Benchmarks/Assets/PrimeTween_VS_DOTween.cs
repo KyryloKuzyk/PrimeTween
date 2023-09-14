@@ -22,8 +22,8 @@ public class PrimeTween_VS_DOTween {
         Debug.LogError("Please install PrimeTween from Asset Store: https://assetstore.unity.com/packages/slug/252960");
     }
     #else
-    const int warmups = 1;
-    const int iterations = 100000;
+    internal const int warmups = 1;
+    internal const int iterations = 100000;
     Transform transform;
 
     [OneTimeSetUp] public void oneTimeSetup() {
@@ -82,6 +82,7 @@ public class PrimeTween_VS_DOTween {
     [UnityTest, Performance] public IEnumerator _03_AnimationWithCustomEase_PrimeTween() => measureAverageFrameTimes(() => Tween.Position(transform, endValue, longDuration, animationCurve));
 
 
+    int numCallbackCalled;
     [UnityTest, Performance] public IEnumerator _04_Delay_DOTween() => measureAverageFrameTimes(() => DOVirtual.DelayedCall(longDuration, () => numCallbackCalled++));
     [UnityTest, Performance] public IEnumerator _04_Delay_PrimeTween() => measureAverageFrameTimes(() => Tween.Delay(this, longDuration, _this => _this.numCallbackCalled++));
 
@@ -143,40 +144,6 @@ public class PrimeTween_VS_DOTween {
     [UnityTest, Performance] public IEnumerator _09_Delay_Start_PrimeTween() => measureFrameTime(() => Tween.Delay(this, longDuration, _this => _this.numCallbackCalled++));
 
     
-    const float delayStartEndDuration = 0.05f;
-    int numCallbackCalled;
-    const int delayStartEndCount = 5000;
-    /// DOTween measures time incorrectly with more than 5000 delays (Mac M1 IL2CPP; Mac M1 Editor) 
-    [UnityTest, Performance] public IEnumerator _10_Delay_StartEnd_DOTween() {
-        using (Measure.Frames().Scope()) {
-            numCallbackCalled = 0;
-            for (int i = 0; i < delayStartEndCount; i++) {
-                DOVirtual.DelayedCall(delayStartEndDuration, () => numCallbackCalled++);
-            }
-            GC.Collect();
-            while (numCallbackCalled != delayStartEndCount) {
-                yield return null;
-            }
-            GC.Collect();
-            yield return null;
-        }
-    }
-    [UnityTest, Performance] public IEnumerator _10_Delay_StartEnd_PrimeTween() {
-        using (Measure.Frames().Scope()) {
-            numCallbackCalled = 0;
-            for (int i = 0; i < delayStartEndCount; i++) {
-                Tween.Delay(this, delayStartEndDuration, _this => _this.numCallbackCalled++);
-            }
-            GC.Collect();
-            while (numCallbackCalled != delayStartEndCount) {
-                yield return null;
-            }
-            GC.Collect();
-            yield return null;
-        }
-    }
-
-
     const int sequenceIterations = iterations / 3 - warmups;
     [UnityTest, Performance] public IEnumerator _11_Sequence_DOTween() => measureAverageFrameTimes(createSequenceDOTween, sequenceIterations);
     [UnityTest, Performance] public IEnumerator _11_Sequence_PrimeTween() => measureAverageFrameTimes(createSequencePrimeTween, sequenceIterations);
