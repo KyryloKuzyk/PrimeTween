@@ -27,6 +27,9 @@ public class PrimeTween_VS_DOTween {
     Transform transform;
 
     [OneTimeSetUp] public void oneTimeSetup() {
+        if (!Application.isEditor) {
+            GarbageCollector.GCMode = GarbageCollector.Mode.Disabled;
+        }
         Application.targetFrameRate = SystemInfo.deviceType == DeviceType.Handheld ? 120 : -1;
         transform = new GameObject().transform;
         const int capacity = iterations + warmups;
@@ -40,10 +43,7 @@ public class PrimeTween_VS_DOTween {
         PrimeTweenConfig.warnTweenOnDisabledTarget = false;
     }
 
-    [UnitySetUp] public IEnumerator setUp() {
-        if (!Application.isEditor) {
-            GarbageCollector.GCMode = GarbageCollector.Mode.Disabled;
-        }
+    [UnityTearDown] public IEnumerator setUp() {
         DOTween.KillAll();
         Tween.StopAll();
         Assert.AreEqual(0, DOTween.TotalActiveSequences());
@@ -55,7 +55,6 @@ public class PrimeTween_VS_DOTween {
         }
     }
 
-    
     [Test] public void _0_ProfilerDisabled() => Assert.IsFalse(Profiler.enabled, "Please disable Profiler because it influences test results.");
     [Test] public void _0_RunningOnDevice() => Assert.IsFalse(Application.isEditor, "Please run performance tests on a real device, not in Editor.");
     [Test] public void _0_PrimeTweenAssertionsDisabled() {
@@ -197,7 +196,7 @@ public class PrimeTween_VS_DOTween {
 
     
     /// More iterations produce higher measurement accuracy. 
-    static void measureGCAlloc(Action action, int _iterations = iterations) {
+    internal static void measureGCAlloc(Action action, int _iterations = iterations) {
         for (int i = 0; i < warmups; i++) {
             action();
         }
@@ -209,8 +208,8 @@ public class PrimeTween_VS_DOTween {
         var gcAllocPerIteration = (GC.GetTotalMemory(true) - allocatedMemoryBefore) / _iterations;
         Measure.Custom(new SampleGroup("GCAlloc", SampleUnit.Byte), gcAllocPerIteration);
     }
-    
-    static IEnumerator measureFrameTime(Action action, int _iterations = iterations) {
+
+    internal static IEnumerator measureFrameTime(Action action, int _iterations = iterations) {
         for (int i = 0; i < warmups; i++) {
             action();
         }
@@ -222,8 +221,8 @@ public class PrimeTween_VS_DOTween {
             yield return null;
         }
     }
-    
-    static IEnumerator measureAverageFrameTimes(Action action, int _iterations = iterations) {
+
+    internal static IEnumerator measureAverageFrameTimes(Action action, int _iterations = iterations) {
         for (int i = 0; i < warmups; i++) {
             action();
         }

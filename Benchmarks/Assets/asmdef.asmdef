@@ -5,7 +5,9 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Unity.PerformanceTesting",
-        "PrimeTween.Runtime"
+        "PrimeTween.Runtime",
+        "MagicTween",
+        "Unity.Mathematics"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -29,6 +31,11 @@
             "name": "com.unity.modules.uielements",
             "expression": "1.0.0",
             "define": "UI_ELEMENTS_MODULE_INSTALLED"
+        },
+        {
+            "name": "com.annulusgames.magic-tween",
+            "expression": "0.1.1",
+            "define": "MAGIC_TWEEN_INSTALLED"
         }
     ],
     "noEngineReferences": false
