@@ -1,0 +1,2 @@
+- Resolved an issue where domain reloading could result in unexpected behaviour in the Unity Editor
+- Various improvements and new features in the Tween Inspector

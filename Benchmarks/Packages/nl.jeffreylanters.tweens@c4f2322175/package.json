@@ -1,0 +1,22 @@
+{
+  "name": "nl.jeffreylanters.tweens",
+  "displayName": "Tweens",
+  "version": "3.2.0",
+  "unity": "2020.1",
+  "description": "An extremely light weight, extendable and customisable tweening engine made for strictly typed script-based animations for user-interfaces and world-space objects optimised for all platforms.",
+  "type": "library",
+  "keywords": [
+    "Tweens",
+    "Animation"
+  ],
+  "hideInEditor": false,
+  "documentationUrl": "https://github.com/jeffreylanters/unity-tweens",
+  "changelogUrl": "https://github.com/jeffreylanters/unity-tweens/releases",
+  "licensesUrl": "https://github.com/jeffreylanters/unity-tweens/blob/master/LICENSE.md",
+  "repository": "https://github.com/jeffreylanters/unity-tweens.git",
+  "author": {
+    "name": "Jeffrey Lanters",
+    "email": "hallo@jeffreylanters.nl",
+    "url": "https://github.com/jeffreylanters"
+  }
+}

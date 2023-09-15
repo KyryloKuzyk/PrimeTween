@@ -7,7 +7,8 @@
         "Unity.PerformanceTesting",
         "PrimeTween.Runtime",
         "MagicTween",
-        "Unity.Mathematics"
+        "Unity.Mathematics",
+        "nl.jeffreylanters.tweens"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
