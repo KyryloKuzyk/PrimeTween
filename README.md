@@ -299,7 +299,7 @@ Migrating from DOTween to PrimeTween
 PrimeTween and DOTween don't conflict with each other and can be used in one project. You can check out all PrimeTween's performance benefits in your current DOTween project without breaking anything.
 
 What are the reasons to try PrimeTween?
-* See [performance](https://github.com/KyryloKuzyk/PrimeTween/discussions/8) comparison.
+* See [performance](https://github.com/KyryloKuzyk/PrimeTween/discussions/10) comparison.
 * **Seamless installation** that never produces compilation errors regardless of what other packages or plugins your project already uses.
 * PrimeTween is extremely easy to learn. It has only 7 top-level concepts, and you can learn the API even without the documentation by simply typing `PrimeTween` and pressing `.`
 * PrimeTween is extensively covered by more than **150 automatic tests** that ensure that every bit works perfectly.
@@ -308,7 +308,7 @@ What are the reasons to try PrimeTween?
 
 #### Performance comparison
 
-Please visit the full performance comparison [article](https://github.com/KyryloKuzyk/PrimeTween/discussions/8).
+Please visit the full performance comparison [article](https://github.com/KyryloKuzyk/PrimeTween/discussions/10).
 
 #### DOTween adapter
 
