@@ -15,7 +15,7 @@ using UnityEngine.TestTools;
 using Ease = DG.Tweening.Ease;
 using Assert = UnityEngine.Assertions.Assert;
 
-public class PrimeTween_VS_DOTween {
+public class DOTween_PrimeTweenTests {
     #if !PRIME_TWEEN_INSTALLED
     [Test]
     public void PrimeTweenIsInstalled() {

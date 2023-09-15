@@ -12,7 +12,7 @@ using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 using Assert = UnityEngine.Assertions.Assert;
 
-public class PrimeTween_VS_UIToolkit {
+public class UIToolkit_PrimeTweenTests {
     const int iterations = 100000;
     const int duration = 1;
     readonly VisualElement visualElement = new VisualElement();
@@ -40,7 +40,7 @@ public class PrimeTween_VS_UIToolkit {
     }
     
     void initUIToolkitTests() {
-        var panelSettings = Resources.Load<PanelSettings>("PrimeTween_VS_UIToolkit/TestPanelSettings");
+        var panelSettings = Resources.Load<PanelSettings>("UIToolkit_PrimeTweenTests/TestPanelSettings");
         Assert.IsNotNull(panelSettings);
         var uiDocument = new GameObject("UIToolkit_test_object").AddComponent<UIDocument>();
         uiDocument.panelSettings = panelSettings;

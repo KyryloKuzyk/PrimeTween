@@ -40,7 +40,7 @@ public class UnityTweensTests {
     void startDelay() => transform.gameObject.AddTween(new FloatTween(){delay = longDuration, onEnd = delegate { numCallbackCalled++; }});
 
     const float shortDuration = 0.0001f;
-    [Test, Performance] public void _05_Animation_GCAlloc_UnityTweens() => PrimeTween_VS_DOTween.measureGCAlloc(() => startPositionAnimation());
+    [Test, Performance] public void _05_Animation_GCAlloc_UnityTweens() => DOTween_PrimeTweenTests.measureGCAlloc(() => startPositionAnimation());
     [Test, Performance] public void _06_Delay_GCAlloc_UnityTweens() => measureGCAlloc(() => startDelay());
 
     [UnityTest, Performance] public IEnumerator _07_Animation_Start_UnityTweens() => measureFrameTime(() => startPositionAnimation());
@@ -59,10 +59,10 @@ public class UnityTweensTests {
     [UnityTest, Performance] public IEnumerator _09_Delay_Start_UnityTweens() => measureFrameTime(() => startDelay());
 
 
-    const int warmups = PrimeTween_VS_DOTween.warmups;
-    const int iterations = PrimeTween_VS_DOTween.iterations;
+    const int warmups = DOTween_PrimeTweenTests.warmups;
+    const int iterations = DOTween_PrimeTweenTests.iterations;
     const int sequenceIterations = iterations / 3 - warmups; 
-    static IEnumerator measureAverageFrameTimes(Action action, int _iterations = iterations) => PrimeTween_VS_DOTween.measureAverageFrameTimes(action, _iterations);
-    static void measureGCAlloc(Action action, int _iterations = iterations) => PrimeTween_VS_DOTween.measureGCAlloc(action, _iterations);
-    internal static IEnumerator measureFrameTime(Action action, int _iterations = iterations) => PrimeTween_VS_DOTween.measureFrameTime(action, _iterations);
+    static IEnumerator measureAverageFrameTimes(Action action, int _iterations = iterations) => DOTween_PrimeTweenTests.measureAverageFrameTimes(action, _iterations);
+    static void measureGCAlloc(Action action, int _iterations = iterations) => DOTween_PrimeTweenTests.measureGCAlloc(action, _iterations);
+    internal static IEnumerator measureFrameTime(Action action, int _iterations = iterations) => DOTween_PrimeTweenTests.measureFrameTime(action, _iterations);
 }

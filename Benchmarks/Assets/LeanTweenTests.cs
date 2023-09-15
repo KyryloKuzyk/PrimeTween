@@ -14,7 +14,7 @@ public class LeanTweenTests {
             GarbageCollector.GCMode = GarbageCollector.Mode.Disabled;
         }
 
-        var capacity = PrimeTween_VS_DOTween.iterations + 1;
+        var capacity = DOTween_PrimeTweenTests.iterations + 1;
         LeanTween.init(capacity, capacity);
     }
 
@@ -38,7 +38,7 @@ public class LeanTweenTests {
     void startDelay() => LeanTween.delayedCall(longDuration, _this => (_this as LeanTweenTests).numCallbackCalled++).setOnCompleteParam(this);
 
     const float shortDuration = 0.0001f;
-    [Test, Performance] public void _05_Animation_GCAlloc_LeanTween() => PrimeTween_VS_DOTween.measureGCAlloc(() => startPositionAnimation());
+    [Test, Performance] public void _05_Animation_GCAlloc_LeanTween() => DOTween_PrimeTweenTests.measureGCAlloc(() => startPositionAnimation());
     [Test, Performance] public void _06_Delay_GCAlloc_LeanTween() => measureGCAlloc(() => startDelay());
 
     [UnityTest, Performance] public IEnumerator _07_Animation_Start_LeanTween() => measureFrameTime(() => startPositionAnimation());
@@ -53,8 +53,8 @@ public class LeanTweenTests {
     });
     [UnityTest, Performance] public IEnumerator _09_Delay_Start_LeanTween() => measureFrameTime(() => startDelay());
 
-    const int warmups = PrimeTween_VS_DOTween.warmups;
-    const int iterations = PrimeTween_VS_DOTween.iterations;
+    const int warmups = DOTween_PrimeTweenTests.warmups;
+    const int iterations = DOTween_PrimeTweenTests.iterations;
     const int sequenceIterations = iterations / 3 - warmups;
     [UnityTest, Performance] public IEnumerator _11_Sequence_LeanTween() => measureAverageFrameTimes(createSequenceLeanTween, sequenceIterations);
     [Test, Performance] public void _12_Sequence_GCAlloc_LeanTween() => measureGCAlloc(createSequenceLeanTween, sequenceIterations);
@@ -65,7 +65,7 @@ public class LeanTweenTests {
             .append(LeanTween.scale(transform.gameObject, Vector3.zero, longDuration))
             .append(LeanTween.rotate(transform.gameObject, Vector3.zero, longDuration));
 
-    static IEnumerator measureAverageFrameTimes(Action action, int _iterations = iterations) => PrimeTween_VS_DOTween.measureAverageFrameTimes(action, _iterations);
-    static void measureGCAlloc(Action action, int _iterations = iterations) => PrimeTween_VS_DOTween.measureGCAlloc(action, _iterations);
-    internal static IEnumerator measureFrameTime(Action action, int _iterations = iterations) => PrimeTween_VS_DOTween.measureFrameTime(action, _iterations);
+    static IEnumerator measureAverageFrameTimes(Action action, int _iterations = iterations) => DOTween_PrimeTweenTests.measureAverageFrameTimes(action, _iterations);
+    static void measureGCAlloc(Action action, int _iterations = iterations) => DOTween_PrimeTweenTests.measureGCAlloc(action, _iterations);
+    internal static IEnumerator measureFrameTime(Action action, int _iterations = iterations) => DOTween_PrimeTweenTests.measureFrameTime(action, _iterations);
 }
