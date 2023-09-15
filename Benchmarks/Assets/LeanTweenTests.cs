@@ -7,8 +7,11 @@ using UnityEngine.Scripting;
 using UnityEngine.TestTools;
 
 public class LeanTweenTests {
+    static bool initializedOnce;
     Transform transform;
     [OneTimeSetUp] public void oneTimeSetup() {
+        Assert.IsFalse(initializedOnce, "LeanTween doesn't support disabled Domain Reload. Please enabled Domain Reload or recompile scripts");
+        initializedOnce = true;
         transform = new GameObject().transform;
         if (!Application.isEditor) {
             GarbageCollector.GCMode = GarbageCollector.Mode.Disabled;
