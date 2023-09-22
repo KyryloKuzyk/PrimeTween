@@ -4,7 +4,7 @@ PrimeTween
 
 PrimeTween is a high-performance, **allocation-free** animation library for Unity. **Animate anything** with just one line of code, tweak all animation properties directly from the Inspector, and create complex animation sequences. No runtime memory allocations, ever.
 
-[**Performance comparison with other tween libraries.**](https://github.com/KyryloKuzyk/PrimeTween/discussions/10)
+[**Performance Comparison with DOTween**](https://github.com/KyryloKuzyk/PrimeTween/discussions/8)
 
 **[Asset Store](https://assetstore.unity.com/packages/slug/252960)** | **[Forum](https://forum.unity.com/threads/1479609/)** | **[FAQ](https://github.com/KyryloKuzyk/PrimeTween/discussions)** | **[YouTube](https://www.youtube.com/watch?v=MuMKwxOzc3M)**
 
@@ -23,6 +23,10 @@ Table of Contents
 - [Inspector integration](#inspector-integration)
 - [Controlling tweens](#controlling-tweens)
 - [Custom tweens](#custom-tweens)
+- [Advanced](#advanced)
+  + [Timescale](#timescale)
+  + [Speed-based animations](#speed-based-animations)
+  + [Custom easing](#custom-easing)
 - [Zero allocations with delegates](#zero-allocations-with-delegates)
 - [Debugging tweens](#debugging-tweens)
 - [Migrating from DOTween to PrimeTween](#migrating-from-dotween-to-primetween)
@@ -258,6 +262,46 @@ float floatField;
 Tween.Custom(tweenSettings, onValueChange: newVal => floatField = newVal);    
 ```
 
+Advanced
+---
+
+### Timescale
+You can apply a custom timeScale to each individual tween with the help of the `tween.timeScale` property. To smoothly animate the timeScale, use `Tween.TweenTimeScale(Tween tween, ...)` method.  
+To animate the global Unity's Time.timeScale, use `Tween.GlobalTimeScale(...)` method.
+
+### Speed-based animations
+Tween._**AtSpeed**(transform, endValue, **speed**, ...) methods allow to create animations based on the speed instead of duration. When the speed-based tween is created, PrimeTween will calculate the duration with the help of a simple formula: `duration = distance(startValue, endValue) / speed`. Because the duration is calculated immediately, to chain speed-based tweens to one another, you have to specify the `startValue` for all subsequent tweens:
+```csharp
+Tween.LocalPositionAtSpeed(transform, endValue: midPos, speed)
+    // Set 'startValue: midPos' to continue the movement from the 'midPos' instead of the initial 'transform.position'
+    .Chain(Tween.LocalPositionAtSpeed(transform, startValue: midPos, endValue: endPos, speed));
+```
+
+### Custom easing
+#### Animation curves
+It's possible to pass AnimationCurve instead of Ease enum to tweening methods:
+```csharp
+var animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+Tween.PositionY(transform, endValue, duration, animationCurve);
+```
+
+#### Parametric easing
+
+> This is an experimental feature that requires the `PRIME_TWEEN_EXPERIMENTAL` define in the `ProjectSettings/Player/Script Compilation`.
+
+Parametric easing gives the ability to customize the standard ease types. For example:
+```csharp
+// Regardless of the current position and endValue, the bounce will have the exact amplitude of 1 meter 
+Tween.PositionY(transform, endValue, duration, Easing.BounceExact(1));
+```
+
+Available parametric eases:
+- Easing.Overshoot(float strength): allows to customize the overshoot strength of Ease.OutBack.
+- Easing.Bounce(float strength): allows to customize the bounce strength of Ease.OutBounce.
+- Easing.BounceExact(float amplitude): allows to specify the exact bounce amplitude in meters/angles.
+- Easing.Elastic(float strength, float period = 0.3f): allows to customize the strength and oscillation period of Ease.OutElastic.
+
+
 Zero allocations with delegates
 ---
 C# delegates is a powerful language feature essential for game development. It gives us the ability to receive callbacks and pass methods to other methods. But when delegates are used in hot code paths carelessly, they can create [performance issues](https://www.jacksondunstan.com/articles/3765).
@@ -443,8 +487,8 @@ transform.DOPath()
 
 // Not supported because sequences and tweens are non-reusable in PrimeTween
 tween/sequence.PlayForward/PlayBackwards/Rewind/Restart() // alternative: start a new tween/sequence in the desired direction
-sequence.OnStart() // alternative: execute the code before starting a sequence
-tween.OnStart() // alternative: execute the code before starting a tween
+sequence.OnStart() // alternative: use sequence.ChainCallback() at the beginning of the sequence
+tween.OnStart() // alternative: Sequence.Create(Tween.Delay(delay, () => print("start"))).Chain(Tween.Position(...));
 ```
 
 Adding all the above features to PrimeTween is technically possible in one or another way, but I decided to gather feedback from users first to see if they really need it. Please drop me a note if your project needs any of these and describe your use case.
