@@ -25,6 +25,7 @@ Table of Contents
 - [Custom tweens](#custom-tweens)
 - [Advanced](#advanced)
   + [Timescale](#timescale)
+  + [OnUpdate](#onupdate)
   + [Speed-based animations](#speed-based-animations)
   + [Custom easing](#custom-easing)
 - [Zero allocations with delegates](#zero-allocations-with-delegates)
