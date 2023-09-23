@@ -275,11 +275,11 @@ Use `tween.OnUpdate()` callback to execute a custom callback when the animated v
 ```csharp
 // Rotate the transform around y-axis as animation progresses
 Tween.PositionY(transform, endValue, duration)
-    .OnUpdate(transform, (Transform target, Tween tween) => target.rotation = Quaternion.Euler(0, tween.interpolationFactor * 90f, 0));
+    .OnUpdate(target: transform, (target, tween) => target.rotation = Quaternion.Euler(0, tween.interpolationFactor * 90f, 0));
 
 // Call the OnPositionUpdated() method on every position change
 Tween.PositionY(transform, endValue, duration)
-    .OnUpdate(this, (target, tween) => target.OnPositionUpdated(tween.progress));
+    .OnUpdate(target: this, (target, tween) => target.OnPositionUpdated(tween.progress));
 ```
 
 ### Speed-based animations
