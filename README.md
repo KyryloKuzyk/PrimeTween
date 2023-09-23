@@ -4,7 +4,7 @@ PrimeTween
 
 PrimeTween is a high-performance, **allocation-free** animation library for Unity. **Animate anything** with just one line of code, tweak all animation properties directly from the Inspector, and create complex animation sequences. No runtime memory allocations, ever.
 
-[**Performance Comparison with DOTween**](https://github.com/KyryloKuzyk/PrimeTween/discussions/8)
+[**Performance comparison with other tween libraries.**](https://github.com/KyryloKuzyk/PrimeTween/discussions/10)
 
 **[Asset Store](https://assetstore.unity.com/packages/slug/252960)** | **[Forum](https://forum.unity.com/threads/1479609/)** | **[FAQ](https://github.com/KyryloKuzyk/PrimeTween/discussions)** | **[YouTube](https://www.youtube.com/watch?v=MuMKwxOzc3M)**
 
@@ -268,6 +268,18 @@ Advanced
 ### Timescale
 You can apply a custom timeScale to each individual tween with the help of the `tween.timeScale` property. To smoothly animate the timeScale, use `Tween.TweenTimeScale(Tween tween, ...)` method.  
 To animate the global Unity's Time.timeScale, use `Tween.GlobalTimeScale(...)` method.
+
+### OnUpdate
+Use `tween.OnUpdate()` callback to execute a custom callback when the animated value is updated.
+```csharp
+// Rotate the transform around y-axis as animation progresses
+Tween.PositionY(transform, endValue, duration)
+    .OnUpdate(transform, (Transform target, Tween tween) => target.rotation = Quaternion.Euler(0, tween.interpolationFactor * 90f, 0));
+
+// Call the OnPositionUpdated() method on every position change
+Tween.PositionY(transform, endValue, duration)
+    .OnUpdate(this, (target, tween) => target.OnPositionUpdated(tween.progress));
+```
 
 ### Speed-based animations
 Tween._**AtSpeed**(transform, endValue, **speed**, ...) methods allow to create animations based on the speed instead of duration. When the speed-based tween is created, PrimeTween will calculate the duration with the help of a simple formula: `duration = distance(startValue, endValue) / speed`. Because the duration is calculated immediately, to chain speed-based tweens to one another, you have to specify the `startValue` for all subsequent tweens:
