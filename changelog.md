@@ -1,3 +1,7 @@
+## [1.0.13] - 2022-09-24
+### Fixed
+- Fixed: passing a null UnityEngine.Object to 'Tween.' methods causes null ref exception in PrimeTweenManager.Update(). Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/13
+
 ## [1.0.12] - 2022-09-22
 ### Added
 - Experimental: add parametric Easing.Bounce(float strength) and Easing.BounceExact(float magnitude). BounceExact allows to specify the exact bounce amplitude in meters/degrees regardless of the total tween distance. This feature requires the PRIME_TWEEN_EXPERIMENTAL define.
