@@ -11,6 +11,7 @@ using UnityEngine.TestTools;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
 using Assert = UnityEngine.Assertions.Assert;
+using Easing = UnityEngine.UIElements.Experimental.Easing;
 
 public class UIToolkit_PrimeTweenTests {
     const int iterations = 100000;
