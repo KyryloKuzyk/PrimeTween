@@ -1,3 +1,11 @@
+## [1.0.14] - 2023-10-02
+### Added
+- Add methods to animate RectTransform.offsetMin/offsetMax.
+- Add sequence.timeScale to set the timeScale for all tweens in a Sequence.
+- Add Tween.TweenTimeScale(Sequence) method to animate sequence.timeScale over time.
+### Fixed
+- Fixed: Unity's Time.unscaledDeltaTime reports the wrong value after unpausing a scene in the Editor.
+
 ## [1.0.13] - 2023-09-24
 ### Fixed
 - Fixed: passing a null UnityEngine.Object to 'Tween.' methods causes null ref exception in PrimeTweenManager.Update(). Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/13
