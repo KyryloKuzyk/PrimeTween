@@ -1,4 +1,4 @@
-After cloning the repo, open the '*Window/General/**Test Runner***' and run the tests on the target platform by pressing the '*Run All Tests (TargetPlatform)*' button.
+After cloning the [Benchmarks](https://github.com/KyryloKuzyk/PrimeTween/tree/main/Benchmarks) repo, open the '*Window/General/**Test Runner***' and run the tests on the target platform by pressing the '*Run All Tests (TargetPlatform)*' button.
 
 This repo has the `PRIME_TWEEN_DISABLE_ASSERTIONS` define. PrimeTween heavily uses assertions in development builds, and this define will disable them to match the release performance in tests.
 
