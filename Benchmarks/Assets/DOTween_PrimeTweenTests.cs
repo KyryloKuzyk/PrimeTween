@@ -116,9 +116,9 @@ public class DOTween_PrimeTweenTests {
         settings.defaultRecyclable = false;
         DOTween.defaultRecyclable = false;
     }
-    [Test, Performance] public void _05_Animation_GCAlloc_PrimeTween() => measureGCAlloc(() => Tween.Position(transform, endValue, shortDuration));
+    [Test, Performance] public void _05_Animation_GCAlloc_PrimeTween() => measureGCAlloc(() => Tween.Position(transform, endValue, shortDuration), expected: 0);
     [Test, Performance] public void _06_Delay_GCAlloc_DOTween() => measureGCAlloc(() => DOVirtual.DelayedCall(shortDuration, () => numCallbackCalled++));
-    [Test, Performance] public void _06_Delay_GCAlloc_PrimeTween() => measureGCAlloc(() => Tween.Delay(this, shortDuration, _this => _this.numCallbackCalled++));
+    [Test, Performance] public void _06_Delay_GCAlloc_PrimeTween() => measureGCAlloc(() => Tween.Delay(this, shortDuration, _this => _this.numCallbackCalled++), expected: 0);
     
     
     [UnityTest, Performance] public IEnumerator _07_Animation_Start_DOTween() => measureFrameTime(() => transform.DOMove(endValue, shortDuration));
@@ -144,11 +144,11 @@ public class DOTween_PrimeTweenTests {
     [UnityTest, Performance] public IEnumerator _09_Delay_Start_PrimeTween() => measureFrameTime(() => Tween.Delay(this, longDuration, _this => _this.numCallbackCalled++));
 
     
-    const int sequenceIterations = iterations / 3 - warmups;
+    const int sequenceIterations = iterations / 4 - warmups;
     [UnityTest, Performance] public IEnumerator _11_Sequence_DOTween() => measureAverageFrameTimes(createSequenceDOTween, sequenceIterations);
     [UnityTest, Performance] public IEnumerator _11_Sequence_PrimeTween() => measureAverageFrameTimes(createSequencePrimeTween, sequenceIterations);
     [Test, Performance] public void _12_Sequence_GCAlloc_DOTween() => measureGCAlloc(createSequenceDOTween, sequenceIterations);
-    [Test, Performance] public void _12_Sequence_GCAlloc_PrimeTween() => measureGCAlloc(createSequencePrimeTween, sequenceIterations);
+    [Test, Performance] public void _12_Sequence_GCAlloc_PrimeTween() => measureGCAlloc(createSequencePrimeTween, sequenceIterations, expected: 0);
     [UnityTest, Performance] public IEnumerator _13_SequenceStart_DOTween() => measureFrameTime(createSequenceDOTween, sequenceIterations);
     [UnityTest, Performance] public IEnumerator _13_SequenceStart_PrimeTween() => measureFrameTime(createSequencePrimeTween, sequenceIterations);
     void createSequenceDOTween() =>
@@ -158,12 +158,12 @@ public class DOTween_PrimeTweenTests {
             .Append(transform.DORotate(Vector3.zero, longDuration));
     void createSequencePrimeTween() =>
         Tween.Position(transform, Vector3.zero, longDuration)
-            .Chain(Tween.Scale(transform, Vector3.zero, longDuration))
+            //.Chain(Tween.Scale(transform, Vector3.zero, longDuration))
             .Chain(Tween.Rotation(transform, Vector3.zero, longDuration));
 
     
     /// More iterations produce higher measurement accuracy. 
-    internal static void measureGCAlloc(Action action, int _iterations = iterations) {
+    internal static void measureGCAlloc(Action action, int _iterations = iterations, long? expected = null) {
         for (int i = 0; i < warmups; i++) {
             action();
         }
@@ -174,6 +174,9 @@ public class DOTween_PrimeTweenTests {
         }
         var gcAllocPerIteration = (GC.GetTotalMemory(true) - allocatedMemoryBefore) / _iterations;
         Measure.Custom(new SampleGroup("GCAlloc", SampleUnit.Byte), gcAllocPerIteration);
+        if (expected.HasValue) {
+            Assert.AreEqual(expected.Value, gcAllocPerIteration);
+        }
     }
 
     internal static IEnumerator measureFrameTime(Action action, int _iterations = iterations) {

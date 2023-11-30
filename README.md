@@ -108,21 +108,26 @@ Animations can be repeated with the help of cycles. To apply cycles to an animat
 Tween.PositionY(transform, endValue: 10, duration: 0.5f, cycles: 2, cycleMode: CycleMode.Yoyo);
 ```
 
+To apply cycles to a Sequence, use the `Sequence.Create(cycles: numCycles, cycleMode: CycleMode.Yoyo)` method.
+```csharp
+Sequence.Create(cycles: 2, CycleMode.Yoyo).Chain(Tween.PositionX(transform, 10, duration))
+    .Chain(Tween.PositionY(transform, 20, duration));
+```
+
+
 #### enum CycleMode
-- **Restart** (default): restarts the tween from the beginning.
-- **Yoyo**: animates forth and back, like a yoyo. Easing is normal on the backward cycle.
-- **Incremental**: at the end of a cycle increments `startValue` and `endValue`, like this: `(startValue = endValue, endValue += deltaValue)`. For example, if a tween moves position.x from 0 to 1, then after the first cycle, the tween will move the position.x from 1 to 2, and so on.
-- **Rewind**: rewinds the tween as if time was reversed. Easing is reversed on the backward cycle.
-> Sequences don't support CycleMode and can't be played backward.
+- Restart (default): restarts the tween from the beginning.
+- Yoyo: animates forth and back, like a yoyo. Easing is normal on the backward cycle.
+- Incremental: at the end of a cycle increments the `endValue` by the difference between `startValue` and `endValue`. For example, if a tween moves position.x from 0 to 1, then after the first cycle, the tween will move the position.x from 1 to 2, and so on.
+- Rewind: rewinds the tween as if time was reversed. Easing is reversed on the backward cycle.
 
-#### void SetCycles(int cycles)
-Sets the number of remaining cycles to a tween or sequence.  
-This method modifies the cyclesTotal so that the tween will complete after the number of cycles.
 
-#### void SetCycles(bool stopAtEndValue)
+#### void SetRemainingCycles(int cycles)
+Sets the number of remaining cycles to a tween or sequence. This method modifies the `cyclesTotal` so that the tween will complete after the number of cycles.
+
+#### void SetRemainingCycles(bool stopAtEndValue)
 Stops the tween when it reaches 'startValue' or 'endValue' for the next time.  
-For example, if you have an infinite tween (cycles == -1) with CycleMode.Yoyo/Rewind, and you wish to stop it when it reaches the 'endValue' (odd cycle), then set stopAtEndValue to true.  
-To stop the animation at the 'startValue' (even cycle), set stopAtEndValue to false.
+For example, if you have an infinite tween (`cycles == -1`) with CycleMode.Yoyo/Rewind, and you wish to stop it when it reaches the 'endValue', then set `stopAtEndValue` to true. To stop the animation at the 'startValue'  set `stopAtEndValue` to false.
 
 Sequencing tweens
 ---
@@ -134,14 +139,14 @@ There are several sequencing methods in PrimeTween. Let's start with the most co
 Sequences can be controlled the same way as individual tweens, see [controlling tweens](#controlling-tweens) section.
 
 ```csharp
-Sequence.Create()
+Sequence.Create(cycles: 10, CycleMode.Yoyo)
     // PositionX and Scale tweens are 'grouped', so they will run in parallel
     .Group(Tween.PositionX(transform, endValue: 10f, duration: 1.5f))
     .Group(Tween.Scale(transform, endValue: 2f, duration: 0.5f, startDelay: 1))
     // Rotation tween is 'chained' so it will start when both previous tweens are finished (after 1.5 seconds)
     .Chain(Tween.Rotation(transform, endValue: new Vector3(0f, 0f, 45f), duration: 1f)) 
     .ChainDelay(1)
-    .ChainCallback(() => Debug.Log("Sequence completed"));
+    .ChainCallback(() => Debug.Log("Sequence cycle completed"));
 ```
 
 #### Coroutines
@@ -172,6 +177,50 @@ async void AsyncMethod() {
 
 > While PrimeTween never allocates memory at runtime, the async/await feature in C# is allocating: awaiting an async method allocates a small amount of garbage. Consider using [UniTask](https://github.com/Cysharp/UniTask) to address this language limitation.
 
+
+Controlling tweens
+---
+All static **`Tween.`** methods return a **`Tween`** struct. While the **`tween.isAlive`** you can control it and access its properties such as duration, elapsedTime, progress, interpolationFactor, etc.
+
+After completion, the tween becomes 'dead' and can't be reused. This ensures that completed tweens don't eat computing resources and prevents the common performance pitfalls encountered in other tween libraries.
+```csharp
+Tween tween = Tween.LocalPositionX(transform, endValue: 1.5f, duration: 1f);
+// ...
+ 
+if (tween.isAlive) {
+    // '.isAlive' means the tween was created and not completed (or manually stopped) yet.
+    // While the tween '.isAlive' you can access its properties such as duration,
+    //     elapsedTime, progress, interpolationFactor, etc.
+    Debug.Log($"Animation is still running, elapsed time: {tween.elapsedTime}.");
+}
+
+
+tween.Stop(); // Interrupt the tween, leaving the animated value at the current value
+Tween.StopAll(onTarget: transform); // Alternative way to stop the tween by its target
+
+tween.Complete(); // Instantly complete the running tween and set the animated value to the endValue
+Tween.CompleteAll(onTarget: transform); // Alternative way to complete the tween by its target
+
+tween.isPaused = true; // Pause the tween
+Tween.PausedAll(true, onTarget: transform); // Alternative way to pause the tween by its target
+
+tween.elapsedTime = 0.5f; // Manually set the elapsed time of the tween. Use 'elapsedTimeTotal' to set the elapsed time of all cycles.
+
+tween.progress = 0.5f; // Manually set the normalized progress of the current cycle. This property is similar to the 'normalizedTime' property of the Animation component.
+
+tween.timeScale = 2f; // Apply a custom timeScale to the tween
+```
+
+As you can see, there is no way to change the direction of the currently running tween, it can only be **stopped** and **completed**. But how to play an animation **forward** and **backward**, for example, to show or hide a window? Easy! Just start a new Tween in the desired direction.
+```csharp
+[SerializeField] RectTransform window;
+
+public void SetWindowOpened(bool isOpened) {
+    Tween.UIAnchoredPositionY(window, endValue: isOpened ? 0 : -500, duration: 0.5f);
+}
+```
+In this example, the `SetWindowOpened()` can be called again while the previous animation is still running. Generally, there is no need to stop the previously running tween in such cases. The new tween will seamlessly start from the current position and **overwrite** all previously running tweens on the `window`. Several duplicated tweens are fine, but if your code can potentially create duplicated tweens every frame, then consider stopping the previous tween with the help of `tween.Stop()` or `Tween.StopAll(onTarget: target)`.
+
 Inspector integration
 ---
 Inspector integration is the cornerstone of PrimeTween's design. It lets you tweak all animation properties from the Inspector without changing the code. It **saves time** and gives **creative freedom**. All animation settings can be **serialized** in MonoBehaviour or ScriptableObject and passed to the corresponding Tween methods.
@@ -195,33 +244,11 @@ The neat thing about setting up animation properties in the Inspector is that yo
 
 <img width="100%" src="Documentation/inspector_integration.jpg">
 
-Controlling tweens
----
-All static **`Tween.`** methods return a **`Tween`** struct. While the **`tween.isAlive`** you can control it and access its properties such as duration, elapsedTime, progress, interpolationFactor, etc.
+Now let's revisit the window example from the [Controlling tweens](#controlling-tweens) section and improve it by removing all magic variables from the code. Notice how the **`isOpened`** parameter is passed to the **`WithDirection(bool toEndValue)`** method. This helper method selects the target position based on the `isOpened` parameter. Nice and simple!
 
-After completion, the tween becomes 'dead' and can't be reused. This ensures that completed tweens don't eat computing resources and prevents the common performance pitfalls encountered in other tween libraries.
-```csharp
-Tween tween = Tween.LocalPositionX(transform, endValue: 1.5f, duration: 1f);
-// ...
- 
-if (tween.isAlive) {
-    // '.isAlive' means the tween was created and not completed (or manually stopped) yet.
-    // While the tween '.isAlive' you can access its properties such as duration,
-    //     elapsedTime, progress, interpolationFactor, etc.
-    Debug.Log($"Animation is still running, elapsed time: {tween.elapsedTime}.");
-}
+<details>
+<summary>Old window example (click to expand)</summary>
 
-// Pause the tween
-tween.isPaused = true;
-
-// Interrupt the tween, leaving the animated value at the current value
-tween.Stop();
-
-// Instantly complete the running tween and set the animated value to the endValue
-tween.Complete();
-```
-
-As you can see, there is no way to change the direction of the currently running tween, it can only be **stopped** and **completed**. But how to play an animation **forward** and **backward**, for example, to show or hide a window? Easy! Just start a new Tween in the desired direction.
 ```csharp
 [SerializeField] RectTransform window;
 
@@ -229,9 +256,10 @@ public void SetWindowOpened(bool isOpened) {
     Tween.UIAnchoredPositionY(window, endValue: isOpened ? 0 : -500, duration: 0.5f);
 }
 ```
-In this example, the `SetWindowOpened()` can be called again while the previous animation is still running. Generally, there is no need to stop the previously running tween in such cases. The new tween will seamlessly start from the current position and **overwrite** all previously running tweens on the `window`. Several duplicated tweens are fine, but if your code can potentially create duplicated tweens every frame, then consider stopping the previous tween.
+</details>
 
-And to utilize the full power of PrimeTween, all window animation settings can come from the Inspector. Notice how the **`isOpened`** parameter is passed to the **`WithDirection(bool toEndValue)`** method. This helper method selects the target position based on the `isOpened` parameter. Nice and simple!
+
+Window example with Inspector Integration:
 ```csharp
 [SerializeField] RectTransform window;
 [SerializeField] TweenSettings<float> windowAnimationSettings;
@@ -273,7 +301,7 @@ To animate the global Unity's Time.timeScale, use `Tween.GlobalTimeScale(...)` m
 ### OnUpdate
 Use `tween.OnUpdate()` callback to execute a custom callback when the animated value is updated.
 ```csharp
-// Rotate the transform around y-axis as animation progresses
+// Rotate the transform around the y-axis as the animation progresses
 Tween.PositionY(transform, endValue, duration)
     .OnUpdate(target: transform, (target, tween) => target.rotation = Quaternion.Euler(0, tween.interpolationFactor * 90f, 0));
 
@@ -309,10 +337,10 @@ Tween.PositionY(transform, endValue, duration, Easing.BounceExact(1));
 ```
 
 Available parametric eases:
-- Easing.Overshoot(float strength): allows to customize the overshoot strength of Ease.OutBack.
-- Easing.Bounce(float strength): allows to customize the bounce strength of Ease.OutBounce.
+- Easing.Overshoot(float strength): customizes the overshoot strength of Ease.OutBack.
+- Easing.Bounce(float strength): customizes the bounce strength of Ease.OutBounce.
 - Easing.BounceExact(float amplitude): allows to specify the exact bounce amplitude in meters/angles.
-- Easing.Elastic(float strength, float period = 0.3f): allows to customize the strength and oscillation period of Ease.OutElastic.
+- Easing.Elastic(float strength, float period = 0.3f): customizes the strength and oscillation period of Ease.OutElastic.
 
 
 Zero allocations with delegates
@@ -371,7 +399,7 @@ Please visit the full performance comparison [article](https://github.com/Kyrylo
 
 PrimeTween comes with a built-in migration adapter that can help you migrate even big projects relatively quickly. The adapter can also be used if you're missing extension methods you've gotten used to.
 
-Adapter is an **optional** feature designed to speed up PrimeTween's adoption. The migrated code may still be allocating because of the [delegate allocations](#zero-allocations-with-delegates).
+The Adapter is an **optional** feature designed to speed up PrimeTween's adoption. The migrated code may still be allocating because of the [delegate allocations](#zero-allocations-with-delegates).
 > Please **back up** your project before proceeding. You should **test** the migrated code thoroughly before releasing it to production.
 
 
@@ -484,27 +512,29 @@ public class PrimeTweenWindow : MonoBehaviour {
 }
 ```
 
-#### Unsupported APIs
-There are a few other things PrimeTween currently **doesn't support**.
+#### Migration cheatsheet
+There are a few other things PrimeTween does differently or provides a different approach. Here is a cheatsheet of the main differences between DOTween and PrimeTween. Please drop me a note if PrimeTween doesn't cover some particular need of yours and describe your use case.
+
 ```csharp
-// Alternative available
-sequence.Insert(atPosition: 1.5f, transform.DOMoveX(0, 1));  -->  sequence.Group(Tween.PositionX(transform, 0, 1, startDelay: 1.5f)); (at the beginning of a Sequence)
-sequence.InsertCallback(atPosition: 1f, callback: delegate { });  -->  sequence.Group(Tween.Delay(duration: 1, onComplete: delegate { })); (at the beginning of a Sequence)
-transform.DOJump() // https://forum.unity.com/threads/1479609/#post-9226566
+sequence.Insert(atPosition: 1.5f, transform.DOMoveX(0, 1));  // sequence.Group(Tween.PositionX(...)); at the beginning of a Sequence
+sequence.InsertCallback(atPosition: 1f, callback: delegate { }); // sequence.Group(Tween.Delay(duration: 1, onComplete: delegate { })); at the beginning of a Sequence
+
+transform.DOJump(); // https://forum.unity.com/threads/1479609/#post-9226566
+transform.DOPath() // This feature in on my roadmap
     
-// Not supported, but technically possible
-sequence.OnComplete() // alternative: if a sequence has one loop, use ChainCallback() instead
-sequence.SetEase() // alternative: apply eases to individual tweens in a sequence
-sequence.SetUpdate(bool isIndependentUpdate) // alternative: apply 'useUnscaledTime' parameter to all tweens in a sequence
-transform.DOPath()
+tween.SetEase(Ease.InOutSine); // Tween.Position(..., ease: Ease.InOutSine);
+sequence.SetEase(Ease.OutBounce); // Sequence.Create(..., sequenceEase: Ease.OutBounce);
 
-// Not supported because sequences and tweens are non-reusable in PrimeTween
-tween/sequence.PlayForward/PlayBackwards/Rewind/Restart() // alternative: start a new tween/sequence in the desired direction
-sequence.OnStart() // alternative: use sequence.ChainCallback() at the beginning of the sequence
-tween.OnStart() // alternative: Sequence.Create(Tween.Delay(delay, () => print("start"))).Chain(Tween.Position(...));
+tween.SetUpdate(isIndependentUpdate: true); // Tween.Position(..., useUnscaledTime: true);
+sequence.SetUpdate(isIndependentUpdate: true) // Sequence.Create(..., useUnscaledTime: true);
+
+tween.OnStart(() => print("start")) // Tween.Delay(startDelay, () => print("start")).Chain(Tween.Position(...));
+sequence.OnStart(); // sequence.ChainCallback() at the beginning of the sequence
+
+sequence.OnComplete(); // If a sequence has one loop, use ChainCallback() at the end of the Sequence
+    
+tween/sequence.PlayForward/PlayBackwards/Rewind/Restart() // Start a new tween/sequence in the desired direction
 ```
-
-Adding all the above features to PrimeTween is technically possible in one or another way, but I decided to gather feedback from users first to see if they really need it. Please drop me a note if your project needs any of these and describe your use case.
 
 Support
 ---

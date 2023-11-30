@@ -1,3 +1,33 @@
+## [1.1.0] - 2023-11-30
+### Added:
+- Sequences now support CycleMode.Yoyo and CycleMode.Rewind with the help of Sequence.Create(numCycles, CycleMode **cycleMode**).
+- Sequences now support easing that can be applied to the whole Sequence with the help of Sequence.Create(..., Ease **sequenceEase**).
+- 'elapsedTime', 'elapsedTimeTotal', 'progress', and 'progressTotal' properties now have setters, so it's possible to manually set the elapsed time of tweens and sequences. Please see the Demo scene for usage example.
+- Parent Sequence now controls the isPaused, timeScale, and useUnscaledTime of all its children tweens and sequences.
+- Add a warning when tween.SetRemainingCycles() is called on Tween.Delay(). More info: https://forum.unity.com/threads/1479609/page-3#post-9415922.
+### Changed
+- It's no longer allowed to Stop()/Complete() a tween inside a Sequence. Please Stop()/Complete() the parent Sequence instead.
+- It's no longer allowed to await or use the '.ToYieldInstruction()' on tween inside a Sequence. Please use the parent Sequence instead.
+- It's no longer allowed to add tweens to a started Sequence.
+- It's now allowed to call Tween.StopAll(), Tween.CompleteAll() and Tween.SetPausedAll() from onValueChange, OnUpdate() and OnComplete().
+- SetCycles() was renamed to SetRemainingCycles(). To set Sequence cycles, use Sequence.Create(cycles: numCycles).
+- Remove 'minExpected' and 'numMaxExpected' parameters from Tween.StopAll/CompleteAll/SetPausedAll() methods.
+### Fixed
+- Fixed: Tween.GetTweensCount() may return the incorrect result if called from the OnComplete() callback.
+- Fixed: MeasureMemoryAllocations.cs example script doesn't ignore its own allocations.
+
+## [1.0.17] - 2023-11-12
+### Fixed
+- Fixed: the Demo scene doesn't compile if PrimeTween is not installed.
+
+## [1.0.16] - 2023-11-04
+### Fixed
+- Fixed: Quaternion tweens don't work correctly with CycleMode.Incremental. Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/19
+
+## [1.0.15] - 2023-10-14
+### Fixed
+- Fixed: the first time Sequence is created, it may play incorrectly in some cases.
+
 ## [1.0.14] - 2023-10-02
 ### Added
 - Add methods to animate RectTransform.offsetMin/offsetMax.
