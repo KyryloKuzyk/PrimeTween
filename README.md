@@ -503,7 +503,7 @@ public class DOTweenWindow : MonoBehaviour {
 ```
 </details>
 
-PrimeTween offers a much more elegant way of doing the same that comes with much better performance. Destroying the window while the animation is playing is perfectly fine:
+PrimeTween offers a much more elegant way of doing the same that comes with much better performance. [Destroying](https://github.com/KyryloKuzyk/PrimeTween/discussions/4) the window while the animation is playing is perfectly fine:
 ```csharp
 public class PrimeTweenWindow : MonoBehaviour {
     public void SetWindowOpened(bool isOpened) {
