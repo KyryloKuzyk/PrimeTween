@@ -34,6 +34,7 @@ Table of Contents
   + [Performance comparison](#performance-comparison)
   + [DOTween adapter](#dotween-adapter)
   + [Tween.PlayForward/PlayBackwards](#tweenplayforwardplaybackwardsrestart)
+  + [Migration cheatsheet](#migration-cheatsheet)
 - [Support](#support)
 
 Getting started
@@ -409,57 +410,26 @@ First, to enable the adapter, add the **`PRIME_TWEEN_DOTWEEN_ADAPTER`** define t
 
 The migration process may vary from project to project. In many cases, simply replacing `using DG.Tweening;` with `using PrimeTween;` is enough to switch a script from DOTween to PrimeTween. See how easy was to migrate the [MotionDesignFES](https://github.com/KirillKuzyk/MotionDesignFES-PrimeTween/commit/628cb17d027e9648add45e0b2d9b431983a1bde6) project with dozens of complex animations.
 
-Open a script that uses DOTween, change `using DG.Tweening;` to `using PrimeTween;` and the adapter will handle the majority of cases **automatically**.
-```csharp
-DOTween API on the left     -->  PrimeTween API on the right
-
-// All animations are supported, here are only a few of them as an example
-transform.DOMove()          -->  Tween.Position(transform)
-uiImage.DOFade()            -->  Tween.Alpha(uiImage)
-material.DOColor()          -->  Tween.Color(material)
-transform.DOShakePosition() -->  Tween.ShakeLocalPosition(transform)
-
-DOVirtual.DelayedCall()     -->  Tween.Delay()
-DOTween.To()                -->  Tween.Custom()
-DOVirtual.Vector3()         -->  Tween.Custom()
-
-DOTween.Sequence()          -->  Sequence.Create()
-sequence.Join()             -->  sequence.Group()
-sequence.Append()           -->  sequence.Chain()
-
-DOTween.Kill(target, true)  -->  Tween.CompleteAll(onTarget: target)
-DOTween.Kill(target, false) -->  Tween.StopAll(onTarget: target)
-tween.Kill(true)            -->  tween.Complete()
-tween.Kill(false)           -->  tween.Stop()
-
-yield return tween.WaitForCompletion()    -->  yield return tween.ToYieldInstruction()
-yield return sequence.WaitForCompletion() -->  yield return sequence.ToYieldInstruction()
-
-// PrimeTween doesn't use threads, so you can write async methods even on WebGL
-await tween.AsyncWaitForCompletion()      -->  await tween
-await sequence.AsyncWaitForCompletion()   -->  await sequence 
-```
-
-Although, here are the most common places that require a **manual fix** to the existing code base.
+Open a script that uses DOTween, change `using DG.Tweening;` to `using PrimeTween;` and the adapter will handle the majority of cases **automatically**, preserving DOTween's syntax in your project. The most common places that require a **manual change** to the existing code base:
 ```csharp
 // using DG.Tweening;
 using PrimeTween;
-
-// Tween tween;
-// Tweener tween;
-// TweenerCore tween;
-Tween tween;
 
 // if (tween != null) {
 //     tween.Kill(complete: true);
 //     tween = null;
 // }
 tween.Complete(); // null checking and setting tween to null is not needed
+
+// tween/sequence.PlayForward/PlayBackwards/Rewind/Restart();
+// In PrimeTween, tweens and sequences are non-reusable, so there is no direct equivalent.
+// Instead, start a new tween or sequence in the desired direction (see the example below).
+// Starting new tweens and sequences in PrimeTween is extremely fast, so there is no need for caching.
 ```
 
 #### Tween.PlayForward/PlayBackwards/Restart
 
-PrimeTween offers a different approach to animating things forward and backward that is simpler and has greater performance.
+PrimeTween offers a different approach to animating things forward and backward that is simpler and has greater performance. In PrimeTween, tweens and sequences are **non-reusable**, which means that it's not possible to cache tweens and reuse them later.
 
 Let's consider the common DOTween usage pattern: creating a tween once, then calling PlayForward() and PlayBackwards() when needed.
 <details>
@@ -513,27 +483,58 @@ public class PrimeTweenWindow : MonoBehaviour {
 ```
 
 #### Migration cheatsheet
-There are a few other things PrimeTween does differently or provides a different approach. Here is a cheatsheet of the main differences between DOTween and PrimeTween. Please drop me a note if PrimeTween doesn't cover some particular need of yours and describe your use case.
+If you don't want to use the Adapter and wish to migrate your project to PrimeTween's syntax, please refer to this cheatsheet for the API differences of two libraries.
 
 ```csharp
-sequence.Insert(atPosition: 1.5f, transform.DOMoveX(0, 1));  // sequence.Group(Tween.PositionX(...)); at the beginning of a Sequence
-sequence.InsertCallback(atPosition: 1f, callback: delegate { }); // sequence.Group(Tween.Delay(duration: 1, onComplete: delegate { })); at the beginning of a Sequence
+DOTween API on the left             -->  PrimeTween API on the right
 
-transform.DOJump(); // https://forum.unity.com/threads/1479609/#post-9226566
-transform.DOPath() // This feature in on my roadmap
+// All animations are supported, here are only a few of them as an example
+transform.DOMove(...)               -->  Tween.Position(transform, ...)
+uiImage.DOFade(...)                 -->  Tween.Alpha(uiImage, ...)
+material.DOColor(...)               -->  Tween.Color(material, ...)
+transform.DOShakePosition(...)      -->  Tween.ShakeLocalPosition(transform, ...)
     
-tween.SetEase(Ease.InOutSine); // Tween.Position(..., ease: Ease.InOutSine);
-sequence.SetEase(Ease.OutBounce); // Sequence.Create(..., sequenceEase: Ease.OutBounce);
+tween.SetEase(Ease.InOutSine)       --> Tween.Position(..., ease: Ease.InOutSine);
+sequence.SetEase(Ease.OutBounce)    --> Sequence.Create(..., sequenceEase: Ease.OutBounce)
 
-tween.SetUpdate(isIndependentUpdate: true); // Tween.Position(..., useUnscaledTime: true);
-sequence.SetUpdate(isIndependentUpdate: true) // Sequence.Create(..., useUnscaledTime: true);
-
-tween.OnStart(() => print("start")) // Tween.Delay(startDelay, () => print("start")).Chain(Tween.Position(...));
-sequence.OnStart(); // sequence.ChainCallback() at the beginning of the sequence
-
-sequence.OnComplete(); // If a sequence has one loop, use ChainCallback() at the end of the Sequence
+tween.SetLoops(2, LoopType.Yoyo)    --> Tween.Position(..., cycles: 2, CycleMode.Yoyo)
+sequence.SetLoops(2, LoopType.Yoyo) --> Sequence.Create(cycles: 2, CycleMode.Yoyo)
     
-tween/sequence.PlayForward/PlayBackwards/Rewind/Restart() // Start a new tween/sequence in the desired direction
+tween.SetUpdate(true)               --> Tween.Position(..., useUnscaledTime: true)
+sequence.SetUpdate(true)            --> Sequence.Create(..., useUnscaledTime: true)
+
+tween.Kill(false)                   -->  tween.Stop()
+tween.Kill(true)                    -->  tween.Complete()
+
+DOVirtual.DelayedCall()             -->  Tween.Delay()
+DOTween.To()                        -->  Tween.Custom()
+DOVirtual.Vector3()                 -->  Tween.Custom()
+
+DOTween.Sequence()                  -->  Sequence.Create()
+sequence.Join()                     -->  sequence.Group()
+sequence.Append()                   -->  sequence.Chain()
+
+DOTween.Kill(target, false)         -->  Tween.StopAll(onTarget: target)
+DOTween.Kill(target, true)          -->  Tween.CompleteAll(onTarget: target)
+
+yield return tween.WaitForCompletion()    -->  yield return tween.ToYieldInstruction()
+yield return sequence.WaitForCompletion() -->  yield return sequence.ToYieldInstruction()
+
+// PrimeTween doesn't use threads, so you can write async methods even on WebGL
+await tween.AsyncWaitForCompletion()      -->  await tween
+await sequence.AsyncWaitForCompletion()   -->  await sequence 
+  
+sequence.InsertCallback(1f, callback))    --> sequence.Group(Tween.Delay(1f, callback)) // before the first sequence.Chain() operation    
+sequence.Insert(1.5f, trans.DOMoveX(...)) --> sequence.Group(Tween.PositionX(..., startDelay: 1.5f)) // before the first sequence.Chain() operation
+sequence.Insert(atPosition: 1.5f, tween)  --> sequence.Group(Tween.Delay(1.5f).Chain(tween)) // before the first sequence.Chain() operation
+
+transform.DOMoveX(20, 1).From(fromValue)  --> Tween.PositionX(transform, fromValue, 20, 1)
+  
+tween.SetDelay(1f).OnStart(callback)      --> Tween.Delay(1, callback).Chain(tween)
+sequence.OnStart(callback)                --> sequence.ChainCallback(callback) // at the beginning of the sequence
+
+transform.DOJump()                        --> // https://forum.unity.com/threads/1479609/#post-9226566
+transform.DOPath()                        --> // on the roadmap
 ```
 
 Support
