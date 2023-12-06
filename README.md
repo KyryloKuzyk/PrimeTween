@@ -195,7 +195,6 @@ if (tween.isAlive) {
     Debug.Log($"Animation is still running, elapsed time: {tween.elapsedTime}.");
 }
 
-
 tween.Stop(); // Interrupt the tween, leaving the animated value at the current value
 Tween.StopAll(onTarget: transform); // Alternative way to stop the tween by its target
 

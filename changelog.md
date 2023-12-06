@@ -1,4 +1,17 @@
-## [1.1.0] - 2023-11-30
+## [1.1.3] - 2023-12-06
+### Added:
+- Add Sequence.OnComplete() API.
+### Fixed
+- Fixed: nesting multiple empty Sequences may lead to a StackOverflow exception in some cases.
+- Fixed: enabling/disabling UI.Slider in Demo scene constantly allocates GC.
+
+## [1.1.2] - 2023-12-03
+### Added:
+- Add 'PrimeTweenConfig.warnEndValueEqualsCurrent' setting to warn if the 'endValue' equals to the current animated value.
+### Fixed
+- Fixed: PrimeTween may log warnings in Editor when exiting Play Mode.
+
+## [1.1.1] - 2023-11-30
 ### Added:
 - Sequences now support CycleMode.Yoyo and CycleMode.Rewind with the help of Sequence.Create(numCycles, CycleMode **cycleMode**).
 - Sequences now support easing that can be applied to the whole Sequence with the help of Sequence.Create(..., Ease **sequenceEase**).
