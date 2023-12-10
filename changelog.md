@@ -1,3 +1,14 @@
+## [1.1.4] - 2023-12-10
+### Added:
+- Tween/Sequence.timeScale can now be negative to support backward movement (rewind).
+- Add 'useFixedUpdate' parameter to update a tween or sequence in the FixedUpdate().
+- Release Parametric Easing to production (previously this feature was experimental): https://github.com/KyryloKuzyk/PrimeTween#parametric-easing
+### Changed
+- The default 'easeBetweenShakes' is now Ease.OutQuad instead of Ease.OutSine.
+- The 'useUnscaledTime' parameter now doesn't prevent the abrupt delta time changes when unpausing the Editor to be consistent with the official Unity's behavior.
+### Fixed
+- Fixed: shakes log the 'warnEndValueEqualsCurrent' warning if object's local position/rotation is Vector3.zero/Quaternion.identity.
+
 ## [1.1.3] - 2023-12-06
 ### Added:
 - Add Sequence.OnComplete() API.

@@ -28,6 +28,7 @@ Table of Contents
   + [OnUpdate](#onupdate)
   + [Speed-based animations](#speed-based-animations)
   + [Custom easing](#custom-easing)
+  + [FixedUpdate](#fixedupdate)
 - [Zero allocations with delegates](#zero-allocations-with-delegates)
 - [Debugging tweens](#debugging-tweens)
 - [Migrating from DOTween to PrimeTween](#migrating-from-dotween-to-primetween)
@@ -322,14 +323,10 @@ Tween.LocalPositionAtSpeed(transform, endValue: midPos, speed)
 #### Animation curves
 It's possible to pass AnimationCurve instead of Ease enum to tweening methods:
 ```csharp
-var animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+AnimationCurve animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 Tween.PositionY(transform, endValue, duration, animationCurve);
 ```
-
 #### Parametric easing
-
-> This is an experimental feature that requires the `PRIME_TWEEN_EXPERIMENTAL` define in the `ProjectSettings/Player/Script Compilation`.
-
 Parametric easing gives the ability to customize the standard ease types. For example:
 ```csharp
 // Regardless of the current position and endValue, the bounce will have the exact amplitude of 1 meter 
@@ -339,9 +336,21 @@ Tween.PositionY(transform, endValue, duration, Easing.BounceExact(1));
 Available parametric eases:
 - Easing.Overshoot(float strength): customizes the overshoot strength of Ease.OutBack.
 - Easing.Bounce(float strength): customizes the bounce strength of Ease.OutBounce.
-- Easing.BounceExact(float amplitude): allows to specify the exact bounce amplitude in meters/angles.
+- Easing.BounceExact(float amplitude): customizes the exact amplitude of the first bounce in meters/angles.
 - Easing.Elastic(float strength, float period = 0.3f): customizes the strength and oscillation period of Ease.OutElastic.
 
+### FixedUpdate
+Use `useFixedUpdate` parameter to update a tween or sequence in the FixedUpdate().
+```csharp
+// Use TweenSettings or TweenSettings<T> struct to pass the 'useFixedUpdate' parameter to static 'Tween.' methods
+Tween.PositionX(transform, endValue: 10f, new TweenSettings(duration: 1f, useFixedUpdate: true));
+
+var tweenSettingsFloat = new TweenSettings<float>(endValue: 10f, duration: 1f, useFixedUpdate: true);
+Tween.PositionX(transform, tweenSettingsFloat);
+
+// To update the Sequence in FixedUpdate(), pass the 'useFixedUpdate' parameter to Seqeunce.Create()  
+Sequence.Create(useFixedUpdate: true);
+```
 
 Zero allocations with delegates
 ---
@@ -386,8 +395,8 @@ PrimeTween and DOTween don't conflict with each other and can be used in one pro
 What are the reasons to try PrimeTween?
 * See [performance](https://github.com/KyryloKuzyk/PrimeTween/discussions/10) comparison.
 * **Seamless installation** that never produces compilation errors regardless of what other packages or plugins your project already uses.
-* PrimeTween is extremely easy to learn. It has only 7 top-level concepts, and you can learn the API even without the documentation by simply typing `PrimeTween` and pressing `.`
-* PrimeTween is extensively covered by more than **150 automatic tests** that ensure that every bit works perfectly.
+* PrimeTween is extremely easy to learn. It has only 8 top-level concepts, and you can learn the API even without the documentation by simply typing `PrimeTween` and pressing `.`
+* PrimeTween is extensively covered by more than **220 automatic tests** that ensure that every bit works perfectly.
 * With PrimeTween it's safe to [destroy objects](https://github.com/KyryloKuzyk/PrimeTween/discussions/4) with running animations.
 * PrimeTween is truly multiplatform with no exceptions. Awaiting tweens in async methods works even on WebGL!
 
@@ -502,6 +511,9 @@ sequence.SetLoops(2, LoopType.Yoyo) --> Sequence.Create(cycles: 2, CycleMode.Yoy
 tween.SetUpdate(true)               --> Tween.Position(..., useUnscaledTime: true)
 sequence.SetUpdate(true)            --> Sequence.Create(..., useUnscaledTime: true)
 
+tween.SetUpdate(UpdateType.Fixed)   --> Tween.Position(..., new TweenSettings(1f, useFixedUpdate: true)) // https://github.com/KyryloKuzyk/PrimeTween#fixedupdate 
+sequence.SetUpdate(UpdateType.Fixed)--> Sequence.Create(useFixedUpdate: true)
+
 tween.Kill(false)                   -->  tween.Stop()
 tween.Kill(true)                    -->  tween.Complete()
 
@@ -527,13 +539,14 @@ sequence.InsertCallback(1f, callback))    --> sequence.Group(Tween.Delay(1f, cal
 sequence.Insert(1.5f, trans.DOMoveX(...)) --> sequence.Group(Tween.PositionX(..., startDelay: 1.5f)) // before the first sequence.Chain() operation
 sequence.Insert(atPosition: 1.5f, tween)  --> sequence.Group(Tween.Delay(1.5f).Chain(tween)) // before the first sequence.Chain() operation
 
-transform.DOMoveX(20, 1).From(fromValue)  --> Tween.PositionX(transform, fromValue, 20, 1)
+transform.DOMoveX(to, 1).From(from)       --> Tween.PositionX(transform, from, to, 1)
+tween.From(from, setImmediately: true)    --> // manually set the animated value to 'from': https://forum.unity.com/threads/1479609/page-4#post-9515827   
   
 tween.SetDelay(1f).OnStart(callback)      --> Tween.Delay(1, callback).Chain(tween)
 sequence.OnStart(callback)                --> sequence.ChainCallback(callback) // at the beginning of the sequence
 
 transform.DOJump()                        --> // https://forum.unity.com/threads/1479609/#post-9226566
-transform.DOPath()                        --> // on the roadmap
+transform.DOPath()                        --> // on the roadmap    
 ```
 
 Support
