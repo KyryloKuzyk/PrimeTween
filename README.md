@@ -546,7 +546,7 @@ tween.SetDelay(1f).OnStart(callback)      --> Tween.Delay(1, callback).Chain(twe
 sequence.OnStart(callback)                --> sequence.ChainCallback(callback) // at the beginning of the sequence
 
 transform.DOJump()                        --> // https://forum.unity.com/threads/1479609/#post-9226566
-transform.DOPath()                        --> // on the roadmap    
+transform.DOPath()                        --> // https://forum.unity.com/threads/1479609/page-4#post-9522451
 ```
 
 Support
