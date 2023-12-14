@@ -112,7 +112,8 @@ Tween.PositionY(transform, endValue: 10, duration: 0.5f, cycles: 2, cycleMode: C
 
 To apply cycles to a Sequence, use the `Sequence.Create(cycles: numCycles, cycleMode: CycleMode.Yoyo)` method.
 ```csharp
-Sequence.Create(cycles: 2, CycleMode.Yoyo).Chain(Tween.PositionX(transform, 10, duration))
+Sequence.Create(cycles: 2, CycleMode.Yoyo)
+    .Chain(Tween.PositionX(transform, 10, duration))
     .Chain(Tween.PositionY(transform, 20, duration));
 ```
 
@@ -545,8 +546,13 @@ tween.From(from, setImmediately: true)    --> // manually set the animated value
 tween.SetDelay(1f).OnStart(callback)      --> Tween.Delay(1, callback).Chain(tween)
 sequence.OnStart(callback)                --> sequence.ChainCallback(callback) // at the beginning of the sequence
 
+trans.DOMove(pos, speed).SetSpeedBased()  --> Tween.PositionAtSpeed(transform, pos, speed)
+
+textMeshPro.DOText(...)                   --> // https://forum.unity.com/threads/1479609/page-4#post-9529051 or see TypewriterAnimatorExample.cs in Demo
+text.DOCounter()                          --> // https://forum.unity.com/threads/1479609/page-2#post-9387887
 transform.DOJump()                        --> // https://forum.unity.com/threads/1479609/#post-9226566
 transform.DOPath()                        --> // https://forum.unity.com/threads/1479609/page-4#post-9522451
+tween.SetId()                             --> // https://github.com/KyryloKuzyk/PrimeTween/discussions/26#discussioncomment-7700985
 ```
 
 Support

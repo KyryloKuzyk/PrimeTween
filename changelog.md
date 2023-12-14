@@ -1,3 +1,9 @@
+## [1.1.5] - 2023-12-14
+### Added:
+- Add Tween.TextMaxVisibleCharacters(TMP_Text target, ...) method to support simple typewriter animation. Please see the 'Demo.TypewriterAnimatorExample.cs' for a more complex example of text animation that makes pauses after punctuations.
+### Fixed
+- Fixed: don't allow to set invalid elapsedTimeTotal and progressTotal values to infinite tweens.
+
 ## [1.1.4] - 2023-12-10
 ### Added:
 - Tween/Sequence.timeScale can now be negative to support backward movement (rewind).
