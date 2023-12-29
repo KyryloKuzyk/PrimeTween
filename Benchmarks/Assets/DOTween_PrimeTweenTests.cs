@@ -41,6 +41,7 @@ public class DOTween_PrimeTweenTests {
         PrimeTweenConfig.SetTweensCapacity(capacity);
         PrimeTweenConfig.warnZeroDuration = false;
         PrimeTweenConfig.warnTweenOnDisabledTarget = false;
+        PrimeTweenConfig.warnEndValueEqualsCurrent = false;
     }
 
     [UnityTearDown] public IEnumerator setUp() {

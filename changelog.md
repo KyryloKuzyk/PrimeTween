@@ -1,3 +1,10 @@
+## [1.1.6] - 2023-12-29
+### Added:
+- PrimeTween can now print tween's creation stack trace when an error occurs to make the debugging process a lot easier. This feature requires the 'PRIME_TWEEN_SAFETY_CHECKS' define.
+- Add TypewriterAnimatorExample.TypewriterAnimationByWords() to the Demo scene to show an example of how to animate text word-by-word.
+### Fixed
+- Fixed: shake doesn't restore the position to the initial value if shake's period is less than duration.
+
 ## [1.1.5] - 2023-12-14
 ### Added:
 - Add Tween.TextMaxVisibleCharacters(TMP_Text target, ...) method to support simple typewriter animation. Please see the 'Demo.TypewriterAnimatorExample.cs' for a more complex example of text animation that makes pauses after punctuations.
