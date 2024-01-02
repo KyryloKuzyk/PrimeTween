@@ -1,3 +1,6 @@
+## [1.1.7] - 2024-01-02
+- Fixed: ReusableTween.updateSequence() throws AssertionException when a sequence is running during scene change in the Editor. Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/32
+
 ## [1.1.6] - 2023-12-29
 ### Added:
 - PrimeTween can now print tween's creation stack trace when an error occurs to make the debugging process a lot easier. This feature requires the 'PRIME_TWEEN_SAFETY_CHECKS' define.
