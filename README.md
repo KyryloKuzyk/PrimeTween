@@ -541,18 +541,19 @@ sequence.Insert(1.5f, trans.DOMoveX(...)) --> sequence.Group(Tween.PositionX(...
 sequence.Insert(atPosition: 1.5f, tween)  --> sequence.Group(Tween.Delay(1.5f).Chain(tween)) // before the first sequence.Chain() operation
 
 transform.DOMoveX(to, 1).From(from)       --> Tween.PositionX(transform, from, to, 1)
-tween.From(from, setImmediately: true)    --> // manually set the animated value to 'from': https://forum.unity.com/threads/1479609/page-4#post-9515827   
+tween.From(from, setImmediately: true)    --> manually set the animated value to 'from': https://forum.unity.com/threads/1479609/page-4#post-9515827   
   
 tween.SetDelay(1f).OnStart(callback)      --> Tween.Delay(1, callback).Chain(tween)
 sequence.OnStart(callback)                --> sequence.ChainCallback(callback) // at the beginning of the sequence
 
 trans.DOMove(pos, speed).SetSpeedBased()  --> Tween.PositionAtSpeed(transform, pos, speed)
 
-textMeshPro.DOText(...)                   --> // https://forum.unity.com/threads/1479609/page-4#post-9529051 or see TypewriterAnimatorExample.cs in Demo
-text.DOCounter()                          --> // https://forum.unity.com/threads/1479609/page-2#post-9387887
-transform.DOJump()                        --> // https://forum.unity.com/threads/1479609/#post-9226566
-transform.DOPath()                        --> // https://forum.unity.com/threads/1479609/page-4#post-9522451
-tween.SetId()                             --> // https://github.com/KyryloKuzyk/PrimeTween/discussions/26#discussioncomment-7700985
+textMeshPro.DOText(...)         --> forum.unity.com/threads/1479609/page-4#post-9529051 or see TypewriterAnimatorExample.cs in Demo
+text.DOCounter()                --> forum.unity.com/threads/1479609/page-2#post-9387887
+transform.DOJump()              --> forum.unity.com/threads/1479609/#post-9226566
+transform.DOPath()              --> forum.unity.com/threads/1479609/page-4#post-9522451
+transform.DOLookAt()            --> forum.unity.com/threads/1479609/page-4#post-9557785
+tween.SetId()                   --> github.com/KyryloKuzyk/PrimeTween/discussions/26#discussioncomment-7700985
 ```
 
 Support

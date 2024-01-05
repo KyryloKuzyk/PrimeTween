@@ -1,4 +1,11 @@
+## [1.1.8] - 2024-01-05
+### Added:
+- Add more detailed warnings and errors.
+### Fixed
+- Fixed: Demo.cs causes compilation error, preventing PrimeTween to install correctly.
+
 ## [1.1.7] - 2024-01-02
+### Fixed
 - Fixed: ReusableTween.updateSequence() throws AssertionException when a sequence is running during scene change in the Editor. Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/32
 
 ## [1.1.6] - 2023-12-29
