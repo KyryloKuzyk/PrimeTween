@@ -535,10 +535,10 @@ yield return sequence.WaitForCompletion() -->  yield return sequence.ToYieldInst
 // PrimeTween doesn't use threads, so you can write async methods even on WebGL
 await tween.AsyncWaitForCompletion()      -->  await tween
 await sequence.AsyncWaitForCompletion()   -->  await sequence 
-  
-sequence.InsertCallback(1f, callback))    --> sequence.Group(Tween.Delay(1f, callback)) // before the first sequence.Chain() operation    
-sequence.Insert(1.5f, trans.DOMoveX(...)) --> sequence.Group(Tween.PositionX(..., startDelay: 1.5f)) // before the first sequence.Chain() operation
-sequence.Insert(atPosition: 1.5f, tween)  --> sequence.Group(Tween.Delay(1.5f).Chain(tween)) // before the first sequence.Chain() operation
+   
+sequence.InsertCallback(1f, callback))    --> github.com/KyryloKuzyk/PrimeTween/discussions/33#discussioncomment-8052812    
+sequence.Insert(1.5f, trans.DOMoveX(...)) --> sequence.Group(Tween.PositionX(..., startDelay: 1.5f)) // use 'startDelay' before Chain() operation
+                                          --> sequence.Group(Tween.Delay(1.5f).Chain(tween)) // or 'prepend' the delay before Chain() operation
 
 transform.DOMoveX(to, 1).From(from)       --> Tween.PositionX(transform, from, to, 1)
 tween.From(from, setImmediately: true)    --> manually set the animated value to 'from': https://forum.unity.com/threads/1479609/page-4#post-9515827   

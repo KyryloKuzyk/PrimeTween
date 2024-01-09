@@ -1,3 +1,14 @@
+## [1.1.9] - 2024-01-09
+### Added
+- [Adapter](https://github.com/KyryloKuzyk/PrimeTween#dotween-adapter): add 'loopType' parameter to sequence.SetLoops(); add sequence.SetEase(); add SetLink().
+### Fixed
+- Fixed: sequence.Group() after seqence.Chain() produces a wrong sequence duration (too short) if a grouped tween is longer than the previously chained tween.
+- Fixed: sequence.Group(sequence) groups with the first tween in sequence, but should group with the previous tween (or sequence) instead. Now it works the same way as sequence.Group(tween).
+- Fixed: sequence.OnComplete() should be called when all sequence children are completed. Previously it was called before the last children update.
+- Fixed: setting 'elapsedTime' or 'progress' recursively from Tween.Custom() or tween.OnUpdate() leads to a crash because of stack overflow.
+### Changed
+- Remove the 'useUnscaledTime' parameter from sequence.ChainDelay(). The parent Sequence controls the 'useUnscaledTime' of all children tweens and sequences, so this parameter is not needed.
+
 ## [1.1.8] - 2024-01-05
 ### Added:
 - Add more detailed warnings and errors.
