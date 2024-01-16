@@ -1,3 +1,14 @@
+## [1.1.10] - 2024-01-15
+### Added
+- Add sequence.Insert() and sequence.InsertCallback() APIs. Feature request: https://github.com/KyryloKuzyk/PrimeTween/discussions/33
+- Add Asset Store review request when updating PrimeTween to a new version.
+### Fixed
+- Fixed: completing an infinite tween (cycles == -1) evaluates the interpolation factor to -1 and produces wrong animated value. Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/38
+### Changed
+- sequence.Complete() now respects the 'cycles' and 'cycleMode' and works similarly to tween.Complete(). Previuosly, sequence.Complete() completed only the current cycle. 
+### Removed
+- Remove Tween.PositionOutBounce() experimental API. Use Easing.BounceExact(float amplitude) instead.
+
 ## [1.1.9] - 2024-01-09
 ### Added
 - [Adapter](https://github.com/KyryloKuzyk/PrimeTween#dotween-adapter): add 'loopType' parameter to sequence.SetLoops(); add sequence.SetEase(); add SetLink().
@@ -28,7 +39,7 @@
 
 ## [1.1.5] - 2023-12-14
 ### Added:
-- Add Tween.TextMaxVisibleCharacters(TMP_Text target, ...) method to support simple typewriter animation. Please see the 'Demo.TypewriterAnimatorExample.cs' for a more complex example of text animation that makes pauses after punctuations.
+- Add Tween.TextMaxVisibleCharacters(TMP_Text target, ...) method to support simple typewriter animation. Please see the 'Demo.TypewriterAnimatorExample.cs' for a more complex example of text animation that makes pauses after punctuations. 
 ### Fixed
 - Fixed: don't allow to set invalid elapsedTimeTotal and progressTotal values to infinite tweens.
 
@@ -48,13 +59,13 @@
 - Add Sequence.OnComplete() API.
 ### Fixed
 - Fixed: nesting multiple empty Sequences may lead to a StackOverflow exception in some cases.
-- Fixed: enabling/disabling UI.Slider in Demo scene constantly allocates GC.
+- Fixed: enabling/disabling UI.Slider in Demo scene constantly allocates GC.  
 
 ## [1.1.2] - 2023-12-03
 ### Added:
 - Add 'PrimeTweenConfig.warnEndValueEqualsCurrent' setting to warn if the 'endValue' equals to the current animated value.
 ### Fixed
-- Fixed: PrimeTween may log warnings in Editor when exiting Play Mode.
+- Fixed: PrimeTween may log warnings in Editor when exiting Play Mode. 
 
 ## [1.1.1] - 2023-11-30
 ### Added:
@@ -138,7 +149,7 @@
 
 ## [1.0.7] - 2023-09-01
 ### Added
-- Add 'UI Toolkit' support (com.unity.modules.uielements). All animations from the [ITransitionAnimations](https://docs.unity3d.com/2023.2/Documentation/ScriptReference/UIElements.Experimental.ITransitionAnimations.html) interface are supported.
+- Add 'UI Toolkit' support (com.unity.modules.uielements). All animations from the [ITransitionAnimations](https://docs.unity3d.com/2023.2/Documentation/ScriptReference/UIElements.Experimental.ITransitionAnimations.html) interface are supported. 
 - Experimental: add Tween.PositionOutBounce/LocalPositionOutBounce() methods. These methods add the ability to fine-tune the Ease.OutBounce by specifying the exact bounce amplitude, number of bounces, and bounce stiffness.
 - Log error when properties of dead tweens and sequences are used.
 ### Changed
