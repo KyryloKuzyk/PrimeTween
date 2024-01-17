@@ -178,7 +178,8 @@ async void AsyncMethod() {
 }
 ```
 
-> While PrimeTween never allocates memory at runtime, the async/await feature in C# is allocating: awaiting an async method allocates a small amount of garbage. Consider using [UniTask](https://github.com/Cysharp/UniTask) to address this language limitation.
+> While PrimeTween never allocates memory at runtime, the async/await feature in C# is allocating: awaiting an async method allocates a small amount of garbage. Likewise, StartCoroutine() also allocates GC.  
+> For performance-intensive code paths, use Sequence instead of async methods and Coroutines.
 
 
 Controlling tweens
@@ -498,47 +499,47 @@ If you don't want to use the Adapter and wish to migrate your project to PrimeTw
 DOTween API on the left             -->  PrimeTween API on the right
 
 // All animations are supported, here are only a few of them as an example
-transform.DOMove(...)               -->  Tween.Position(transform, ...)
-uiImage.DOFade(...)                 -->  Tween.Alpha(uiImage, ...)
-material.DOColor(...)               -->  Tween.Color(material, ...)
-transform.DOShakePosition(...)      -->  Tween.ShakeLocalPosition(transform, ...)
+transform.DOMove(...)                -->  Tween.Position(transform, ...)
+uiImage.DOFade(...)                  -->  Tween.Alpha(uiImage, ...)
+material.DOColor(...)                -->  Tween.Color(material, ...)
+transform.DOShakePosition(...)       -->  Tween.ShakeLocalPosition(transform, ...)
     
-tween.SetEase(Ease.InOutSine)       --> Tween.Position(..., ease: Ease.InOutSine);
-sequence.SetEase(Ease.OutBounce)    --> Sequence.Create(..., sequenceEase: Ease.OutBounce)
+tween.SetEase(Ease.InOutSine)        --> Tween.Position(..., ease: Ease.InOutSine);
+sequence.SetEase(Ease.OutBounce)     --> Sequence.Create(..., sequenceEase: Ease.OutBounce)
 
-tween.SetLoops(2, LoopType.Yoyo)    --> Tween.Position(..., cycles: 2, CycleMode.Yoyo)
-sequence.SetLoops(2, LoopType.Yoyo) --> Sequence.Create(cycles: 2, CycleMode.Yoyo)
+tween.SetLoops(2, LoopType.Yoyo)     --> Tween.Position(..., cycles: 2, CycleMode.Yoyo)
+sequence.SetLoops(2, LoopType.Yoyo)  --> Sequence.Create(cycles: 2, CycleMode.Yoyo)
     
-tween.SetUpdate(true)               --> Tween.Position(..., useUnscaledTime: true)
-sequence.SetUpdate(true)            --> Sequence.Create(..., useUnscaledTime: true)
+tween.SetUpdate(true)                --> Tween.Position(..., useUnscaledTime: true)
+sequence.SetUpdate(true)             --> Sequence.Create(..., useUnscaledTime: true)
 
-tween.SetUpdate(UpdateType.Fixed)   --> Tween.Position(..., new TweenSettings(1f, useFixedUpdate: true)) // https://github.com/KyryloKuzyk/PrimeTween#fixedupdate 
-sequence.SetUpdate(UpdateType.Fixed)--> Sequence.Create(useFixedUpdate: true)
+tween.SetUpdate(UpdateType.Fixed)    --> Tween.Position(..., new TweenSettings(1f, useFixedUpdate: true)) // https://github.com/KyryloKuzyk/PrimeTween#fixedupdate 
+sequence.SetUpdate(UpdateType.Fixed) --> Sequence.Create(useFixedUpdate: true)
 
-tween.Kill(false)                   -->  tween.Stop()
-tween.Kill(true)                    -->  tween.Complete()
+tween.Kill(false)                    --> tween.Stop()
+tween.Kill(true)                     --> tween.Complete()
 
-DOVirtual.DelayedCall()             -->  Tween.Delay()
-DOTween.To()                        -->  Tween.Custom()
-DOVirtual.Vector3()                 -->  Tween.Custom()
+DOVirtual.DelayedCall()              --> Tween.Delay()
+DOTween.To()                         --> Tween.Custom()
+DOVirtual.Vector3()                  --> Tween.Custom()
 
-DOTween.Sequence()                  -->  Sequence.Create()
-sequence.Join()                     -->  sequence.Group()
-sequence.Append()                   -->  sequence.Chain()
+DOTween.Sequence()                   --> Sequence.Create()
+sequence.Join()                      --> sequence.Group()
+sequence.Append()                    --> sequence.Chain() 
+sequence.AppendCallback()            --> sequence.ChainCallback() 
+seq.Insert(1.5f, trans.DOMoveX(...)) --> seq.Insert(1.5f, Tween.PositionX(trans, ...)) 
+                                     --> // or `seq.Group(Tween.PositionX(..., startDelay: 1.5f))` before the first Chain() operation
+seq.InsertCallback(1f, callback))    --> seq.InsertCallback(1f, callback))    
 
-DOTween.Kill(target, false)         -->  Tween.StopAll(onTarget: target)
-DOTween.Kill(target, true)          -->  Tween.CompleteAll(onTarget: target)
+DOTween.Kill(target, false)          --> Tween.StopAll(onTarget: target)
+DOTween.Kill(target, true)           --> Tween.CompleteAll(onTarget: target)
 
 yield return tween.WaitForCompletion()    -->  yield return tween.ToYieldInstruction()
 yield return sequence.WaitForCompletion() -->  yield return sequence.ToYieldInstruction()
 
 // PrimeTween doesn't use threads, so you can write async methods even on WebGL
 await tween.AsyncWaitForCompletion()      -->  await tween
-await sequence.AsyncWaitForCompletion()   -->  await sequence 
-   
-sequence.InsertCallback(1f, callback))    --> github.com/KyryloKuzyk/PrimeTween/discussions/33#discussioncomment-8052812    
-sequence.Insert(1.5f, trans.DOMoveX(...)) --> sequence.Group(Tween.PositionX(..., startDelay: 1.5f)) // use 'startDelay' before Chain() operation
-                                          --> sequence.Group(Tween.Delay(1.5f).Chain(tween)) // or 'prepend' the delay before Chain() operation
+await sequence.AsyncWaitForCompletion()   -->  await sequence
 
 transform.DOMoveX(to, 1).From(from)       --> Tween.PositionX(transform, from, to, 1)
 tween.From(from, setImmediately: true)    --> manually set the animated value to 'from': https://forum.unity.com/threads/1479609/page-4#post-9515827   
@@ -546,9 +547,10 @@ tween.From(from, setImmediately: true)    --> manually set the animated value to
 tween.SetDelay(1f).OnStart(callback)      --> Tween.Delay(1, callback).Chain(tween)
 sequence.OnStart(callback)                --> sequence.ChainCallback(callback) // at the beginning of the sequence
 
-trans.DOMove(pos, speed).SetSpeedBased()  --> Tween.PositionAtSpeed(transform, pos, speed)
+trans.DOMove(pos, speed).SetSpeedBased()  --> Tween.PositionAtSpeed(trans, pos, speed)
 
-textMeshPro.DOText(...)         --> forum.unity.com/threads/1479609/page-4#post-9529051 or see TypewriterAnimatorExample.cs in Demo
+textMeshPro.DOText(...)         --> forum.unity.com/threads/1479609/page-4#post-9529051 
+                                --> // or see TypewriterAnimatorExample.cs in Demo
 text.DOCounter()                --> forum.unity.com/threads/1479609/page-2#post-9387887
 transform.DOJump()              --> forum.unity.com/threads/1479609/#post-9226566
 transform.DOPath()              --> forum.unity.com/threads/1479609/page-4#post-9522451
