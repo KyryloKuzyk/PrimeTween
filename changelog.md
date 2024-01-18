@@ -1,3 +1,9 @@
+## [1.1.11] - 2024-01-18
+### Fixed
+- Fixed: calling PrimeTweenConfig.SetTweensCapacity() before PrimeTweenManager is created throws an exception in Editor.
+### Changed
+- Optimize duplicated shakes on the same target.
+
 ## [1.1.10] - 2024-01-15
 ### Added
 - Add sequence.Insert() and sequence.InsertCallback() APIs. Feature request: https://github.com/KyryloKuzyk/PrimeTween/discussions/33
