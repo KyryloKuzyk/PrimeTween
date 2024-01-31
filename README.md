@@ -350,7 +350,7 @@ Tween.PositionX(transform, endValue: 10f, new TweenSettings(duration: 1f, useFix
 var tweenSettingsFloat = new TweenSettings<float>(endValue: 10f, duration: 1f, useFixedUpdate: true);
 Tween.PositionX(transform, tweenSettingsFloat);
 
-// To update the Sequence in FixedUpdate(), pass the 'useFixedUpdate' parameter to Seqeunce.Create()  
+// To update the Sequence in FixedUpdate(), pass the 'useFixedUpdate' parameter to Sequence.Create()  
 Sequence.Create(useFixedUpdate: true);
 ```
 
