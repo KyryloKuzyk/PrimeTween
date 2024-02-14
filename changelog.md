@@ -1,3 +1,11 @@
+## [1.1.12] - 2024-02-14
+### Added
+- Add experimental Easing.Evaluate(float, Ease).
+- Add DOVirtual.EasedValue() to adapter.
+- Add custom Ease.OutBounce strength support to adapter.
+### Changed
+- The 'warnEndValueEqualsCurrent' setting is now applied on a per-tween basis. Feature request: https://github.com/KyryloKuzyk/PrimeTween/discussions/48
+
 ## [1.1.11] - 2024-01-18
 ### Fixed
 - Fixed: calling PrimeTweenConfig.SetTweensCapacity() before PrimeTweenManager is created throws an exception in Editor.
