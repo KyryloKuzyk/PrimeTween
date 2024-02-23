@@ -1,3 +1,9 @@
+## [1.1.13] - 2024-02-23
+### Added
+- Add sequence.Pause/Play() to adapter.
+### Changed
+- If sequence child pauses the parent sequence, stop updating Sequence immediately. Other tweens after the current one will not receive an update.
+
 ## [1.1.12] - 2024-02-14
 ### Added
 - Add experimental Easing.Evaluate(float, Ease).
