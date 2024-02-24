@@ -63,7 +63,7 @@ That's it!
 Simply type **`Tween.`** and let your IDE suggest all supported animations. Out of the box, PrimeTween can animate almost everything: UI, UI Toolkit, Materials, Camera properties, Transforms, AudioSource, and whatnot.
 
 Didn't find what you're looking for? No problem, use [`Tween.Custom()`](#custom-tweens) to animate **anything**.
-> To view PrimeTween's XML documentation in your IDE, enable this setting: _'Unity Preferences/External Tools/Generate .csproj files for/**Local tarbal**'_ and press the _'Regenerate project files'_ button.
+> To view PrimeTween's XML documentation in your IDE, enable this setting: _'Unity Preferences/External Tools/Generate .csproj files for/**Local tarball**'_ and press the _'Regenerate project files'_ button.
 
 ### Shakes
 ```csharp
@@ -120,26 +120,24 @@ Sequence.Create(cycles: 2, CycleMode.Yoyo)
 
 #### enum CycleMode
 - Restart (default): restarts the tween from the beginning.
-- Yoyo: animates forth and back, like a yoyo. Easing is normal on the backward cycle.
+- Yoyo: animates forth and back, like a yoyo. Easing is the same on the backward cycle.
 - Incremental: at the end of a cycle increments the `endValue` by the difference between `startValue` and `endValue`. For example, if a tween moves position.x from 0 to 1, then after the first cycle, the tween will move the position.x from 1 to 2, and so on.
 - Rewind: rewinds the tween as if time was reversed. Easing is reversed on the backward cycle.
 
 
-#### void SetRemainingCycles(int cycles)
+#### SetRemainingCycles(int cycles)
 Sets the number of remaining cycles to a tween or sequence. This method modifies the `cyclesTotal` so that the tween will complete after the number of cycles.
 
-#### void SetRemainingCycles(bool stopAtEndValue)
+#### SetRemainingCycles(bool stopAtEndValue)
 Stops the tween when it reaches 'startValue' or 'endValue' for the next time.  
 For example, if you have an infinite tween (`cycles == -1`) with CycleMode.Yoyo/Rewind, and you wish to stop it when it reaches the 'endValue', then set `stopAtEndValue` to true. To stop the animation at the 'startValue'  set `stopAtEndValue` to false.
 
 Sequencing tweens
 ---
-#### Sequence
+### Sequence
 There are several sequencing methods in PrimeTween. Let's start with the most common one: grouping tweens in **Sequences**.
 
-**Sequence** is an ordered group of tweens and callbacks. Tweens in a sequence can run in **parallel** to one another with **`.Group()`** and **sequentially** with **`.Chain()`**. Overlapping can be achieved by adding **`startDelay`** to a tween.
-
-Sequences can be controlled the same way as individual tweens, see [controlling tweens](#controlling-tweens) section.
+**Sequence** is a group of tweens, callbacks, and other sequences. Animations in a sequence can **overlap**, run **sequentially** or in **parallel**, or any combination of those. You can control a Sequence the same way as individual tweens, see [controlling tweens](#controlling-tweens) section.
 
 ```csharp
 Sequence.Create(cycles: 10, CycleMode.Yoyo)
@@ -149,11 +147,23 @@ Sequence.Create(cycles: 10, CycleMode.Yoyo)
     // Rotation tween is 'chained' so it will start when both previous tweens are finished (after 1.5 seconds)
     .Chain(Tween.Rotation(transform, endValue: new Vector3(0f, 0f, 45f), duration: 1f)) 
     .ChainDelay(1)
-    .ChainCallback(() => Debug.Log("Sequence cycle completed"));
+    .ChainCallback(() => Debug.Log("Sequence cycle completed"))
+    // Insert color animation at time of '0.5' seconds
+    // Inserted animations overlap with other animations in the sequence
+    .Insert(atTime: 0.5f, Tween.Color(image, Color.red, duration: 0.5f));
 ```
 
-#### Coroutines
-Another sequencing method is waiting for tweens and sequences in **coroutines** by calling **`.ToYieldInstruction()`**.
+#### Insert(float atTime, Tween/Sequence animation)
+Places `animation` inside this sequence at the specified time, **overlapping** with other animations. The total sequence duration is increased if the inserted animation doesn't fit inside the current sequence duration.
+
+#### Chain(Tween/Sequence animation)
+Places `animation` after all previously added animations in this sequence. Chained animations run **sequentially** after one another.
+
+#### Group(Tween/Sequence animation)
+Groups `animation` with the 'previous' animation in this Sequence. The 'previous' animation is the animation used in the preceding Group/Chain/Insert() method call. Grouped animations start at the same time and run in **parallel**.
+
+### Coroutines
+Another sequencing method is waiting for animations in **coroutines** by calling **`.ToYieldInstruction()`**.
 ```csharp
 IEnumerator Coroutine() {
     Tween.PositionX(transform, endValue: 10f, duration: 1.5f);
@@ -165,8 +175,8 @@ IEnumerator Coroutine() {
 }
 ```
 
-#### Async/await
-And the last method is awaiting tweens and sequences using the **async/await** pattern. Async/await is a great tool to prevent the callback hell in your code. PrimeTween doesn't use threads, so tweens can be awaited on all platforms, even on WebGL.
+### Async/await
+And the last method is awaiting animations using the **async/await** pattern. Async/await is a great tool to prevent the callback hell in your code. PrimeTween doesn't use threads, so tweens can be awaited on all platforms, even on WebGL.
 ```csharp
 async void AsyncMethod() {
     Tween.PositionX(transform, endValue: 10f, duration: 1.5f);
@@ -271,6 +281,8 @@ public void SetWindowOpened(bool isOpened) {
     Tween.UIAnchoredPositionY(window, windowAnimationSettings.WithDirection(toEndValue: isOpened));
 }
 ```
+
+> The generic TweenSettings<T> can be serialized and tweaked from the Inspector in Unity 2020.1+. If you're using an older version of Unity, use the non-generic TweenSetting and serialize `startValue/endValue` separately.
 
 Custom tweens
 ---
