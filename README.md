@@ -126,11 +126,11 @@ Sequence.Create(cycles: 2, CycleMode.Yoyo)
 
 
 #### SetRemainingCycles(int cycles)
-Sets the number of remaining cycles to a tween or sequence. This method modifies the `cyclesTotal` so that the tween will complete after the number of cycles.
+Sets the number of remaining cycles to an animation. This method modifies the `cyclesTotal` so that the animation will complete after the number of cycles.
 
 #### SetRemainingCycles(bool stopAtEndValue)
-Stops the tween when it reaches 'startValue' or 'endValue' for the next time.  
-For example, if you have an infinite tween (`cycles == -1`) with CycleMode.Yoyo/Rewind, and you wish to stop it when it reaches the 'endValue', then set `stopAtEndValue` to true. To stop the animation at the 'startValue'  set `stopAtEndValue` to false.
+Stops an animation when it reaches 'startValue' or 'endValue' for the next time.  
+For example, if you have an infinite animation (`cycles == -1`) with CycleMode.Yoyo/Rewind, and you wish to stop it when it reaches the 'endValue', then set `stopAtEndValue` to true. To stop the animation at the 'startValue'  set `stopAtEndValue` to false.
 
 Sequencing tweens
 ---
@@ -182,7 +182,8 @@ async void AsyncMethod() {
     Tween.PositionX(transform, endValue: 10f, duration: 1.5f);
     await Tween.Scale(transform, endValue: 2f, duration: 0.5f, startDelay: 1);
     await Tween.Rotation(transform, endValue: new Vector3(0f, 0f, 45f), duration: 1f);
-    // Non-allocating alternative to 'await Task.Delay(1000)' that doesn't use 'System.Threading'. Tweens and sequences can be awaited on all platforms, even on WebGL
+    // Non-allocating alternative to 'await Task.Delay(1000)' that doesn't use 'System.Threading'
+    // Animations can be awaited on all platforms, even on WebGL
     await Tween.Delay(1); 
     Debug.Log("Sequence completed");
 }
@@ -310,7 +311,9 @@ Advanced
 ---
 
 ### Timescale
-You can apply a custom timeScale to each individual tween with the help of the `tween.timeScale` property. To smoothly animate the timeScale, use `Tween.TweenTimeScale(Tween tween, ...)` method.  
+You can apply a custom timeScale to each individual animation with the help of the `timeScale` property.
+
+To smoothly animate the timeScale, use `Tween.TweenTimeScale(Tween/Sequence tween, ...)` method.  
 To animate the global Unity's Time.timeScale, use `Tween.GlobalTimeScale(...)` method.
 
 ### OnUpdate
@@ -354,7 +357,7 @@ Available parametric eases:
 - Easing.Elastic(float strength, float period = 0.3f): customizes the strength and oscillation period of Ease.OutElastic.
 
 ### FixedUpdate
-Use `useFixedUpdate` parameter to update a tween or sequence in the FixedUpdate().
+Use `useFixedUpdate` parameter to update an animation in the FixedUpdate().
 ```csharp
 // Use TweenSettings or TweenSettings<T> struct to pass the 'useFixedUpdate' parameter to static 'Tween.' methods
 Tween.PositionX(transform, endValue: 10f, new TweenSettings(duration: 1f, useFixedUpdate: true));
@@ -410,7 +413,7 @@ What are the reasons to try PrimeTween?
 * See [performance](https://github.com/KyryloKuzyk/PrimeTween/discussions/10) comparison.
 * **Seamless installation** that never produces compilation errors regardless of what other packages or plugins your project already uses.
 * PrimeTween is extremely easy to learn. It has only 8 top-level concepts, and you can learn the API even without the documentation by simply typing `PrimeTween` and pressing `.`
-* PrimeTween is extensively covered by more than **220 automatic tests** that ensure that every bit works perfectly.
+* PrimeTween is extensively covered by more than **250 automatic tests** that ensure that every bit works perfectly.
 * With PrimeTween it's safe to [destroy objects](https://github.com/KyryloKuzyk/PrimeTween/discussions/4) with running animations.
 * PrimeTween is truly multiplatform with no exceptions. Awaiting tweens in async methods works even on WebGL!
 
@@ -445,8 +448,8 @@ tween.Complete(); // null checking and setting tween to null is not needed
 
 // tween/sequence.PlayForward/PlayBackwards/Rewind/Restart();
 // In PrimeTween, tweens and sequences are non-reusable, so there is no direct equivalent.
-// Instead, start a new tween or sequence in the desired direction (see the example below).
-// Starting new tweens and sequences in PrimeTween is extremely fast, so there is no need for caching.
+// Instead, start a new animation in the desired direction (see the example below).
+// Starting new animations in PrimeTween is extremely fast, so there is no need for caching.
 ```
 
 #### Tween.PlayForward/PlayBackwards/Restart
@@ -508,7 +511,7 @@ public class PrimeTweenWindow : MonoBehaviour {
 If you don't want to use the Adapter and wish to migrate your project to PrimeTween's syntax, please refer to this cheatsheet for the API differences of two libraries.
 
 ```csharp
-DOTween API on the left             -->  PrimeTween API on the right
+DOTween API on the left              -->  PrimeTween API on the right
 
 // All animations are supported, here are only a few of them as an example
 transform.DOMove(...)                -->  Tween.Position(transform, ...)
