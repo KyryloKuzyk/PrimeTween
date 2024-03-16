@@ -1,3 +1,10 @@
+## [1.1.14] - 2024-03-16
+### Added
+- Add Tween.VisualElementColor/VisualElementBackgroundColor() to animate colors of UIToolkit components.
+- Experimental: add 'double' numeric type support for Tween.Custom(). This feature requires the PRIME_TWEEN_EXPERIMENTAL define in 'Scripting Define Symbols'.
+### Changed
+- Improve documentation.
+
 ## [1.1.13] - 2024-02-23
 ### Added
 - Add sequence.Pause/Play() to adapter.
