@@ -528,8 +528,9 @@ sequence.SetLoops(2, LoopType.Yoyo)  --> Sequence.Create(cycles: 2, CycleMode.Yo
 tween.SetUpdate(true)                --> Tween.Position(..., useUnscaledTime: true)
 sequence.SetUpdate(true)             --> Sequence.Create(..., useUnscaledTime: true)
 
-tween.SetUpdate(UpdateType.Fixed)    --> Tween.Position(..., new TweenSettings(1f, useFixedUpdate: true)) // https://github.com/KyryloKuzyk/PrimeTween#fixedupdate 
+tween.SetUpdate(UpdateType.Fixed)    --> Tween.Position(..., new TweenSettings(1f, useFixedUpdate: true)) 
 sequence.SetUpdate(UpdateType.Fixed) --> Sequence.Create(useFixedUpdate: true)
+                                     --> github.com/KyryloKuzyk/PrimeTween#fixedupdate
 
 tween.Kill(false)                    --> tween.Stop()
 tween.Kill(true)                     --> tween.Complete()
@@ -557,7 +558,7 @@ await tween.AsyncWaitForCompletion()      -->  await tween
 await sequence.AsyncWaitForCompletion()   -->  await sequence
 
 transform.DOMoveX(to, 1).From(from)       --> Tween.PositionX(transform, from, to, 1)
-tween.From(from, setImmediately: true)    --> manually set the animated value to 'from': https://forum.unity.com/threads/1479609/page-4#post-9515827   
+tween.From(from, setImmediately: true)    --> manually set the animated value to 'from': forum.unity.com/threads/1479609/page-4#post-9515827   
   
 tween.SetDelay(1f).OnStart(callback)      --> Tween.Delay(1, callback).Chain(tween)
 sequence.OnStart(callback)                --> sequence.ChainCallback(callback) // at the beginning of the sequence
@@ -565,12 +566,14 @@ sequence.OnStart(callback)                --> sequence.ChainCallback(callback) /
 trans.DOMove(pos, speed).SetSpeedBased()  --> Tween.PositionAtSpeed(trans, pos, speed)
 
 textMeshPro.DOText(...)         --> forum.unity.com/threads/1479609/page-4#post-9529051 
-                                --> // or see TypewriterAnimatorExample.cs in Demo
+                                --> or see TypewriterAnimatorExample.cs in Demo
 text.DOCounter()                --> forum.unity.com/threads/1479609/page-2#post-9387887
 transform.DOJump()              --> forum.unity.com/threads/1479609/#post-9226566
 transform.DOPath()              --> forum.unity.com/threads/1479609/page-4#post-9522451
 transform.DOLookAt()            --> forum.unity.com/threads/1479609/page-4#post-9557785
 tween.SetId()                   --> github.com/KyryloKuzyk/PrimeTween/discussions/26#discussioncomment-7700985
+target.DOBlendable___(...)      --> Tween.___Additive(target, ...) // experimental
+                                --> github.com/KyryloKuzyk/PrimeTween/discussions/55
 ```
 
 Support
