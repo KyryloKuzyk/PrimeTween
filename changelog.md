@@ -1,6 +1,6 @@
 ## [1.1.15] - 2024-04-07
 ### Fixed
-- Fixed: Tween.GetTweenCount(target) doesn't work for tweens inside sequences. But report: https://github.com/KyryloKuzyk/PrimeTween/issues/60
+- Fixed: Tween.GetTweenCount(target) doesn't work for tweens inside sequences. Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/60
 - Fixed: ShakeSettings.strength property incorrectly displayed in narrow Inspector.
 - Fixed: sometimes automatic installation fails and users have to press the 'PrimeTweenInstaller/Install' button to fix it.
 - Fixed: review request should appear only after the user presses the Update button in Package Manager. Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/58
