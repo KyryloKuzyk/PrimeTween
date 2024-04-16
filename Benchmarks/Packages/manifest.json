@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.kyrylokuzyk.primetween": "file:com.kyrylokuzyk.primetween.tgz",
-    "com.unity.ide.rider": "3.0.27",
+    "com.unity.ide.rider": "3.0.28",
     "com.unity.test-framework.performance": "3.0.2"
   }
 }

@@ -1,3 +1,10 @@
+## [1.1.16] - 2024-04-16
+### Fixed
+- Fixed: interpolation factor can be calculated incorrectly when cyclic tween is not started yet. Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/63
+- Fixed: don't log an error when the child animation setting is the same as the parent Sequence's setting. Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/66
+- Fixed: enabling PRIME_TWEEN_SAFETY_CHECKS in IL2CPP builds throws exception. Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/65
+- Fixed: adding experimental define produces compilation error.
+
 ## [1.1.15] - 2024-04-07
 ### Fixed
 - Fixed: Tween.GetTweenCount(target) doesn't work for tweens inside sequences. Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/60
