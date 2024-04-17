@@ -1,3 +1,6 @@
+## [1.1.17] - 2024-04-17
+- Fixed: Tween.TextMaxVisibleCharacters() throws assertion exception.
+
 ## [1.1.16] - 2024-04-16
 ### Fixed
 - Fixed: interpolation factor can be calculated incorrectly when cyclic tween is not started yet. Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/63
