@@ -1,3 +1,6 @@
+## [1.1.18] - 2024-05-11
+- Fixed: nested sequence updates its children even when it doesn't update self. This resulted in multiple chained jumps to override the first jump. Bug report: https://forum.unity.com/threads/primetween-high-performance-animations-and-sequences.1479609/page-6#post-9802575 
+
 ## [1.1.17] - 2024-04-17
 - Fixed: Tween.TextMaxVisibleCharacters() throws assertion exception.
 
