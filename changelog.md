@@ -1,7 +1,13 @@
+## [1.1.19] - 2024-05-29
+### Fixed
+- Fixed: Tween.TextMaxVisibleCharacters() is not available in Unity 6 because Text Mesh Pro was merged with UGUI.
+
 ## [1.1.18] - 2024-05-11
+### Fixed
 - Fixed: nested sequence updates its children even when it doesn't update self. This resulted in multiple chained jumps to override the first jump. Bug report: https://forum.unity.com/threads/primetween-high-performance-animations-and-sequences.1479609/page-6#post-9802575 
 
 ## [1.1.17] - 2024-04-17
+### Fixed
 - Fixed: Tween.TextMaxVisibleCharacters() throws assertion exception.
 
 ## [1.1.16] - 2024-04-16
