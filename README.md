@@ -454,7 +454,7 @@ tween.Complete(); // null checking and setting tween to null is not needed
 
 #### Tween.PlayForward/PlayBackwards/Restart
 
-PrimeTween offers a different approach to animating things forward and backward that is simpler and has greater performance. In PrimeTween, tweens and sequences are **non-reusable**, which means that it's not possible to cache tweens and reuse them later.
+PrimeTween offers a different approach to animating things forward and backward that is simpler and has greater performance. In PrimeTween, tweens and sequences are **[non-reusable]([url](https://discussions.unity.com/t/primetween-high-performance-animations-and-sequences/926420/125))**, which means that it's not possible to cache tweens and reuse them later.
 
 Let's consider the common DOTween usage pattern: creating a tween once, then calling PlayForward() and PlayBackwards() when needed.
 <details>
