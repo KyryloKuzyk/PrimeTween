@@ -1,3 +1,12 @@
+## [1.1.20] - 2024-08-12
+### Changed
+- Change internal tween from 'int' to 'long', which reduces the likelihood of id collisions in apps that run for months or years. Feature request: https://discussions.unity.com/t/926420/291
+### Added
+- Add 'setImmediately' and 'isRelative' parameters to From() method in [Adapter](https://github.com/KyryloKuzyk/PrimeTween#dotween-adapter). Feature request: https://discussions.unity.com/t/926420/299
+### Fixed
+- Fixed: Demo scene doesn't work with Input System (New). Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/85
+- Fixed (minor): calling Sequence.Complete() when the sequence is in Stater.After doesn't complete the sequence immediately.
+
 ## [1.1.19] - 2024-05-29
 ### Fixed
 - Fixed: Tween.TextMaxVisibleCharacters() is not available in Unity 6 because Text Mesh Pro was merged with UGUI.
