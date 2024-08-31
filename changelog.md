@@ -1,3 +1,7 @@
+## [1.1.21] - 2024-08-31
+### Added
+- Implement GetHashCode() and IEquatable for Tween and Sequence.
+
 ## [1.1.20] - 2024-08-12
 ### Changed
 - Change internal tween from 'int' to 'long', which reduces the likelihood of id collisions in apps that run for months or years. Feature request: https://discussions.unity.com/t/926420/291
