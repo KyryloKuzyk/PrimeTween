@@ -1,3 +1,10 @@
+## [1.1.22] - 2024-09-14
+### Added
+- Add `Easing.Evaluate(float interpolationFactor, Ease ease)` method that gives the ability to evaluate standard eases manually. Previously this method was experimental.
+### Fixed
+- Fixed: destroying target of a paused tween doesn't release the tween. Bug report: https://github.com/KyryloKuzyk/PrimeTween/discussions/4#discussioncomment-10555636
+- Fixed: UPM examples are not compatible with Input System (New).
+
 ## [1.1.21] - 2024-08-31
 ### Added
 - Implement GetHashCode() and IEquatable for Tween and Sequence.
