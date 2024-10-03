@@ -1,3 +1,7 @@
+## [1.2.0] - 2024-10-03
+### Fixed
+- Fixed: sequence.Group() doesn't work correctly after ChainCallback() and InsertCallback(). More info: https://github.com/KyryloKuzyk/PrimeTween/discussions/112
+
 ## [1.1.22] - 2024-09-14
 ### Added
 - Add `Easing.Evaluate(float interpolationFactor, Ease ease)` method that gives the ability to evaluate standard eases manually. Previously this method was experimental.
