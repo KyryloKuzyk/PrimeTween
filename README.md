@@ -36,6 +36,7 @@ Table of Contents
   + [DOTween adapter](#dotween-adapter)
   + [Tween.PlayForward/PlayBackwards](#tweenplayforwardplaybackwardsrestart)
   + [Migration cheatsheet](#migration-cheatsheet)
+- [Contributions](#contributions)
 - [Support](#support)
 
 Getting started
@@ -575,6 +576,10 @@ tween.SetId()                   --> github.com/KyryloKuzyk/PrimeTween/discussion
 target.DOBlendable___(...)      --> Tween.___Additive(target, ...) // experimental
                                 --> github.com/KyryloKuzyk/PrimeTween/discussions/55
 ```
+
+Contributions
+---
+Please note I currently do not accept pull requests.
 
 Support
 ---
