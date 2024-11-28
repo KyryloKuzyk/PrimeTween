@@ -1,3 +1,7 @@
+## [1.2.1] - 2024-11-28
+### Fixed
+- Fixed: when a new tween is created at the last frame of `ToYieldInstruction()`, coroutine will wait for the wrong tween. Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/126
+
 ## [1.2.0] - 2024-10-03
 ### Fixed
 - Fixed: sequence.Group() doesn't work correctly after ChainCallback() and InsertCallback(). More info: https://github.com/KyryloKuzyk/PrimeTween/discussions/112
@@ -150,7 +154,7 @@
 - Sequences now support easing that can be applied to the whole Sequence with the help of Sequence.Create(..., Ease **sequenceEase**).
 - 'elapsedTime', 'elapsedTimeTotal', 'progress', and 'progressTotal' properties now have setters, so it's possible to manually set the elapsed time of tweens and sequences. Please see the Demo scene for usage example.
 - Parent Sequence now controls the isPaused, timeScale, and useUnscaledTime of all its children tweens and sequences.
-- Add a warning when tween.SetRemainingCycles() is called on Tween.Delay(). More info: https://forum.unity.com/threads/1479609/page-3#post-9415922.
+- Add a warning when tween.SetRemainingCycles() is called on Tween.Delay(). More info: https://discussions.unity.com/t/926420/101.
 ### Changed
 - It's no longer allowed to Stop()/Complete() a tween inside a Sequence. Please Stop()/Complete() the parent Sequence instead.
 - It's no longer allowed to await or use the '.ToYieldInstruction()' on tween inside a Sequence. Please use the parent Sequence instead.
