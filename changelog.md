@@ -1,3 +1,8 @@
+## [1.2.2] - 2024-12-05
+### Fixed
+- Fixed: TextMeshPro animations are not available in Unity 2023. Bug report: https://discussions.unity.com/t/primetween-high-performance-animations-and-sequences/926420/365
+- Fixed: Demo project produces compilation errors if Ugui package is not installed.
+
 ## [1.2.1] - 2024-11-28
 ### Fixed
 - Fixed: when a new tween is created at the last frame of `ToYieldInstruction()`, coroutine will wait for the wrong tween. Bug report: https://github.com/KyryloKuzyk/PrimeTween/issues/126
