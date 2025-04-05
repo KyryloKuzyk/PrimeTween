@@ -66,7 +66,7 @@ public class DOTween_PrimeTweenTests {
     
 
     readonly Vector3 endValue = new Vector3(0,0,10);
-    const float longDuration = 10f;
+    const float longDuration = 100f;
     [UnityTest, Performance] public IEnumerator _01_PositionAnimation_DOTween() => measureAverageFrameTimes(() => transform.DOMove(endValue, longDuration));
     [UnityTest, Performance] public IEnumerator _01_PositionAnimation_PrimeTween() => measureAverageFrameTimes(() => Tween.Position(transform, endValue, longDuration));
     [UnityTest, Performance] public IEnumerator _01_RotationAnimation_DOTween() => measureAverageFrameTimes(() => transform.DORotate(endValue, longDuration));
@@ -203,7 +203,7 @@ public class DOTween_PrimeTweenTests {
         }
         GC.Collect();
         yield return null;
-        yield return Measure.Frames().MeasurementCount(200).Run();
+        yield return Measure.Frames().MeasurementCount(50).Run();
     }
     #endif // PRIME_TWEEN_INSTALLED
 }

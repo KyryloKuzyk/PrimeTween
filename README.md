@@ -6,7 +6,7 @@ PrimeTween is a high-performance, **allocation-free** animation library for Unit
 
 [**Performance comparison with other tween libraries.**](https://github.com/KyryloKuzyk/PrimeTween/discussions/10)
 
-**[Asset Store](https://assetstore.unity.com/packages/slug/252960)** | **[Forum](https://forum.unity.com/threads/1479609/)** | **[FAQ](https://github.com/KyryloKuzyk/PrimeTween/discussions)** | **[YouTube](https://www.youtube.com/watch?v=MuMKwxOzc3M)**
+**[Asset Store](https://assetstore.unity.com/packages/slug/252960)** | **[Forum](https://discussions.unity.com/t/primetween-high-performance-animations-and-sequences/926420)** | **[FAQ](https://github.com/KyryloKuzyk/PrimeTween/discussions)** | **[YouTube](https://www.youtube.com/watch?v=MuMKwxOzc3M)**
 
 Table of Contents
 ---
@@ -28,7 +28,7 @@ Table of Contents
   + [OnUpdate](#onupdate)
   + [Speed-based animations](#speed-based-animations)
   + [Custom easing](#custom-easing)
-  + [FixedUpdate](#fixedupdate)
+  + [LateUpdate/FixedUpdate](#lateupdatefixedupdate)
 - [Zero allocations with delegates](#zero-allocations-with-delegates)
 - [Debugging tweens](#debugging-tweens)
 - [Migrating from DOTween to PrimeTween](#migrating-from-dotween-to-primetween)
@@ -356,17 +356,17 @@ Available parametric eases:
 - Easing.BounceExact(float amplitude): customizes the exact amplitude of the first bounce in meters/angles.
 - Easing.Elastic(float strength, float period = 0.3f): customizes the strength and oscillation period of Ease.OutElastic.
 
-### FixedUpdate
-Use `useFixedUpdate` parameter to update an animation in the FixedUpdate().
+### LateUpdate/FixedUpdate
+Use `updateType` parameter to chose which Unity even function will update the animation. The available options are Update, LateUpdate, and FixedUpdate.  
 ```csharp
-// Use TweenSettings or TweenSettings<T> struct to pass the 'useFixedUpdate' parameter to static 'Tween.' methods
-Tween.PositionX(transform, endValue: 10f, new TweenSettings(duration: 1f, useFixedUpdate: true));
+// Use TweenSettings or TweenSettings<T> struct to pass the 'lateUpdate' parameter to static 'Tween.' methods
+Tween.PositionX(transform, endValue: 10f, new TweenSettings(duration: 1f, updateType: UpdateType.LateUpdate));
 
-var tweenSettingsFloat = new TweenSettings<float>(endValue: 10f, duration: 1f, useFixedUpdate: true);
+var tweenSettingsFloat = new TweenSettings<float>(endValue: 10f, duration: 1f, updateType: UpdateType.FixedUpdate);
 Tween.PositionX(transform, tweenSettingsFloat);
 
-// To update the Sequence in FixedUpdate(), pass the 'useFixedUpdate' parameter to Sequence.Create()  
-Sequence.Create(useFixedUpdate: true);
+// To update the Sequence in FixedUpdate(), pass the 'updateType' parameter to Sequence.Create()  
+Sequence.Create(updateType: UpdateType.FixedUpdate);
 ```
 
 Zero allocations with delegates
@@ -528,9 +528,9 @@ sequence.SetLoops(2, LoopType.Yoyo)  --> Sequence.Create(cycles: 2, CycleMode.Yo
 tween.SetUpdate(true)                --> Tween.Position(..., useUnscaledTime: true)
 sequence.SetUpdate(true)             --> Sequence.Create(..., useUnscaledTime: true)
 
-tween.SetUpdate(UpdateType.Fixed)    --> Tween.Position(..., new TweenSettings(1f, useFixedUpdate: true)) 
-sequence.SetUpdate(UpdateType.Fixed) --> Sequence.Create(useFixedUpdate: true)
-                                     --> github.com/KyryloKuzyk/PrimeTween#fixedupdate
+tween.SetUpdate(UpdateType.Fixed)    --> Tween.Position(..., new TweenSettings(1f, updateType: UpdateType.Fixed)) 
+sequence.SetUpdate(UpdateType.Fixed) --> Sequence.Create(updateType: UpdateType.Fixed)
+                                     --> github.com/KyryloKuzyk/PrimeTween#lateupdatefixedupdate
 
 tween.Kill(false)                    --> tween.Stop()
 tween.Kill(true)                     --> tween.Complete()
@@ -558,19 +558,18 @@ await tween.AsyncWaitForCompletion()      -->  await tween
 await sequence.AsyncWaitForCompletion()   -->  await sequence
 
 transform.DOMoveX(to, 1).From(from)       --> Tween.PositionX(transform, from, to, 1)
-tween.From(from, setImmediately: true)    --> manually set the animated value to 'from': forum.unity.com/threads/1479609/page-4#post-9515827   
   
 tween.SetDelay(1f).OnStart(callback)      --> Tween.Delay(1, callback).Chain(tween)
 sequence.OnStart(callback)                --> sequence.ChainCallback(callback) // at the beginning of the sequence
 
 trans.DOMove(pos, speed).SetSpeedBased()  --> Tween.PositionAtSpeed(trans, pos, speed)
 
-textMeshPro.DOText(...)         --> forum.unity.com/threads/1479609/page-4#post-9529051 
+textMeshPro.DOText(...)         --> discussions.unity.com/t/926420/159 
                                 --> or see TypewriterAnimatorExample.cs in Demo
-text.DOCounter()                --> forum.unity.com/threads/1479609/page-2#post-9387887
-transform.DOJump()              --> forum.unity.com/threads/1479609/#post-9226566
-transform.DOPath()              --> forum.unity.com/threads/1479609/page-4#post-9522451
-transform.DOLookAt()            --> forum.unity.com/threads/1479609/page-4#post-9557785
+text.DOCounter()                --> discussions.unity.com/t/926420/80
+transform.DOJump()              --> discussions.unity.com/t/926420/4
+transform.DOPath()              --> discussions.unity.com/t/926420/158
+transform.DOLookAt()            --> discussions.unity.com/t/926420/189
 tween.SetId()                   --> github.com/KyryloKuzyk/PrimeTween/discussions/26#discussioncomment-7700985
 target.DOBlendable___(...)      --> Tween.___Additive(target, ...) // experimental
                                 --> github.com/KyryloKuzyk/PrimeTween/discussions/55
@@ -578,7 +577,7 @@ target.DOBlendable___(...)      --> Tween.___Additive(target, ...) // experiment
 
 Support
 ---
-Join the discussion on [Unity Forum](https://forum.unity.com/threads/1479609/).  
+Join the discussion on [Unity Discussions](https://discussions.unity.com/t/primetween-high-performance-animations-and-sequences/926420).  
 Please submit bug reports [here](https://github.com/KyryloKuzyk/PrimeTween/issues).  
 Submit your questions and feature requests [here](https://github.com/KyryloKuzyk/PrimeTween/discussions).  
 If you want to contact me privately, please drop me an email: kuzykkirill@gmail.com

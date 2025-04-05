@@ -1,3 +1,14 @@
+## [1.3.0] - 2025-04-04
+### Added
+- Add support for updating animations in LateUpdate with the help of the new 'UpdateType updateType' parameter. The available options are Update, LateUpdate, and FixedUpdate. https://github.com/KyryloKuzyk/PrimeTween/issues/138
+- Add 'Vector3' overloads to RotationAtSpeed() and LocalRotationAtSpeed() methods.
+- Add 'TextFontSize()' to animate 'TextMeshPro.fontSize' property. https://github.com/KyryloKuzyk/PrimeTween/discussions/129
+- Add a message to the exception thrown when an invalid ease is provided to `StandardEasing.Evaluate()`. https://github.com/KyryloKuzyk/PrimeTween/issues/151
+### Changed
+- Change 'bool useFixedUpdate' to 'UpdateType updateType'. The new version comes with an automatic script updater. Please back up your project before updating.
+- Make the exception stack trace clickable when custom tween throws an exception. https://github.com/KyryloKuzyk/PrimeTween/issues/119
+- Prevent allocations in development builds when  PRIME_TWEEN_SAFETY_CHECKS is enabled. 
+
 ## [1.2.2] - 2024-12-05
 ### Fixed
 - Fixed: TextMeshPro animations are not available in Unity 2023. Bug report: https://discussions.unity.com/t/primetween-high-performance-animations-and-sequences/926420/365

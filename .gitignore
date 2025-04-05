@@ -11,3 +11,4 @@ packages-lock.json
 SceneTemplateSettings.json
 Benchmarks/.idea
 *.user
+Benchmarks/.utmp
