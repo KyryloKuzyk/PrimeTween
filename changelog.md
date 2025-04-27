@@ -1,3 +1,16 @@
+## [1.3.1] - 2025-04-27
+### Added
+- Add Edit mode support, so animations can be played in Editor without entering the Play mode. https://github.com/KyryloKuzyk/PrimeTween/discussions/62
+- PrimeTween can now be installed via Unity Package Manager.
+- Demo project: add 'Play Animation' button to Inspector to preview animations in Edit mode without entering Play mode.
+- Add the experimental `ResetAfterComplete()` method to reset animations to the initial value before completion. https://github.com/KyryloKuzyk/PrimeTween/discussions/153
+- Add the experimental `PrimeTweenConfig.ManualInitialize()` to initialize PrimeTween before `RuntimeInitializeLoadType.BeforeSceneLoad`. https://github.com/KyryloKuzyk/PrimeTween/issues/150
+- Add `Tween.VisualElementOpacity()` method to animate the `VisualElement.style.opacity` property. Also, extend `Tween.Color/Alpha` methods to also work with VisualElement.
+### Changed
+- Passing `null` to `OnComplete()` is now allowed and no longer results in an error. https://github.com/KyryloKuzyk/PrimeTween/discussions/164
+### Fixed
+- Fixed: PrimeTween doesn't work after scripts are recompiled while playing in Editor when the 'Recompile And Continue Playing' setting is enabled.
+
 ## [1.3.0] - 2025-04-04
 ### Added
 - Add support for updating animations in LateUpdate with the help of the new 'UpdateType updateType' parameter. The available options are Update, LateUpdate, and FixedUpdate. https://github.com/KyryloKuzyk/PrimeTween/issues/138
