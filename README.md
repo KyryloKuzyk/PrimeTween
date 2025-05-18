@@ -44,7 +44,7 @@ Getting started
 ---
 
 ### Installation
-Import PrimeTween from [Asset Store](https://assetstore.unity.com/packages/slug/252960).  
+Import PrimeTween from [Asset Store](https://assetstore.unity.com/packages/slug/252960). This is a preferable option because it comes with a Demo scene.  
 Optional: install via Unity [Package Manager](#install-via-unity-package-manager-upm) (UPM).
 
 ### Animations
@@ -384,7 +384,7 @@ Or modify the `Packages/manifest.json' file manually:
 ```json
 {
   "dependencies": {
-    "com.kyrylokuzyk.primetween": "1.3.1",
+    "com.kyrylokuzyk.primetween": "1.3.2",
     ...
   },
   "scopedRegistries": [

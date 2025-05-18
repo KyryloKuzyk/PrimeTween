@@ -1,3 +1,7 @@
+## [1.3.2] - 2025-05-18
+### Fixed
+- Fixed: the 'updateType was ignored' error appears if a tween with default 'updateType' is added to a Sequence. https://github.com/KyryloKuzyk/PrimeTween/issues/171
+
 ## [1.3.1] - 2025-04-27
 ### Added
 - Add Edit mode support, so animations can be played in Editor without entering the Play mode. https://github.com/KyryloKuzyk/PrimeTween/discussions/62
