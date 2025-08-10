@@ -384,7 +384,7 @@ Or modify the `Packages/manifest.json' file manually:
 ```json
 {
   "dependencies": {
-    "com.kyrylokuzyk.primetween": "1.3.2",
+    "com.kyrylokuzyk.primetween": "1.3.3",
     ...
   },
   "scopedRegistries": [

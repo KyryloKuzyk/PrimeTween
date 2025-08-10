@@ -1,3 +1,11 @@
+## [1.3.3] - 2025-08-10
+### Fixed
+- SetEase() does not work with a custom AnimationCurve in the adapter. https://github.com/KyryloKuzyk/PrimeTween/issues/175
+- Using an invalid Ease value throws an "Invalid ease type" exception and breaks PrimeTween.
+- PRIME_TWEEN_SAFETY_CHECKS now works correctly with hot reloading (Recompile And Continue Playing).
+- Edit-mode support incorrectly creates PrimeTweenManager when PrimeTween API is used before RuntimeInitializeLoadType.BeforeSceneLoad, which can hide initialization order issues. https://github.com/KyryloKuzyk/PrimeTween/issues/185
+- Highlight animations in the Demo do not work in Windows Editor.
+
 ## [1.3.2] - 2025-05-18
 ### Fixed
 - Fixed: the 'updateType was ignored' error appears if a tween with default 'updateType' is added to a Sequence. https://github.com/KyryloKuzyk/PrimeTween/issues/171
@@ -138,7 +146,7 @@
 ### Added:
 - Add more detailed warnings and errors.
 ### Fixed
-- Fixed: Demo.cs causes compilation error, preventing PrimeTween to install correctly.
+- Fixed: Demo.cs causes a compilation error, preventing PrimeTween from installing correctly.
 
 ## [1.1.7] - 2024-01-02
 ### Fixed
