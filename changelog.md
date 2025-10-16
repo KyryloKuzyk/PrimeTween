@@ -1,3 +1,15 @@
+## [1.3.5] - 2025-10-15
+### Changed
+- Sequence's 'CycleMode' has been changed to 'SequenceCycleMode'.
+- 'SetRemainingCycles()' now works with negative 'timeScale'. https://github.com/KyryloKuzyk/PrimeTween/issues/203.
+- Improved animation debugging in PrimeTweenManager inspector.
+### Fixed
+- Fixed: inserting animations into a Sequence with negative 'atTime' decreases sequence duration. https://github.com/KyryloKuzyk/PrimeTween/issues/202.
+- Fixed: 'startDelay' is ignored when tween's duration is zero. https://github.com/KyryloKuzyk/PrimeTween/issues/200
+- Fixed: 'elapsedTimeTotal', 'elapsedTime', and 'progressTotal' are calculated incorrectly for nested tweens.
+- Fixed: animating 'ScrollRect.normalizedPosition' can throw exception if 'ScrollRect.content' is null.
+- Fixed: if Unity Editor is open for a long time, time measurement gets imprecise when running animations in Edit mode.
+
 ## [1.3.3] - 2025-08-10
 ### Fixed
 - SetEase() does not work with a custom AnimationCurve in the adapter. https://github.com/KyryloKuzyk/PrimeTween/issues/175

@@ -384,7 +384,7 @@ Or modify the `Packages/manifest.json' file manually:
 ```json
 {
   "dependencies": {
-    "com.kyrylokuzyk.primetween": "1.3.3",
+    "com.kyrylokuzyk.primetween": "1.3.5",
     ...
   },
   "scopedRegistries": [
@@ -552,8 +552,8 @@ transform.DOShakePosition(...)       -->  Tween.ShakeLocalPosition(transform, ..
 tween.SetEase(Ease.InOutSine)        --> Tween.Position(..., ease: Ease.InOutSine);
 sequence.SetEase(Ease.OutBounce)     --> Sequence.Create(..., sequenceEase: Ease.OutBounce)
 
-tween.SetLoops(2, LoopType.Yoyo)     --> Tween.Position(..., cycles: 2, CycleMode.Yoyo)
-sequence.SetLoops(2, LoopType.Yoyo)  --> Sequence.Create(cycles: 2, CycleMode.Yoyo)
+tween.SetLoops(2, LoopType.Yoyo)     --> Tween.Position(..., cycles: 2, CycleMode.Rewind) // Yoyo in DOTween works like Rewind
+sequence.SetLoops(2, LoopType.Yoyo)  --> Sequence.Create(cycles: 2, Sequence.SequenceCycleMode.Rewind)
     
 tween.SetUpdate(true)                --> Tween.Position(..., useUnscaledTime: true)
 sequence.SetUpdate(true)             --> Sequence.Create(..., useUnscaledTime: true)
