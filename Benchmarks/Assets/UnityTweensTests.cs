@@ -62,7 +62,7 @@ public class UnityTweensTests {
     const int warmups = DOTween_PrimeTweenTests.warmups;
     const int iterations = DOTween_PrimeTweenTests.iterations;
     const int sequenceIterations = iterations / 3 - warmups; 
-    static IEnumerator measureAverageFrameTimes(Action action, int _iterations = iterations) => DOTween_PrimeTweenTests.measureAverageFrameTimes(action, _iterations);
+    static IEnumerator measureAverageFrameTimes(Action action, int _iterations = iterations) => DOTween_PrimeTweenTests.measureAverageFrameTimes(action);
     static void measureGCAlloc(Action action, int _iterations = iterations) => DOTween_PrimeTweenTests.measureGCAlloc(action, _iterations);
     internal static IEnumerator measureFrameTime(Action action, int _iterations = iterations) => DOTween_PrimeTweenTests.measureFrameTime(action, _iterations);
 }

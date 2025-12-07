@@ -11,33 +11,33 @@ PrimeTween is a high-performance, **allocation-free** animation library for Unit
 Table of Contents
 ---
 - [Getting started](#getting-started)
-  * [Installation](#installation)
-  * [Animations](#animations)
-  * [Shakes](#shakes)
-  * [Callbacks](#callbacks)
-  * [Delays](#delays)
-  * [Cycles](#cycles)
+    * [Installation](#installation)
+    * [Animations](#animations)
+    * [Shakes](#shakes)
+    * [Callbacks](#callbacks)
+    * [Delays](#delays)
+    * [Cycles](#cycles)
 - [Sequencing tweens](#sequencing-tweens)
-  + [Sequence](#sequence)
-  + [Coroutines](#coroutines)
-  + [Async/await](#asyncawait)
+    + [Sequence](#sequence)
+    + [Coroutines](#coroutines)
+    + [Async/await](#asyncawait)
 - [Controlling tweens](#controlling-tweens)
 - [Inspector integration](#inspector-integration)
 - [Custom tweens](#custom-tweens)
 - [Advanced](#advanced)
-  + [Timescale](#timescale)
-  + [OnUpdate](#onupdate)
-  + [Speed-based animations](#speed-based-animations)
-  + [Custom easing](#custom-easing)
-  + [LateUpdate/FixedUpdate](#lateupdatefixedupdate)
-  + [Install via Unity Package Manager (UPM)](#install-via-unity-package-manager-upm)
+    + [Timescale](#timescale)
+    + [OnUpdate](#onupdate)
+    + [Speed-based animations](#speed-based-animations)
+    + [Custom easing](#custom-easing)
+    + [LateUpdate/FixedUpdate](#lateupdatefixedupdate)
+    + [Install via Unity Package Manager (UPM)](#install-via-unity-package-manager-upm)
 - [Zero allocations with delegates](#zero-allocations-with-delegates)
 - [Debugging tweens](#debugging-tweens)
 - [Migrating from DOTween to PrimeTween](#migrating-from-dotween-to-primetween)
-  + [Performance comparison](#performance-comparison)
-  + [DOTween adapter](#dotween-adapter)
-  + [Tween.PlayForward/PlayBackwards](#tweenplayforwardplaybackwardsrestart)
-  + [Migration cheatsheet](#migration-cheatsheet)
+    + [Performance comparison](#performance-comparison)
+    + [DOTween adapter](#dotween-adapter)
+    + [Tween.PlayForward/PlayBackwards](#tweenplayforwardplaybackwardsrestart)
+    + [Migration cheatsheet](#migration-cheatsheet)
 - [Support](#support)
 
 Getting started
@@ -360,7 +360,7 @@ Available parametric eases:
 - Easing.Elastic(float strength, float period = 0.3f): customizes the strength and oscillation period of Ease.OutElastic.
 
 ### LateUpdate/FixedUpdate
-Use `updateType` parameter to chose which Unity even function will update the animation. The available options are Update, LateUpdate, and FixedUpdate.  
+Use `updateType` parameter to chose which Unity even function will update the animation. The available options are Update, LateUpdate, and FixedUpdate.
 ```csharp
 // Use TweenSettings or TweenSettings<T> struct to pass the 'updateType' parameter to static 'Tween.' methods
 Tween.PositionX(transform, endValue: 10f, new TweenSettings(duration: 1f, updateType: UpdateType.LateUpdate));
@@ -379,12 +379,12 @@ This installation method also helps to clean the project structure.
 - Add a new Scoped Registry with Name: `npm` URL: `https://registry.npmjs.org` Scope(s): `com.kyrylokuzyk`.
 - Go to 'Window / Package Manager / Packages / My Registries'.
 - Install the PrimeTween package.
-  
+
 Or modify the `Packages/manifest.json' file manually:
 ```json
 {
   "dependencies": {
-    "com.kyrylokuzyk.primetween": "1.3.5",
+    "com.kyrylokuzyk.primetween": "1.3.6",
     ...
   },
   "scopedRegistries": [

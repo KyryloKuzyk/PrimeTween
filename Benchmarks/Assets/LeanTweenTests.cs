@@ -68,7 +68,7 @@ public class LeanTweenTests {
             .append(LeanTween.scale(transform.gameObject, Vector3.zero, longDuration))
             .append(LeanTween.rotate(transform.gameObject, Vector3.zero, longDuration));
 
-    static IEnumerator measureAverageFrameTimes(Action action, int _iterations = iterations) => DOTween_PrimeTweenTests.measureAverageFrameTimes(action, _iterations);
+    static IEnumerator measureAverageFrameTimes(Action action, int _iterations = iterations) => DOTween_PrimeTweenTests.measureAverageFrameTimes(action);
     static void measureGCAlloc(Action action, int _iterations = iterations) => DOTween_PrimeTweenTests.measureGCAlloc(action, _iterations);
     internal static IEnumerator measureFrameTime(Action action, int _iterations = iterations) => DOTween_PrimeTweenTests.measureFrameTime(action, _iterations);
 }

@@ -154,13 +154,14 @@ public class DOTween_PrimeTweenTests {
     [UnityTest, Performance] public IEnumerator _13_SequenceStart_PrimeTween() => measureFrameTime(createSequencePrimeTween, sequenceIterations);
     void createSequenceDOTween() =>
         DOTween.Sequence()
-            .Append(transform.DOMove(Vector3.zero, longDuration))
-            .Append(transform.DOScale(Vector3.zero, longDuration))
-            .Append(transform.DORotate(Vector3.zero, longDuration));
+            .Join(transform.DOMove(Vector3.zero, longDuration))
+            .Join(transform.DOScale(Vector3.zero, longDuration))
+            .Join(transform.DORotate(Vector3.zero, longDuration));
     void createSequencePrimeTween() =>
-        Tween.Position(transform, Vector3.zero, longDuration)
-            //.Chain(Tween.Scale(transform, Vector3.zero, longDuration))
-            .Chain(Tween.Rotation(transform, Vector3.zero, longDuration));
+        PrimeTween.Sequence.Create()
+            .Group(Tween.Position(transform, Vector3.zero, longDuration))
+            .Group(Tween.Scale(transform, Vector3.zero, longDuration))
+            .Group(Tween.Rotation(transform, Vector3.zero, longDuration));
 
     
     /// More iterations produce higher measurement accuracy. 
@@ -202,8 +203,16 @@ public class DOTween_PrimeTweenTests {
             action();
         }
         GC.Collect();
-        yield return null;
-        yield return Measure.Frames().MeasurementCount(50).Run();
+
+        for (int i = 0; i < 10; i++) {
+            yield return null;
+        }
+
+        var recorder = Recorder.Get("BehaviourUpdate");
+        for (int i = 0; i < 25; i++) {
+            yield return null;
+            Measure.Custom("Update", recorder.elapsedNanoseconds / 1000000f);
+        }
     }
     #endif // PRIME_TWEEN_INSTALLED
 }
