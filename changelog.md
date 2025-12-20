@@ -1,3 +1,7 @@
+## [1.3.7] - 2025-12-20
+### Fixed
+- Fixed crash in ARMv7 (32 bits) Android builds. https://github.com/KyryloKuzyk/PrimeTween/issues/217
+
 ## [1.3.6] - 2025-12-4
 ### Added
 - Experimental: added `Sequence.GroupCallback` method. https://github.com/KyryloKuzyk/PrimeTween/discussions/90#discussioncomment-14407106
