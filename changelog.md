@@ -1,3 +1,11 @@
+## [1.3.8] - 2026-02-09
+### Added
+- Added global `PrimeTweenConfig.warnIfTargetDestroyed` setting. https://github.com/KyryloKuzyk/PrimeTween/discussions/4
+- Experimental: added `UpdateType.Manual`. https://github.com/KyryloKuzyk/PrimeTween/discussions/135
+### Changed
+- `ToYieldInstruction()` no longer throws assertion exceptions if `IEnumerator.Current` is accessed after `MoveNext` returned `false`. https://github.com/KyryloKuzyk/PrimeTween/issues/220
+- Tween.Custom overloads that accept TweenSettings are now obsolete. Use TweenSettings<T> overloads instead.
+
 ## [1.3.7] - 2025-12-20
 ### Fixed
 - Fixed crash in ARMv7 (32 bits) Android builds. https://github.com/KyryloKuzyk/PrimeTween/issues/217
