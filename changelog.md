@@ -1,3 +1,7 @@
+## [1.4.0] - 2026-04-14
+### Fixed
+- Fixed: `ToYieldInstruction` can throw an exception if the underlying tween was already reused for another animation. https://github.com/KyryloKuzyk/PrimeTween/issues/220
+
 ## [1.3.8] - 2026-02-09
 ### Added
 - Added global `PrimeTweenConfig.warnIfTargetDestroyed` setting. https://github.com/KyryloKuzyk/PrimeTween/discussions/4
