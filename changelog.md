@@ -1,3 +1,11 @@
+## [1.4.0-pro] - 2026-04-14
+### Added
+- Initial PRO version release.
+- TweenAnimationComponent: animate anything with no code: create complex animations, add callbacks, delays, and custom animations entirely from the Inspector.
+- TweenAnimation: serialize animations directly in MonoBehaviour scripts: all the power of TweenAnimationComponent, without needing a separate component.
+- Job System and Burst Compiler support.
+- Per-Object Material Animations with MaterialPropertyBlock.
+
 ## [1.4.0] - 2026-04-14
 ### Fixed
 - Fixed: `ToYieldInstruction` can throw an exception if the underlying tween was already reused for another animation. https://github.com/KyryloKuzyk/PrimeTween/issues/220

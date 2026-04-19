@@ -1,6 +1,6 @@
 It's **allowed**:
 - Use PrimeTween and modify its source code in **free and commercial** products distributed in binary format (apps and games).
-- Use PrimeTween in derivative (free and commercial) projects (templates, libraries, GitHub projects) that depend on PrimeTween, but only if PrimeTween is installed as an [**NPM package**](https://github.com/KyryloKuzyk/PrimeTween#install-via-unity-package-manager-upm)
+- Use the free PrimeTween version in derivative (free and commercial) projects (templates, libraries, GitHub projects) that depend on PrimeTween, but only if PrimeTween is installed as an [**NPM package**](https://github.com/KyryloKuzyk/PrimeTween#install-via-unity-package-manager-upm)
 - Use, modify, and redistribute PrimeTween internally within a team or company, for example through a **private** Git repository or an **internal** package distribution system.
 
 It's **not allowed**:

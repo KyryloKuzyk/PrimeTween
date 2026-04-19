@@ -4,6 +4,8 @@ PrimeTween
 
 PrimeTween is a high-performance, **allocation-free** animation library for Unity. **Animate anything** with just one line of code, tweak all animation properties directly from the Inspector, and create complex animation sequences. No runtime memory allocations, ever.
 
+Get **[PrimeTween PRO](https://u3d.as/3WtK)** to animate anything without code.
+
 [**Performance comparison with other tween libraries.**](https://github.com/KyryloKuzyk/PrimeTween/discussions/10)
 
 **[Asset Store](https://assetstore.unity.com/packages/slug/252960)** | **[Forum](https://discussions.unity.com/t/primetween-high-performance-animations-and-sequences/926420)** | **[FAQ](https://github.com/KyryloKuzyk/PrimeTween/discussions)** | **[YouTube](https://www.youtube.com/watch?v=MuMKwxOzc3M)**
@@ -11,16 +13,20 @@ PrimeTween is a high-performance, **allocation-free** animation library for Unit
 Table of Contents
 ---
 - [Getting started](#getting-started)
-    + [Installation](#installation)
-    + [Animations](#animations)
-    + [Shakes](#shakes)
-    + [Callbacks](#callbacks)
-    + [Delays](#delays)
-    + [Cycles](#cycles)
+  + [Installation](#installation)
+  + [Animations](#animations)
+  + [Shakes](#shakes)
+  + [Callbacks](#callbacks)
+  + [Delays](#delays)
+  + [Cycles](#cycles)
+- [PrimeTween PRO](#primetween-pro)
+  - [Tween Animation](#tween-animation)
+  - [Tween Animation Component](#tween-animation-component)
+  - [Per-object material animations](#per-object-material-animations)
 - [Sequencing tweens](#sequencing-tweens)
-    + [Sequence](#sequence)
-    + [Coroutines](#coroutines)
-    + [Async/await](#asyncawait)
+  + [Sequence](#sequence)
+  + [Coroutines](#coroutines)
+  + [Async/await](#asyncawait)
 - [Controlling tweens](#controlling-tweens)
 - [Inspector integration](#inspector-integration)
 - [Advanced](#advanced)
@@ -34,10 +40,10 @@ Table of Contents
   + [Zero allocations with delegates](#zero-allocations-with-delegates)
   + [Debugging tweens](#debugging-tweens)
 - [Migrating from DOTween to PrimeTween](#migrating-from-dotween-to-primetween)
-    + [Performance comparison](#performance-comparison)
-    + [DOTween adapter](#dotween-adapter)
-    + [Tween.PlayForward/PlayBackwards](#tweenplayforwardplaybackwardsrestart)
-    + [Migration cheatsheet](#migration-cheatsheet)
+  + [Performance comparison](#performance-comparison)
+  + [DOTween adapter](#dotween-adapter)
+  + [Tween.PlayForward/PlayBackwards](#tweenplayforwardplaybackwardsrestart)
+  + [Migration cheatsheet](#migration-cheatsheet)
 - [Support](#support)
 
 Getting started
@@ -434,6 +440,69 @@ If the tween's `target` is `UnityEngine.Object`, you can quickly show it in the 
 <img src="Documentation/debug_tweens.jpg" width="80%">
 
 Also, the Inspector shows the '**Max alive tweens**' for the current session. Use this number to estimate the maximum number of tweens required for your game and pass it to the `PrimeTweenConfig.SetTweensCapacity(int capacity)` method at the launch of your game. This will ensure PrimeTween doesn't allocate any additional memory at runtime.
+
+
+PrimeTween PRO
+---
+**[PrimeTween PRO](https://u3d.as/3WtK)** extends the free PrimeTween library with powerful new features for visual animation authoring, faster runtime performance, and cleaner material workflows.
+
+### Tween Animation
+
+TweenAnimation is a serializable class that allows creating complex animations in the Inspector without writing any code.
+```csharp
+// Add TweenAnimation to your script, then set the animation up in the Inspector.
+[SerializeField] TweenAnimation doorAnimation = new();
+
+void Update() {
+    if (Input.GetKeyDown(KeyCode.Space)) {
+        // Play the animation in response to gameplay events.
+        doorAnimation.Trigger();
+        
+        // Or set the state directly.
+        doorAnimation.state = true;
+    }
+}
+```
+
+After adding `[SerializeField] TweenAnimation doorAnimation` to your script, you'll be able to tweak all animation properties from the Inspector without changing the code. Add any number of animations by pressing the '+' button in the Inspector. Chain, delay, or insert animations at a specific time.
+
+Preview controls at the top of the Inspector window allow you to preview the animation in Edit Mode without entering Play Mode or recompiling the scripts.
+
+<img src="Documentation/tween_animation_inspector.png" width="50%">
+
+#### Trigger()
+Plays the animation. The resulting animation state depends on the animation type (simple, reversible, or infinite). If the animation is already playing, applies `interruptionMode`.  
+Simple and infinite animations: plays the animation from the beginning.  
+Reversible animations: changes the direction.
+
+#### state { get; set; }
+Gets or sets the logical state of the animation. Instead of keeping track of the animation state manually, you can store the state in the animation directly.  
+State means different things depending on the animation type. Changing state applies `interruptionMode`.  
+Simple animations: returns `true` if an animation is currently playing.  
+Infinite animations: returns `true` if an animation is currently playing and NOT being interrupted by `interruptionMode`.  
+Reversible animations: returns `true` if the animation is moving forward OR already at the end. Changing state changes animation direction.
+
+#### isReversible
+Use for toggle animations (e.g., open/close or show/hide).  
+Set `state = true` to play forward and `state = false` to reverse — no need for a separate direction variable.  
+Or use `Trigger()` to toggle the current state.
+
+
+### Tween Animation Component
+A component that exposes TweenAnimation to the scene. Consider using it if you need to reference the animation from other scripts or animations in the scene.  
+It allows an animation to be referenced in a scene and played from other MonoBehaviours or UnityEvents. It can also play an animation in response to Unity messages like OnEnable and OnDisable.
+
+<img src="Documentation/tween_animation_component.png" width="50%">
+
+
+### Per-object material animations
+`Tween.MaterialPropertyBlock...(Renderer target, ...)` can animate any Renderer's material property without modifying the original material or creating its copies. It's useful for creating fire-and-forget material animations without the need to copy materials and manually destroy them later.
+
+PrimeTween doesn't reset the MaterialPropertyBlock after animation completion to preserve the animated property at its endValue. As a result, directly modifying the Material's property will have no effect since the MaterialPropertyBlock takes precedence. To modify the sharedMaterial property after animation completion, call `renderer.SetPropertyBlock(null)` to clear the override.
+
+Materials can also be animated from the Inspector with TweenAnimation or TweenAnimationComponent.
+
+<img src="Documentation/material_prop_block.png" width="50%">
 
 Migrating from DOTween to PrimeTween
 ---
