@@ -13,20 +13,20 @@ Get **[PrimeTween PRO](https://u3d.as/3WtK)** to animate anything without code.
 Table of Contents
 ---
 - [Getting started](#getting-started)
-  + [Installation](#installation)
-  + [Animations](#animations)
-  + [Shakes](#shakes)
-  + [Callbacks](#callbacks)
-  + [Delays](#delays)
-  + [Cycles](#cycles)
+    + [Installation](#installation)
+    + [Animations](#animations)
+    + [Shakes](#shakes)
+    + [Callbacks](#callbacks)
+    + [Delays](#delays)
+    + [Cycles](#cycles)
 - [PrimeTween PRO](#primetween-pro)
   - [Tween Animation](#tween-animation)
   - [Tween Animation Component](#tween-animation-component)
   - [Per-object material animations](#per-object-material-animations)
 - [Sequencing tweens](#sequencing-tweens)
-  + [Sequence](#sequence)
-  + [Coroutines](#coroutines)
-  + [Async/await](#asyncawait)
+    + [Sequence](#sequence)
+    + [Coroutines](#coroutines)
+    + [Async/await](#asyncawait)
 - [Controlling tweens](#controlling-tweens)
 - [Inspector integration](#inspector-integration)
 - [Advanced](#advanced)
@@ -40,10 +40,10 @@ Table of Contents
   + [Zero allocations with delegates](#zero-allocations-with-delegates)
   + [Debugging tweens](#debugging-tweens)
 - [Migrating from DOTween to PrimeTween](#migrating-from-dotween-to-primetween)
-  + [Performance comparison](#performance-comparison)
-  + [DOTween adapter](#dotween-adapter)
-  + [Tween.PlayForward/PlayBackwards](#tweenplayforwardplaybackwardsrestart)
-  + [Migration cheatsheet](#migration-cheatsheet)
+    + [Performance comparison](#performance-comparison)
+    + [DOTween adapter](#dotween-adapter)
+    + [Tween.PlayForward/PlayBackwards](#tweenplayforwardplaybackwardsrestart)
+    + [Migration cheatsheet](#migration-cheatsheet)
 - [Support](#support)
 
 Getting started
@@ -464,9 +464,9 @@ void Update() {
 }
 ```
 
-After adding `[SerializeField] TweenAnimation doorAnimation` to your script, you'll be able to tweak all animation properties from the Inspector without changing the code. Add any number of animations by pressing the '+' button in the Inspector. Chain, delay, or insert animations at a specific time.
+After adding `[SerializeField] TweenAnimation doorAnimation` to your script, you'll be able to tweak all animation properties from the Inspector without changing the code. Add any number of animations by pressing the '+' button in the Inspector. Chain, delay, or insert animations at a specific time.  
 
-Preview controls at the top of the Inspector window allow you to preview the animation in Edit Mode without entering Play Mode or recompiling the scripts.
+Preview controls at the top of the Inspector window allow you to preview the animation in Edit Mode without entering Play Mode or recompiling the scripts.  
 
 <img src="Documentation/tween_animation_inspector.png" width="50%">
 

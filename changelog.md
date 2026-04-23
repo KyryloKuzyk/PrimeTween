@@ -1,3 +1,11 @@
+## [1.4.2-pro] - 2026-04-23
+### Fixed
+- Fixed: error message from TweenAnimationComponent when exiting prefab mode. https://github.com/KyryloKuzyk/PrimeTween/issues/232
+
+## [1.4.1-pro] - 2026-04-20
+### Fixed
+- Fixed: TweenAnimation.cycles can be set to a value lower than -1, which should not be allowed.
+
 ## [1.4.0-pro] - 2026-04-14
 ### Added
 - Initial PRO version release.
