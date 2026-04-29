@@ -1,3 +1,9 @@
+## [1.4.3-pro] - 2026-04-29
+### Fixed
+- Fixed: deleting multiple prefabs with TweenAnimationComponent or serialized TweenAnimation immediately restores the deleted prefabs. https://github.com/KyryloKuzyk/PrimeTween/issues/234
+- Fixed: after exiting animation preview, the initial value from the scene should be used instead of the animations's `startValue`.
+- Fixed: the Undo operation doesn't work after previewing the `endValue` in the Inspector.
+
 ## [1.4.2-pro] - 2026-04-23
 ### Fixed
 - Fixed: error message from TweenAnimationComponent when exiting prefab mode. https://github.com/KyryloKuzyk/PrimeTween/issues/232
