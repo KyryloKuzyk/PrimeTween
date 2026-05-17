@@ -1,3 +1,10 @@
+## [1.4.5-pro] - 2026-05-17
+### Fixed
+- Fixed: saving prefab while TweenAnimation preview is playing "bakes in" animated preview values into the saved prefab. https://github.com/KyryloKuzyk/PrimeTween/issues/238
+- Fixed: when multi-editing TweenAnimations and one of them has targets while the other does not (Callback, for example), TweenAnimationDataPropDrawer throws the `Retrieving array size, but no array was provided` exception.
+- Fixed: putting TweenAnimation into an array or a list (TweenAnimation[], List<TweenAnimation>) doesn't update the inspector height and animation headers correctly.
+- Fixed: TweenAnimation unconditionally calls `GUI.changed` even if the animation is not running, which results in degraded performance.
+
 ## [1.4.4-pro] - 2026-05-08
 ### Fixed
 - Fixed: if Domain Reloading is enabled, TweenAnimationComponent resets the animation on selection change during Play Mode. https://discussions.unity.com/t/primetween-high-performance-animations-and-sequences/926420/448
