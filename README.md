@@ -390,7 +390,7 @@ Or modify the `Packages/manifest.json` file manually:
 ```json
 {
   "dependencies": {
-    "com.kyrylokuzyk.primetween": "1.4.0",
+    "com.kyrylokuzyk.primetween": "1.4.6",
     ...
   },
   "scopedRegistries": [

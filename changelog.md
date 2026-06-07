@@ -1,6 +1,17 @@
+## [1.4.6-pro] - 2026-06-07
+### Added
+- Added new `CallbackDirection` setting to TweenAnimation that controls whether a callback should be executed on the animation's backward cycle. https://github.com/KyryloKuzyk/PrimeTween/discussions/245
+### Fixed
+- Fixed: when an animation has a negative timescale and rewinds to the beginning, the OnComplete() should not be invoked.
+- Fixed: recompiling scripts in Edit Mode doesn't reset currently running TweenAnimations.
+
+## [1.4.6] - 2026-06-07
+### Changed
+- VisualElement.Position/Rotation/Scale animations now use VisualElement.style.translate/rotate/scale properties instead of ITransform in Unity 6.2 and newer.
+
 ## [1.4.5-pro] - 2026-05-17
 ### Fixed
-- Fixed: saving prefab while TweenAnimation preview is playing "bakes in" animated preview values into the saved prefab. https://github.com/KyryloKuzyk/PrimeTween/issues/238
+- Fixed: saving a prefab while TweenAnimation preview is playing "bakes in" animated preview values into the saved prefab. https://github.com/KyryloKuzyk/PrimeTween/issues/238
 - Fixed: when multi-editing TweenAnimations and one of them has targets while the other does not (Callback, for example), TweenAnimationDataPropDrawer throws the `Retrieving array size, but no array was provided` exception.
 - Fixed: putting TweenAnimation into an array or a list (TweenAnimation[], List<TweenAnimation>) doesn't update the inspector height and animation headers correctly.
 - Fixed: TweenAnimation unconditionally calls `GUI.changed` even if the animation is not running, which results in degraded performance.
