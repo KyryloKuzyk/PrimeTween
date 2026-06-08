@@ -1,3 +1,6 @@
+## [1.4.7-pro] - 2026-06-08
+- Fixed: TweenAnimation.startValue can't be manually modified in the Inspector. https://github.com/KyryloKuzyk/PrimeTween/issues/246
+
 ## [1.4.6-pro] - 2026-06-07
 ### Added
 - Added new `CallbackDirection` setting to TweenAnimation that controls whether a callback should be executed on the animation's backward cycle. https://github.com/KyryloKuzyk/PrimeTween/discussions/245
