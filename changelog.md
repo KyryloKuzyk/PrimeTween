@@ -1,3 +1,13 @@
+## [1.4.8-pro] - 2026-06-17
+### Added
+- Added `Is Reversed` setting to TweenType.TweenAnimationComponent in the Inspector. This setting can be used to reverse the direction of a nested animation. https://github.com/KyryloKuzyk/PrimeTween/issues/243
+### Fixed
+- Fixed: a rotation tween starting from an exactly 180° rotation (a quaternion with `w == 0`, e.g. `(0, 1, 0, 0)`) snapped to the end value instead of interpolating. https://github.com/KyryloKuzyk/PrimeTween/issues/247
+- Fixed: the `warnEndValueEqualsCurrent` warning was not reported for rotation tweens when the `endValue` was the same rotation as the current value but expressed with the opposite quaternion sign (`-q`). Also, optimized the equality comparison order: https://github.com/KyryloKuzyk/PrimeTween/issues/229
+- Fixed: PropertyDrawer fails to resolve TweenAnimation when it is stored in an inherited private serialized member. https://github.com/KyryloKuzyk/PrimeTween/issues/248
+- Fixed: foldable animation headers don't update their text correctly when multi-editing or when an object has multiple serialized TweenAnimation fields.
+- Fixed: when chaining multiple animations of the same type without manual `startValue` override, the next `startValue` should be automatically calculated from the previous `endValue`. This worked incorrectly for cases when an animation had CycleMode.Yoyo, Incremental, or Rewind. 
+
 ## [1.4.7-pro] - 2026-06-08
 - Fixed: TweenAnimation.startValue can't be manually modified in the Inspector. https://github.com/KyryloKuzyk/PrimeTween/issues/246
 
