@@ -12,3 +12,4 @@ SceneTemplateSettings.json
 Benchmarks/.idea
 *.user
 Benchmarks/.utmp
+Benchmarks/Assets/Resources/PerformanceTestRun*
