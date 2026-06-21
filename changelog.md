@@ -1,6 +1,10 @@
+## [1.4.9-pro] - 2026-06-21
+### Fixed
+- Fixed: the project doesn't compile because ResetComponentsInEditor() is not wrapped with `#if UNITY_EDITOR`. https://github.com/KyryloKuzyk/PrimeTween/issues/250
+
 ## [1.4.8] - 2026-06-19
 ### Fixed
-- Fixed: a rotation tween starting from an exactly 180° rotation (a quaternion with `w == 0`, e.g. `(0, 1, 0, 0)`) snapped to the end value instead of interpolating. https://github.com/KyryloKuzyk/PrimeTween/issues/247
+- Fixed: a rotation tween starting from an exactly 180° rotation (a quaternion with `w == 0`, e.g., `(0, 1, 0, 0)`) snapped to the end value instead of interpolating. https://github.com/KyryloKuzyk/PrimeTween/issues/247
 - Fixed: the `warnEndValueEqualsCurrent` warning was not reported for rotation tweens when the `endValue` was the same rotation as the current value but expressed with the opposite quaternion sign (`-q`). Also, optimized the equality comparison order: https://github.com/KyryloKuzyk/PrimeTween/issues/229
 
 ## [1.4.8-pro] - 2026-06-17
