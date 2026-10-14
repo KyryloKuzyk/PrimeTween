@@ -50,7 +50,7 @@ Getting started
 ---
 
 ### Installation
-Import PrimeTween from [Asset Store](https://assetstore.unity.com/packages/slug/252960). This is a preferable option because it comes with a Demo scene.  
+Import PrimeTween from the [Asset Store](https://assetstore.unity.com/packages/slug/252960). This is the preferred option because it comes with a Demo scene.  
 Optional: install via Unity [Package Manager](#install-via-unity-package-manager-upm) (UPM).
 
 ### Animations
@@ -94,7 +94,7 @@ Tween.PunchLocalPosition(transform, strength: punchDir, duration: 0.5f, frequenc
 ```
 
 ### Callbacks
-Use **`.OnComplete()`** to execute custom code on tween's completion.
+Use **`.OnComplete()`** to execute custom code when the tween completes.
 ```csharp
 // Call SomeMethod() when the animation completes
 Tween.Position(transform, endValue: new Vector3(10, 0), duration: 1)
@@ -105,7 +105,7 @@ Tween.Scale(transform, endValue: 0, duration: 1, endDelay: 0.5f)
     .OnComplete(() => Destroy(gameObject));
 ```
 
->"But wait! There is a **memory allocation** in the example above" you would say. And you would be right: calling `SomeMethod()` or `Destroy()` captures `this` reference in a closure and allocates heap memory. See how to address this in the [zero allocations](#zero-allocations-with-delegates) section.
+>"But wait! There is a **memory allocation** in the example above," you might say. And you would be right: calling `SomeMethod()` or `Destroy()` captures `this` reference in a closure and allocates heap memory. See how to address this in the [zero allocations](#zero-allocations-with-delegates) section.
 
 ### Delays
 Creating delays is by far the most useful feature in game development. Delays in PrimeTween behave like normal tweens and can be used with sequences, coroutines, and async/await methods. All while being completely [allocation-free](#zero-allocations-with-delegates).
@@ -135,18 +135,18 @@ Sequence.Create(cycles: 2, CycleMode.Yoyo)
 
 
 #### SetRemainingCycles(int cycles)
-Sets the number of remaining cycles to an animation. This method modifies the `cyclesTotal` so that the animation will complete after the number of cycles.
+Sets the number of remaining cycles of an animation. This method modifies the `cyclesTotal` so that the animation will complete after the number of cycles.
 
 #### SetRemainingCycles(bool stopAtEndValue)
-Stops an animation when it reaches 'startValue' or 'endValue' for the next time.  
-For example, if you have an infinite animation (`cycles == -1`) with CycleMode.Yoyo/Rewind, and you wish to stop it when it reaches the 'endValue', then set `stopAtEndValue` to true. To stop the animation at the 'startValue'  set `stopAtEndValue` to false.
+Stops an animation when it reaches 'startValue' or 'endValue' the next time.  
+For example, if you have an infinite animation (`cycles == -1`) with CycleMode.Yoyo/Rewind, and you wish to stop it when it reaches the 'endValue', then set `stopAtEndValue` to true. To stop the animation at the 'startValue', set `stopAtEndValue` to false.
 
 Sequencing tweens
 ---
 ### Sequence
 There are several sequencing methods in PrimeTween. Let's start with the most common one: grouping tweens in **Sequences**.
 
-**Sequence** is a group of tweens, callbacks, and other sequences. Animations in a sequence can **overlap**, run **sequentially** or in **parallel**, or any combination of those. You can control a Sequence the same way as individual tweens, see [controlling tweens](#controlling-tweens) section.
+**Sequence** is a group of tweens, callbacks, and other sequences. Animations in a sequence can **overlap**, run **sequentially** or in **parallel**, or any combination of those. You can control a Sequence the same way as individual tweens, see the [controlling tweens](#controlling-tweens) section.
 
 ```csharp
 Sequence.Create(cycles: 10, CycleMode.Yoyo)
@@ -185,7 +185,7 @@ IEnumerator Coroutine() {
 ```
 
 ### Async/await
-And the last method is awaiting animations using the **async/await** pattern. Async/await is a great tool to prevent the callback hell in your code. PrimeTween doesn't use threads, so tweens can be awaited on all platforms, even on WebGL.
+And the last method is awaiting animations using the **async/await** pattern. Async/await is a great tool to prevent callback hell in your code. PrimeTween doesn't use threads, so tweens can be awaited on all platforms, even on WebGL.
 ```csharp
 async void AsyncMethod() {
     Tween.PositionX(transform, endValue: 10f, duration: 1.5f);
@@ -198,13 +198,15 @@ async void AsyncMethod() {
 }
 ```
 
-> While PrimeTween never allocates memory at runtime, the async/await feature in C# is allocating: awaiting an async method allocates a small amount of garbage. Likewise, StartCoroutine() also allocates GC.  
+> While PrimeTween never allocates memory at runtime, the async/await feature in C# is allocating: awaiting an async method allocates a small amount of garbage. Likewise, StartCoroutine() also allocates garbage.  
 > For performance-intensive code paths, use Sequence instead of async methods or Coroutines.
 
-#### SetCancellationToken(CancellationToken cancellationToken)
-Use **`.SetCancellationToken()`** to stop an animation when a `CancellationToken` is canceled. Cancellation stops the animation as if `Stop()` was called and happens on the next PrimeTween update; if the token is already canceled, the animation is stopped immediately. If the animation is awaited with 'await', the 'await' throws an `OperationCanceledException` when the token is canceled.
+#### SetCancellationToken(CancellationToken cancellationToken, TweenSettings.CancellationMode? cancellationMode = null)
+Use **`.SetCancellationToken()`** to stop an animation when a `CancellationToken` is canceled. By default, cancellation stops the animation as if `Stop()` was called. Cancellation happens on the next PrimeTween update; if the token is already canceled, the animation is canceled immediately. If the animation is awaited with 'await', the 'await' throws an `OperationCanceledException` when the token is canceled.
 
-To make a Sequence cancellable, call `SetCancellationToken()` on the Sequence itself instead of its children animations.
+Pass `cancellationMode: TweenSettings.CancellationMode.Complete` to complete the animation on cancellation instead, as if `Complete()` was called: the animation jumps to its end value and `OnComplete` is called. To change the default for all animations, set `PrimeTweenConfig.defaultCancellationMode`.
+
+To make a Sequence cancellable, call `SetCancellationToken()` on the Sequence itself instead of its child animations.
 ```csharp
 var cancellationTokenSource = new CancellationTokenSource();
 Sequence.Create()
@@ -240,7 +242,7 @@ tween.Complete(); // Instantly complete the running tween and set the animated v
 Tween.CompleteAll(onTarget: transform); // Alternative way to complete the tween by its target
 
 tween.isPaused = true; // Pause the tween
-Tween.PausedAll(true, onTarget: transform); // Alternative way to pause the tween by its target
+Tween.SetPausedAll(true, onTarget: transform); // Alternative way to pause the tween by its target
 
 tween.elapsedTime = 0.5f; // Manually set the elapsed time of the tween. Use 'elapsedTimeTotal' to set the elapsed time of all cycles.
 
@@ -249,7 +251,7 @@ tween.progress = 0.5f; // Manually set the normalized progress of the current cy
 tween.timeScale = 2f; // Apply a custom timeScale to the tween
 ```
 
-As you can see, there is no way to change the direction of the currently running tween, it can only be **stopped** and **completed**. But how to play an animation **forward** and **backward**, for example, to show or hide a window? Easy! Just start a new Tween in the desired direction.
+As you can see, there is no way to change the direction of the currently running tween; it can only be **stopped** and **completed**. But how to play an animation **forward** and **backward**, for example, to show or hide a window? Easy! Just start a new Tween in the desired direction.
 ```csharp
 [SerializeField] RectTransform window;
 
@@ -282,7 +284,7 @@ The neat thing about setting up animation properties in the Inspector is that yo
 
 <img width="100%" src="Documentation/inspector_integration.jpg">
 
-Now let's revisit the window example from the [Controlling tweens](#controlling-tweens) section and improve it by removing all magic variables from the code. Notice how the **`isOpened`** parameter is passed to the **`WithDirection(bool toEndValue)`** method. This helper method selects the target position based on the `isOpened` parameter. Nice and simple!
+Now let's revisit the window example from the [Controlling tweens](#controlling-tweens) section and improve it by removing all magic numbers from the code. Notice how the **`isOpened`** parameter is passed to the **`WithDirection(bool toEndValue)`** method. This helper method selects the target position based on the `isOpened` parameter. Nice and simple!
 
 <details>
 <summary>Old window example (click to expand)</summary>
@@ -307,7 +309,7 @@ public void SetWindowOpened(bool isOpened) {
 }
 ```
 
-> The generic TweenSettings<T> can be serialized and tweaked from the Inspector in Unity 2020.1+. If you're using an older version of Unity, use the non-generic TweenSetting and serialize `startValue/endValue` separately.
+> The generic TweenSettings<T> can be serialized and tweaked from the Inspector in Unity 2020.1+. If you're using an older version of Unity, use the non-generic TweenSettings and serialize `startValue/endValue` separately.
 
 Custom tweens
 ---
@@ -337,11 +339,11 @@ Advanced
 ### Timescale
 You can apply a custom timeScale to each individual animation with the help of the `timeScale` property.
 
-To smoothly animate the timeScale, use `Tween.TweenTimeScale(Tween/Sequence tween, ...)` method.  
-To animate the global Unity's Time.timeScale, use `Tween.GlobalTimeScale(...)` method.
+To smoothly animate the timeScale, use the `Tween.TweenTimeScale(Tween/Sequence tween, ...)` method.  
+To animate the global Unity's Time.timeScale, use the `Tween.GlobalTimeScale(...)` method.
 
 ### OnUpdate
-Use `tween.OnUpdate()` callback to execute a custom callback when the animated value is updated.
+Use the `tween.OnUpdate()` callback to execute a custom callback when the animated value is updated.
 ```csharp
 // Rotate the transform around the y-axis as the animation progresses
 Tween.PositionY(transform, endValue, duration)
@@ -395,7 +397,7 @@ Sequence.Create(updateType: UpdateType.FixedUpdate);
 
 ### Install via Unity Package Manager (UPM)
 The Package Manager installation method allows to include PrimeTween in derivative (free and commercial) projects (templates, libraries, GitHub repositories). For more info, see the [license](https://github.com/KyryloKuzyk/PrimeTween?tab=License-1-ov-file).  
-This installation method also helps to clean the project structure.
+This installation method also keeps the project structure clean.
 - Open 'Edit / Project Settings / Package Manager'.
 - Add a new Scoped Registry with Name: `npm` URL: `https://registry.npmjs.org` Scope(s): `com.kyrylokuzyk`.
 - Go to 'Window / Package Manager / Packages / My Registries'.
@@ -405,7 +407,7 @@ Or modify the `Packages/manifest.json` file manually:
 ```json
 {
   "dependencies": {
-    "com.kyrylokuzyk.primetween": "1.4.11",
+    "com.kyrylokuzyk.primetween": "1.5.0",
     ...
   },
   "scopedRegistries": [
@@ -422,15 +424,15 @@ Or modify the `Packages/manifest.json` file manually:
 
 Zero allocations with delegates
 ---
-C# delegates is a powerful language feature essential for game development. It gives us the ability to receive callbacks and pass methods to other methods. But when delegates are used in hot code paths carelessly, they can create [performance issues](https://www.jacksondunstan.com/articles/3765).
+C# delegates are a powerful language feature essential for game development. It gives us the ability to receive callbacks and pass methods to other methods. But when delegates are used in hot code paths carelessly, they can create [performance issues](https://www.jacksondunstan.com/articles/3765).
 
-Let's review the code from earlier. If SomeMethod() is an instance method, then calling it from the callback will implicitly capture **`this`** reference, allocating heap memory.
+Let's review the code from earlier. If SomeMethod() is an instance method, then calling it from the callback will implicitly capture the **`this`** reference, allocating heap memory.
 ```csharp
 Tween.Position(transform, new Vector3(10, 0), duration: 1)
     .OnComplete(() => SomeMethod()); // delegate allocation!
 ```
 
-Here is how to fix the above code to be non-allocating. Notice how **`this`** reference is passed to the `OnComplete` method, then the **`target`** parameter is used instead of calling `SomeMethod()` directly.
+Here is how to fix the above code to be non-allocating. Notice how the **`this`** reference is passed to the `OnComplete` method, then the **`target`** parameter is used instead of calling `SomeMethod()` directly.
 ```csharp
 Tween.Position(transform, new Vector3(10, 0), duration: 1)
     .OnComplete(target: this, target => target.SomeMethod()); // no allocation
@@ -448,7 +450,7 @@ Tween.ShakeCustom(this, startValue: vector3Field, shakeSettings, (target, val) =
 
 Debugging tweens
 ---
-To debug tweens select the **PrimeTweenManager** object under the DontDestroyOnLoad foldout in the scene Hierarchy. Here you can inspect all currently running tweens and their properties.
+To debug tweens, select the **PrimeTweenManager** object under the DontDestroyOnLoad foldout in the scene Hierarchy. Here you can inspect all currently running tweens and their properties.
 
 If the tween's `target` is `UnityEngine.Object`, you can quickly show it in the Hierarchy by clicking on the `Unity Target` field. This is a good reason to supply the target even when it's optional, like in the case of `Tween.Delay()` and `Tween.Custom()`.
 
@@ -547,7 +549,7 @@ First, to enable the adapter, add the **`PRIME_TWEEN_DOTWEEN_ADAPTER`** define t
 
 <img src="Documentation/adapter_define.png" width="60%">
 
-The migration process may vary from project to project. In many cases, simply replacing `using DG.Tweening;` with `using PrimeTween;` is enough to switch a script from DOTween to PrimeTween. See how easy was to migrate the [MotionDesignFES](https://github.com/KirillKuzyk/MotionDesignFES-PrimeTween/commit/628cb17d027e9648add45e0b2d9b431983a1bde6) project with dozens of complex animations.
+The migration process may vary from project to project. In many cases, simply replacing `using DG.Tweening;` with `using PrimeTween;` is enough to switch a script from DOTween to PrimeTween. See how easy it was to migrate the [MotionDesignFES](https://github.com/KirillKuzyk/MotionDesignFES-PrimeTween/commit/628cb17d027e9648add45e0b2d9b431983a1bde6) project with dozens of complex animations.
 
 Open a script that uses DOTween, change `using DG.Tweening;` to `using PrimeTween;` and the adapter will handle the majority of cases **automatically**, preserving DOTween's syntax in your project. The most common places that require a **manual change** to the existing code base:
 ```csharp
@@ -568,7 +570,7 @@ tween.Complete(); // null checking and setting tween to null is not needed
 
 #### Tween.PlayForward/PlayBackwards/Restart
 
-PrimeTween offers a different approach to animating things forward and backward that is simpler and has greater performance. In PrimeTween, tweens and sequences are **[non-reusable]([url](https://discussions.unity.com/t/primetween-high-performance-animations-and-sequences/926420/125))**, which means that it's not possible to cache tweens and reuse them later.
+PrimeTween offers a different approach to animating things forward and backward that is simpler and has greater performance. In PrimeTween, tweens and sequences are **[non-reusable](https://discussions.unity.com/t/primetween-high-performance-animations-and-sequences/926420/125)**, which means that it's not possible to cache tweens and reuse them later.
 
 Let's consider the common DOTween usage pattern: creating a tween once, then calling PlayForward() and PlayBackwards() when needed.
 <details>
@@ -622,7 +624,7 @@ public class PrimeTweenWindow : MonoBehaviour {
 ```
 
 #### Migration cheatsheet
-If you don't want to use the Adapter and wish to migrate your project to PrimeTween's syntax, please refer to this cheatsheet for the API differences of two libraries.
+If you don't want to use the Adapter and wish to migrate your project to PrimeTween's syntax, please refer to this cheatsheet for the API differences between the two libraries.
 
 ```csharp
 DOTween API on the left              -->  PrimeTween API on the right
@@ -659,7 +661,7 @@ sequence.Append()                    --> sequence.Chain()
 sequence.AppendCallback()            --> sequence.ChainCallback() 
 seq.Insert(1.5f, trans.DOMoveX(...)) --> seq.Insert(1.5f, Tween.PositionX(trans, ...)) 
                                      --> // or `seq.Group(Tween.PositionX(..., startDelay: 1.5f))` before the first Chain() operation
-seq.InsertCallback(1f, callback))    --> seq.InsertCallback(1f, callback))    
+seq.InsertCallback(1f, callback)     --> seq.InsertCallback(1f, callback)    
 
 DOTween.Kill(target, false)          --> Tween.StopAll(onTarget: target)
 DOTween.Kill(target, true)           --> Tween.CompleteAll(onTarget: target)
@@ -680,6 +682,7 @@ trans.DOMove(pos, speed).SetSpeedBased()  --> Tween.PositionAtSpeed(trans, pos, 
 
 textMeshPro.DOText(...)         --> discussions.unity.com/t/926420/159 
                                 --> or see TypewriterAnimatorExample.cs in Demo
+                                --> or use textAnimator.TypewriterPlay(), see #text-animator
 text.DOCounter()                --> discussions.unity.com/t/926420/80
 transform.DOJump()              --> discussions.unity.com/t/926420/4
 transform.DOPath()              --> discussions.unity.com/t/926420/158

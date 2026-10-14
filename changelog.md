@@ -1,3 +1,19 @@
+## [1.5.0] - 2026-10-10
+### Added
+- Added `Tween.Delay<T, TPayload>()`, `Sequence.ChainCallback<T, TPayload>()`, and `Sequence.InsertCallback<T, TPayload>()` overloads that pass a struct payload to the callback without producing garbage. The payload can be any struct without reference type fields, up to 120 bytes.
+- Added `Sequence.ChainWaitWhile/Until()` and `Sequence.InsertWaitWhile/Until()` methods that suspend the sequence while (or until) a user-provided predicate returns true. 
+- Added `Sequence.isWaiting` property that returns 'true' if the sequence is currently suspended by a wait.
+- Added `cancellationMode` parameter to `SetCancellationToken()` and the global `PrimeTweenConfig.defaultCancellationMode` setting to control whether an animation is stopped or completed when its `CancellationToken` is canceled.
+- All `PrimeTweenConfig.warn*` settings now have public getters, so it's possible to temporarily disable a warning and then restore its previous value.
+### Fixed
+- Fixed a number of rare edge cases found by extensive fuzz testing of the public API. They mostly involved calling PrimeTween API recursively from user-defined callbacks (OnComplete, OnUpdate, Tween.Custom) or using extreme durations. 
+- Fixed: `Tween.CompleteAll()` froze the app when an `OnComplete()` callback restarted its own animation. `Tween.CompleteAll()` now completes only animations that are running when it's called.
+- Fixed: endDelay in the PrimeTweenManager's inspector didn't show the correct value. Also, "cyclesDone" had an incorrect spelling in the PrimeTweenManager's inspector.
+
+## [1.4.12] - 2026-07-24
+### Fixed
+- Fixed installation in Unity 6000.5.5.
+
 ## [1.4.10-pro] - 2026-07-18
 ### Added
 - Added `SetCancellationToken(CancellationToken)` to `TweenAnimation`.
