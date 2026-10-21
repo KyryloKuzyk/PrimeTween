@@ -407,7 +407,7 @@ Or modify the `Packages/manifest.json` file manually:
 ```json
 {
   "dependencies": {
-    "com.kyrylokuzyk.primetween": "1.5.0",
+    "com.kyrylokuzyk.primetween": "1.5.1",
     ...
   },
   "scopedRegistries": [
@@ -515,7 +515,7 @@ It allows an animation to be referenced in a scene and played from other MonoBeh
 ### Per-object material animations
 `Tween.MaterialPropertyBlock...(Renderer target, ...)` can animate any Renderer's material property without modifying the original material or creating its copies. It's useful for creating fire-and-forget material animations without the need to copy materials and manually destroy them later.
 
-PrimeTween doesn't reset the MaterialPropertyBlock after animation completion to preserve the animated property at its endValue. As a result, directly modifying the Material's property will have no effect since the MaterialPropertyBlock takes precedence. To modify the sharedMaterial property after animation completion, call `renderer.SetPropertyBlock(null)` to clear the override.
+PrimeTween doesn't reset the MaterialPropertyBlock after animation completion to preserve the animated property at its endValue. As a result, directly modifying the Material's property will have no effect since the MaterialPropertyBlock takes precedence. To modify the sharedMaterial property after animation completion, call `renderer.SetPropertyBlock(null)` (or `renderer.SetPropertyBlock(null, materialIndex)`) to clear the override.
 
 Materials can also be animated from the Inspector with TweenAnimation or TweenAnimationComponent.
 

@@ -1,3 +1,19 @@
+## [1.5.1] - 2026-10-21
+### Added
+- Added an optional `getCurrentValue` parameter to `Tween.Custom()` methods that accept `TweenSettings<T>`. It enables `startFromCurrent` support for Custom tweens.
+- Added `Tween.Custom<T, TPayload>(target, payload, settings, onValueChange, getCurrentValue)` overloads that pass a struct payload to onValueChange and getCurrentValue without producing garbage. The payload can be any struct without reference type fields, up to 16 bytes.
+### Changed
+- The max payload size of `Tween.Delay<T, TPayload>()`, `Sequence.ChainCallback<T, TPayload>()`, and `Sequence.InsertCallback<T, TPayload>()` is reduced from 120 to 16 bytes to match `Tween.Custom<T, TPayload>()`.
+
+## [1.5.1-pro] - 2026-10-21
+### Added
+- Added an optional `materialIndex` parameter to `Tween.MaterialPropertyBlock...()` methods to animate only one material of a Renderer with multiple materials. https://github.com/KyryloKuzyk/PrimeTween/discussions/256
+### Fixed
+- Fixed: destroying `TweenAnimationComponent` with `resetOnCompletion` logged an error that the tween's OnComplete callback was ignored. https://github.com/KyryloKuzyk/PrimeTween/issues/254
+- Fixed: `Tween.MaterialPropertyBlockTextureScale()` overwrote the texture offset previously animated by `Tween.MaterialPropertyBlockTextureOffset()` with the material's value, and vice versa.
+- Fixed: `Tween.MaterialPropertyBlockTextureScale/Offset()` with `startFromCurrent` ignored the current value in the MaterialPropertyBlock and started from the material's value.
+- Fixed: `TweenAnimationComponent` with `MaterialPropertyBlockTextureScale/Offset` ignored the current value in the MaterialPropertyBlock and read the start value from the material in Edit Mode.
+
 ## [1.5.0] - 2026-10-10
 ### Added
 - Added `Tween.Delay<T, TPayload>()`, `Sequence.ChainCallback<T, TPayload>()`, and `Sequence.InsertCallback<T, TPayload>()` overloads that pass a struct payload to the callback without producing garbage. The payload can be any struct without reference type fields, up to 120 bytes.

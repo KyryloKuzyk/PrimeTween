@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.kyrylokuzyk.primetween": "1.5.0",
+    "com.kyrylokuzyk.primetween": "1.5.1",
     "com.unity.ide.rider": "3.0.40",
     "com.unity.test-framework.performance": "3.5.0"
   },
