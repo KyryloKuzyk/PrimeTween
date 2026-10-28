@@ -1,3 +1,28 @@
+## [1.5.2] - 2026-10-28
+### Added
+- Unity 7 support.
+- Added `Tween.___Additive` to animate delta changes instead of absolute values. This allows multiple additive tweens to animate the same value simultaneously, combining (blending) their changes.
+- Added Sequence.OnUpdate callback that is invoked every time the sequence updates, after all its children animations are updated.
+- Added `Tween/Sequence.OnFinally()` callback that is invoked when an animation is stopped for any reason (even if the target was destroyed). Use this callback as a "catch all" to run a clean-up.
+- Added the `useDurationAsSpeed` parameter to `Tween.Custom()` and `Tween.CustomAdditive()` to create custom animations based on the speed instead of duration. [#182](https://github.com/KyryloKuzyk/PrimeTween/issues/182)
+- Added a toggle near the 'Start Value' of `TweenSettings<T>` in the Inspector. Disable the toggle to start the animation from the current value (`startFromCurrent = true`). [#226](https://github.com/KyryloKuzyk/PrimeTween/issues/226)
+- Experimental: added `Tween/Sequence.SetClock(Tween.Clock)` to control the timescale and tick of animations grouped together. Use `clock.timeScale` to set the timescale of all animations that share this clock. Use `clock.isManual` together with `clock.Tick(deltaTime)` to update the clock manually. Changes to the clock are applied on the next animation update. To fully control the update order, use `PrimeTweenConfig.ManualUpdate()`.
+### Fixed
+- Fixed: `Tween.Complete()` invoked OnComplete a second time on a tween that had completed while paused, for example, after `isPaused = true` and `progressTotal = 1`.
+
+## [1.5.2-pro] - 2026-10-28
+### Added
+- Added `TweenAnimation.animationType`: Simple, Reversible, Infinite, or Overlapping. It replaces the `isReversible` setting, and `cycles = -1` for infinite animations. The change is backward compatible.
+- Added additive animations support to TweenAnimation. https://github.com/KyryloKuzyk/PrimeTween/discussions/255 
+- Added `AnimationType.Overlapping`: triggering a playing animation plays a new animation on top of it, while the previous one plays until its end. Use it with additive tweens to blend and accumulate their changes.
+### Fixed
+- Fixed: clicking TweenAnimation fields in the Inspector resets the animation in Play Mode. This is limited to the Edit Mode now.
+- Fixed: TweenAnimationComponent with multiple targets restored all targets to the initial value of the first target after the Edit Mode preview.
+- Fixed: a nested TweenAnimation with an even number of Yoyo or Rewind cycles jumped to its end values when its reversible parent started playing backward.
+- Fixed: the `state` of a nested reversible `TweenAnimation` didn't match its targets after the parent was stopped after completion, moved to the end with `progressTotal = 1` while paused, interrupted with `InterruptionMode.Complete`, or completed in a backward cycle of an infinite Yoyo animation. Toggling the nested animation then snapped its targets to the start.
+- Fixed: `TweenAnimation.Reset()` during the backward play of a reversible animation reset the animation to the end instead of the beginning.
+- Fixed: `TweenAnimation` with an even number of Yoyo or Rewind cycles, or with Incremental cycles, didn't restore the initial values after the Edit Mode preview.
+
 ## [1.5.1] - 2026-10-21
 ### Added
 - Added an optional `getCurrentValue` parameter to `Tween.Custom()` methods that accept `TweenSettings<T>`. It enables `startFromCurrent` support for Custom tweens.

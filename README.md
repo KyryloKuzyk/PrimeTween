@@ -342,6 +342,26 @@ You can apply a custom timeScale to each individual animation with the help of t
 To smoothly animate the timeScale, use the `Tween.TweenTimeScale(Tween/Sequence tween, ...)` method.  
 To animate the global Unity's Time.timeScale, use the `Tween.GlobalTimeScale(...)` method.
 
+#### Clock (experimental)
+`Tween.Clock` controls the time of multiple animations at once. This feature requires the `PRIME_TWEEN_EXPERIMENTAL` define in 'Scripting Define Symbols'.
+```csharp
+var clock = new Tween.Clock();
+Tween.PositionX(transform, endValue: 10f, duration: 1f).SetClock(clock);
+Sequence.Create().Chain(Tween.Scale(transform, 2f, 1f)).SetClock(clock);
+clock.timeScale = 0.5f; // slows down both animations
+```
+A manual clock advances its animations only by the time passed to `clock.Tick()`. Animations don't update in frames without a `Tick()`:
+```csharp
+var clock = new Tween.Clock { isManual = true };
+void Start() {
+    Tween.PositionX(transform, endValue: 10f, duration: 1f).SetClock(clock);
+}
+void Update() {
+    clock.Tick(Time.deltaTime); // PrimeTween applies the tick on its next update
+}
+```
+A manual clock also works with `PrimeTweenConfig.ManualUpdate()`: call `clock.Tick()` before `PrimeTweenConfig.ManualUpdate()` to apply the tick in that update.
+
 ### OnUpdate
 Use the `tween.OnUpdate()` callback to execute a custom callback when the animated value is updated.
 ```csharp
@@ -360,6 +380,11 @@ Tween._**AtSpeed**(transform, endValue, **speed**, ...) methods allow to create 
 Tween.LocalPositionAtSpeed(transform, endValue: midPos, speed)
     // Set 'startValue: midPos' to continue the movement from the 'midPos' instead of the initial 'transform.position'
     .Chain(Tween.LocalPositionAtSpeed(transform, startValue: midPos, endValue: endPos, speed));
+```
+
+To animate a custom value based on the speed, pass `useDurationAsSpeed: true` to `Tween.Custom()` or `Tween.CustomAdditive()`. The distance between colors is measured in RGBA space, and the distance between quaternions is the angle in degrees:
+```csharp
+Tween.Custom(material, new TweenSettings<Color>(Color.black, Color.white, speed), (target, color) => target.color = color, useDurationAsSpeed: true);
 ```
 
 ### Custom easing
@@ -407,7 +432,7 @@ Or modify the `Packages/manifest.json` file manually:
 ```json
 {
   "dependencies": {
-    "com.kyrylokuzyk.primetween": "1.5.1",
+    "com.kyrylokuzyk.primetween": "1.5.2",
     ...
   },
   "scopedRegistries": [
@@ -499,10 +524,12 @@ Simple animations: returns `true` if an animation is currently playing.
 Infinite animations: returns `true` if an animation is currently playing and NOT being interrupted by `interruptionMode`.  
 Reversible animations: returns `true` if the animation is moving forward OR already at the end. Changing state changes animation direction.
 
-#### isReversible
-Use for toggle animations (e.g., open/close or show/hide).  
-Set `state = true` to play forward and `state = false` to reverse — no need for a separate direction variable.  
-Or use `Trigger()` to toggle the current state.
+#### animationType
+Controls how the animation responds to `state` changes and `Trigger()`.  
+- `Simple`: plays the animation from the beginning. Triggering the animation while it's playing applies `interruptionMode`.  
+- `Reversible`: use for toggle animations (e.g., open/close or show/hide). Set `state = true` to play forward and `state = false` to reverse — no need for a separate direction variable. Or use `Trigger()` to toggle the current state.  
+- `Infinite`: plays the animation infinitely. `cycles` is always -1.  
+- `Overlapping`: triggering the animation while it's playing plays a new animation on top of the playing one. The previous animation continues playing until its end. Use it with additive tweens to blend and accumulate their changes.
 
 
 ### Tween Animation Component
@@ -679,6 +706,8 @@ tween.SetDelay(1f).OnStart(callback)      --> Tween.Delay(1, callback).Chain(twe
 sequence.OnStart(callback)                --> sequence.ChainCallback(callback) // at the beginning of the sequence
 
 trans.DOMove(pos, speed).SetSpeedBased()  --> Tween.PositionAtSpeed(trans, pos, speed)
+DOTween.To(getter, setter, to, speed)     --> Tween.Custom(new TweenSettings<float>(to, speed), setter, getter, useDurationAsSpeed: true)
+  .SetSpeedBased()
 
 textMeshPro.DOText(...)         --> discussions.unity.com/t/926420/159 
                                 --> or see TypewriterAnimatorExample.cs in Demo
@@ -688,7 +717,7 @@ transform.DOJump()              --> discussions.unity.com/t/926420/4
 transform.DOPath()              --> discussions.unity.com/t/926420/158
 transform.DOLookAt()            --> discussions.unity.com/t/926420/189
 tween.SetId()                   --> github.com/KyryloKuzyk/PrimeTween/discussions/26#discussioncomment-7700985
-target.DOBlendable___(...)      --> Tween.___Additive(target, ...) // experimental
+target.DOBlendable___(...)      --> Tween.___Additive(target, ...)
                                 --> github.com/KyryloKuzyk/PrimeTween/discussions/55
 ```
 
