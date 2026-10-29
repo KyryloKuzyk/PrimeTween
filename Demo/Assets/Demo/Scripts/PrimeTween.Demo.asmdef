@@ -1,0 +1,64 @@
+{
+    "name": "PrimeTween.Demo",
+    "rootNamespace": "",
+    "references": [
+        "PrimeTween.Runtime",
+        "Unity.TextMeshPro",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.modules.physics",
+            "expression": "1.0.0",
+            "define": "PHYSICS_MODULE_INSTALLED"
+        },
+        {
+            "name": "com.unity.ugui",
+            "expression": "1.0.0",
+            "define": "UNITY_UGUI_INSTALLED"
+        },
+        {
+            "name": "com.kyrylokuzyk.primetween",
+            "expression": "1.0.0",
+            "define": "PRIME_TWEEN_INSTALLED"
+        },
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "1.0.0",
+            "define": "INPUT_SYSTEM_INSTALLED"
+        },
+        {
+            "name": "com.unity.textmeshpro",
+            "expression": "1.0.0",
+            "define": "TEXT_MESH_PRO_INSTALLED"
+        },
+        {
+            "name": "com.unity.ugui",
+            "expression": "2.0.0",
+            "define": "TEXT_MESH_PRO_INSTALLED"
+        },
+        {
+          "name": "com.kyrylokuzyk.primetween",
+          "expression": "[1.5.2-all]",
+          "define": "PRIME_TWEEN_PRO"
+        },
+        {
+          "name": "com.kyrylokuzyk.primetween",
+          "expression": "[1.5.2-all]",
+          "define": "PRIME_TWEEN_TEXT"
+        },
+        {
+            "name": "com.unity.modules.uielements",
+            "expression": "1.0.0",
+            "define": "UI_ELEMENTS_MODULE_INSTALLED"
+        }
+    ],
+    "noEngineReferences": false
+}

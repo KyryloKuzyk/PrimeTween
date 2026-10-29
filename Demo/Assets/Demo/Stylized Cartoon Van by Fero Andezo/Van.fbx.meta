@@ -1,0 +1,250 @@
+fileFormatVersion: 2
+guid: c9da341d2d3a64cf8b2adc9bba8ec9ec
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: animationAnchor
+    100002: animationAnchor.001
+    100004: animationAnchor.002
+    100006: animationAnchor.003
+    100008: baggage
+    100010: baggage.001
+    100012: door_ext_l
+    100014: door_l
+    100016: door_r
+    100018: exterior
+    100020: exterior.001
+    100022: highlightAnchor
+    100024: highlightAnchor.001
+    100026: highlightAnchor.002
+    100028: highlightAnchor.003
+    100030: highlightAnchor.004
+    100032: highlightAnchor.005
+    100034: interior
+    100036: model
+    100038: sliding_door
+    100040: trunk
+    100042: trunk_model
+    100044: //RootNode
+    100046: Wheels
+    100048: Wheels.001
+    100050: Wheels.002
+    100052: Wheels.003
+    100054: Wheels.004
+    100056: windows
+    100058: wnd
+    100060: wnd_r
+    100062: wnd_sliding_door
+    100064: wnd_trunk
+    100066: exterior.002
+    100068: Headlights
+    400000: animationAnchor
+    400002: animationAnchor.001
+    400004: animationAnchor.002
+    400006: animationAnchor.003
+    400008: baggage
+    400010: baggage.001
+    400012: door_ext_l
+    400014: door_l
+    400016: door_r
+    400018: exterior
+    400020: exterior.001
+    400022: highlightAnchor
+    400024: highlightAnchor.001
+    400026: highlightAnchor.002
+    400028: highlightAnchor.003
+    400030: highlightAnchor.004
+    400032: highlightAnchor.005
+    400034: interior
+    400036: model
+    400038: sliding_door
+    400040: trunk
+    400042: trunk_model
+    400044: //RootNode
+    400046: Wheels
+    400048: Wheels.001
+    400050: Wheels.002
+    400052: Wheels.003
+    400054: Wheels.004
+    400056: windows
+    400058: wnd
+    400060: wnd_r
+    400062: wnd_sliding_door
+    400064: wnd_trunk
+    400066: exterior.002
+    400068: Headlights
+    2300000: baggage.001
+    2300002: door_ext_l
+    2300004: exterior
+    2300006: exterior.001
+    2300008: interior
+    2300010: model
+    2300012: trunk_model
+    2300014: Wheels.001
+    2300016: Wheels.002
+    2300018: Wheels.003
+    2300020: Wheels.004
+    2300022: windows
+    2300024: wnd
+    2300026: wnd_r
+    2300028: wnd_sliding_door
+    2300030: wnd_trunk
+    2300032: exterior.002
+    3300000: baggage.001
+    3300002: door_ext_l
+    3300004: exterior
+    3300006: exterior.001
+    3300008: interior
+    3300010: model
+    3300012: trunk_model
+    3300014: Wheels.001
+    3300016: Wheels.002
+    3300018: Wheels.003
+    3300020: Wheels.004
+    3300022: windows
+    3300024: wnd
+    3300026: wnd_r
+    3300028: wnd_sliding_door
+    3300030: wnd_trunk
+    3300032: exterior.002
+    4300000: windows
+    4300002: exterior
+    4300004: interior
+    4300006: door_ext_l
+    4300008: wnd
+    4300010: model
+    4300012: wnd_sliding_door
+    4300014: baggage.001
+    4300016: exterior.001
+    4300018: wnd_r
+    4300020: Wheels.001
+    4300022: Wheels.002
+    4300024: Wheels.003
+    4300026: Wheels.004
+    4300028: trunk_model
+    4300030: wnd_trunk
+    4300032: exterior.002
+    6400000: baggage.001
+    6400002: door_ext_l
+    6400004: exterior
+    6400006: exterior.001
+    6400008: interior
+    6400010: model
+    6400012: trunk_model
+    6400014: Wheels.001
+    6400016: Wheels.002
+    6400018: Wheels.003
+    6400020: Wheels.004
+    6400022: windows
+    6400024: wnd
+    6400026: wnd_r
+    6400028: wnd_sliding_door
+    6400030: wnd_trunk
+    6400032: exterior.002
+    9500000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Exterior
+    second: {fileID: 2100000, guid: e3fb3841a697f42f18609c8864d87886, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wheel
+    second: {fileID: 2100000, guid: 697445d70f82745a39de4df5f36c514c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Window
+    second: {fileID: 2100000, guid: c6826ed5c575c40c58f681e880fad469, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: interior
+    second: {fileID: 2100000, guid: 004ae8b11200d44ac83be82a3ee1ebb8, type: 2}
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 1
+    useSRGBMaterialColor: 1
+    importVisibility: 0
+    importBlendShapes: 0
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 0
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

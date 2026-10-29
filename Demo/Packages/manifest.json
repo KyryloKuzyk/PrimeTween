@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "com.kyrylokuzyk.primetween": "1.5.2",
+    "com.unity.render-pipelines.universal": "17.6.0",
+    "com.unity.ugui": "2.6.0"
+  },
+  "scopedRegistries": [
+    {
+      "name": "npm",
+      "url": "https://registry.npmjs.org/",
+      "scopes": [
+        "com.kyrylokuzyk"
+      ]
+    }
+  ]
+}

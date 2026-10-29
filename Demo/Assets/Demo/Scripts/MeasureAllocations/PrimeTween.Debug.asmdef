@@ -1,0 +1,27 @@
+{
+    "name": "PrimeTween.Debug",
+    "rootNamespace": "",
+    "references": [
+        "PrimeTween.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.kyrylokuzyk.primetween",
+            "expression": "1.0.0",
+            "define": "PRIME_TWEEN_INSTALLED"
+        },
+        {
+            "name": "com.unity.ugui",
+            "expression": "1.0.0",
+            "define": "UNITY_UGUI_INSTALLED"
+        }
+    ],
+    "noEngineReferences": false
+}
