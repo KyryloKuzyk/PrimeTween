@@ -423,6 +423,14 @@ Sequence.Create(updateType: UpdateType.FixedUpdate);
 ### Install via Unity Package Manager (UPM)
 The Package Manager installation method allows to include PrimeTween in derivative (free and commercial) projects (templates, libraries, GitHub repositories). For more info, see the [license](https://github.com/KyryloKuzyk/PrimeTween?tab=License-1-ov-file).  
 This installation method also keeps the project structure clean.
+
+There are two alternative ways to install the PrimeTween package. Choose one of them:
+
+**Option 1: Asset Store**
+- Get the [UPM version](https://assetstore.unity.com/packages/tools/primetween-high-performance-animations-and-sequences-7148743) of PrimeTween from the Asset Store.
+- Go to 'Window / Package Manager / My Assets' and install the PrimeTween package.
+
+**Option 2: npm registry**
 - Open 'Edit / Project Settings / Package Manager'.
 - Add a new Scoped Registry with Name: `npm` URL: `https://registry.npmjs.org` Scope(s): `com.kyrylokuzyk`.
 - Go to 'Window / Package Manager / Packages / My Registries'.
@@ -432,7 +440,7 @@ Or modify the `Packages/manifest.json` file manually:
 ```json
 {
   "dependencies": {
-    "com.kyrylokuzyk.primetween": "1.5.2",
+    "com.kyrylokuzyk.primetween": "1.5.3",
     ...
   },
   "scopedRegistries": [
@@ -711,7 +719,6 @@ DOTween.To(getter, setter, to, speed)     --> Tween.Custom(new TweenSettings<flo
 
 textMeshPro.DOText(...)         --> discussions.unity.com/t/926420/159 
                                 --> or see TypewriterAnimatorExample.cs in Demo
-                                --> or use textAnimator.TypewriterPlay(), see #text-animator
 text.DOCounter()                --> discussions.unity.com/t/926420/80
 transform.DOJump()              --> discussions.unity.com/t/926420/4
 transform.DOPath()              --> discussions.unity.com/t/926420/158

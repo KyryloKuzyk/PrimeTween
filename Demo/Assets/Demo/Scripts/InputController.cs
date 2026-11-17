@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.InputSystem.Utilities;
 using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 #endif
@@ -15,7 +16,6 @@ namespace PrimeTweenDemo {
                 #if INPUT_SYSTEM_INSTALLED && ENABLE_INPUT_SYSTEM && UNITY_UGUI_INSTALLED
                 var inputModule = gameObject.AddComponent<InputSystemUIInputModule>();
                 inputModule.pointerBehavior = UIPointerBehavior.AllPointersAsIs;
-                EnhancedTouchSupport.Enable();
                 #endif
                 gameObject.SetActive(true);
             } else {
@@ -58,39 +58,77 @@ namespace PrimeTweenDemo {
 
         public static bool GetDown() {
             #if INPUT_SYSTEM_INSTALLED && ENABLE_INPUT_SYSTEM
-            if (Mouse.current != null) {
-                return Mouse.current.leftButton.wasPressedThisFrame;
-            }
             if (isNewInputSystemEnabled) {
-                return Touch.activeTouches.Count > 0 && Touch.activeTouches[0].phase == TouchPhase.Began;
+                var touches = activeTouches;
+                if (touches.Count > 0) {
+                    return touches[0].phase == TouchPhase.Began;
+                }
+                return Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
             }
             #endif
             return Input.GetMouseButtonDown(0);
         }
 
+        /// On touchscreens, a second finger acts as a right click at the first finger's position.
+        public static bool GetRightDown() {
+            #if INPUT_SYSTEM_INSTALLED && ENABLE_INPUT_SYSTEM
+            if (isNewInputSystemEnabled) {
+                var touches = activeTouches;
+                if (touches.Count > 1) {
+                    for (int i = 0; i < touches.Count; i++) {
+                        if (touches[i].phase == TouchPhase.Began) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                return Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame;
+            }
+            #endif
+            if (Input.touchCount > 1) {
+                for (int i = 0; i < Input.touchCount; i++) {
+                    if (Input.GetTouch(i).phase == UnityEngine.TouchPhase.Began) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return Input.GetMouseButtonDown(1);
+        }
+
+        #if INPUT_SYSTEM_INSTALLED && ENABLE_INPUT_SYSTEM
+        // enabled lazily, not on startup: this demo code can be compiled into a user's game, which shouldn't get EnhancedTouch enabled globally
+        static ReadOnlyArray<Touch> activeTouches {
+            get {
+                if (!EnhancedTouchSupport.enabled) {
+                    EnhancedTouchSupport.Enable();
+                }
+                return Touch.activeTouches;
+            }
+        }
+        #endif
+
         public static bool Get() {
             #if INPUT_SYSTEM_INSTALLED && ENABLE_INPUT_SYSTEM
             if (isNewInputSystemEnabled) {
-                if (Mouse.current != null) {
-                    return Mouse.current.leftButton.isPressed;
+                var touches = activeTouches;
+                if (touches.Count > 0) {
+                    return touches[0].isInProgress;
                 }
-                if (Touch.activeTouches.Count == 0) {
-                    return false;
-                }
-                var phase = Touch.activeTouches[0].phase;
-                return phase == TouchPhase.Stationary || phase == TouchPhase.Moved;
+                return Mouse.current != null && Mouse.current.leftButton.isPressed;
             }
             #endif
-            return Input.GetMouseButtonDown(0);
+            return Input.GetMouseButton(0);
         }
 
         public static bool GetUp() {
             #if INPUT_SYSTEM_INSTALLED && ENABLE_INPUT_SYSTEM
             if (isNewInputSystemEnabled) {
-                if (Mouse.current != null) {
-                    return Mouse.current.leftButton.wasReleasedThisFrame;
+                var touches = activeTouches;
+                if (touches.Count > 0) {
+                    return touches[0].phase == TouchPhase.Ended;
                 }
-                return Touch.activeTouches.Count > 0 && Touch.activeTouches[0].phase == TouchPhase.Ended;
+                return Mouse.current != null && Mouse.current.leftButton.wasReleasedThisFrame;
             }
             #endif
             return Input.GetMouseButtonUp(0);
@@ -100,11 +138,11 @@ namespace PrimeTweenDemo {
             get {
                 #if INPUT_SYSTEM_INSTALLED && ENABLE_INPUT_SYSTEM
                 if (isNewInputSystemEnabled) {
-                    if (Mouse.current != null) {
-                        return Mouse.current.position.ReadValue();
+                    var touches = activeTouches;
+                    if (touches.Count > 0) {
+                        return touches[0].screenPosition;
                     }
-                    var activeTouches = Touch.activeTouches;
-                    return activeTouches.Count > 0 ? activeTouches[0].screenPosition : Vector2.zero;
+                    return Mouse.current != null ? Mouse.current.position.ReadValue() : Vector2.zero;
                 }
                 #endif
                 return Input.mousePosition;

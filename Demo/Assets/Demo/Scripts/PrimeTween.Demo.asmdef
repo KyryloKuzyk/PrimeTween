@@ -46,18 +46,13 @@
         },
         {
           "name": "com.kyrylokuzyk.primetween",
-          "expression": "[1.5.2-all]",
+          "expression": "[1.5.3-pro]",
           "define": "PRIME_TWEEN_PRO"
         },
         {
           "name": "com.kyrylokuzyk.primetween",
-          "expression": "[1.5.2-all]",
+          "expression": "[1.5.3-text]",
           "define": "PRIME_TWEEN_TEXT"
-        },
-        {
-            "name": "com.unity.modules.uielements",
-            "expression": "1.0.0",
-            "define": "UI_ELEMENTS_MODULE_INSTALLED"
         }
     ],
     "noEngineReferences": false

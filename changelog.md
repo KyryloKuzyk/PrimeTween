@@ -1,3 +1,7 @@
+## [1.5.3] - 2026-11-17
+### Added
+- Added `TweenAnimation` and `TweenAnimationComponent` to the free version with a limited set of tween types.
+
 ## [1.5.2] - 2026-10-28
 ### Added
 - Unity 7 support.
