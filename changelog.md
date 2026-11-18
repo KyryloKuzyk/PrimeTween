@@ -1,3 +1,9 @@
+## [1.5.3-text] - 2026-11-17
+### Added
+- Initial release of TextAnimator. TextMeshPro (Unity 2021.2+) and UI Toolkit (Unity 6.0006+, PanelRenderer) support.
+- TextAnimator on the Asset Store: https://assetstore.unity.com/packages/slug/415774
+- WebGL demo: https://kyrylokuzyk.github.io/PrimeTween/
+
 ## [1.5.3] - 2026-11-17
 ### Added
 - Added `TweenAnimation` and `TweenAnimationComponent` to the free version with a limited set of tween types.

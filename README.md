@@ -23,6 +23,12 @@ Table of Contents
   - [Tween Animation](#tween-animation)
   - [Tween Animation Component](#tween-animation-component)
   - [Per-object material animations](#per-object-material-animations)
+- [Text Animator](#text-animator)
+  - [Instant preview in the Editor](#instant-preview-in-the-editor)
+  - [Effects](#effects)
+  - [Typewriter](#typewriter)
+  - [Typewriter events](#typewriter-events)
+  - [TextAnimatorSettings](#textanimatorsettings)
 - [Sequencing tweens](#sequencing-tweens)
     + [Sequence](#sequence)
     + [Coroutines](#coroutines)
@@ -556,6 +562,171 @@ Materials can also be animated from the Inspector with TweenAnimation or TweenAn
 
 <img src="Documentation/material_prop_block.png" width="50%">
 
+
+
+
+
+
+Text Animator
+---
+**TextAnimator** brings text to life with per-character **effects** and **typewriter** animations. All animations are written directly in the text with rich text tags, so dialogues can be animated without writing a single line of code. TextAnimator works with **TextMeshPro** (Unity 2021.2+) and **UI Toolkit** (Unity 6000.6+, PanelRenderer).
+
+Get **[TextAnimator](https://assetstore.unity.com/packages/slug/415774)** on the Asset Store. Try the **[WebGL demo](https://kyrylokuzyk.github.io/PrimeTween/)**.
+
+Add the **`TextAnimator`** component to a GameObject with a TextMeshPro or PanelRenderer component, then wrap any part of the text with an effect tag. By default, when the text changes, the typewriter reveals it character by character, and the effects start playing automatically.
+
+```csharp
+[SerializeField] TextAnimator textAnimator;
+
+textAnimator.SetText("Welcome, <gold>traveler</gold>!\n" +
+                     "The <fire>dragon</fire> is <shake>furious</shake>.\n" +
+                     "<wave>Run to the <rainb>rainbow bridge</rainb>!</wave>");
+```
+
+### Instant preview in the Editor
+TextAnimator allows instantly previewing the effects in Edit Mode without entering Play Mode. Just type the text into the TextMeshPro component or UI Toolkit's UI Builder and preview the result **immediately**!  
+
+Tweaking effect presets in [TextAnimatorSettings](#textanimatorsettings) applies the changes automatically for faster iteration.
+
+<img src="Documentation/text_animator_preview.png" width="50%">  
+
+<img src="Documentation/text_animator_effects.gif" width="50%">
+
+### Effects
+Wrap the text with `<effectName>Text with effect</effectName>` to apply the effect preset to a particular section of the text. Effects can be combined by adding multiple nested tags. For example, `<wave><rainb>rainbow bridge</>` combines two effects.  
+
+All effect presets are stored in the [TextAnimatorSettings](#textanimatorsettings) → effectPresets, where you can tweak the existing presets or create your own.
+
+#### Effect parameters
+Effects can be adjusted right in the tag. Use `=` to set a value, or `*` to multiply the preset's value:
+```
+<wave a=0.3>    'a' is amplitude: sets the wave's amplitude to 0.3
+<shake a*2>     shakes twice as strong as the preset
+                'a' applies to offset, scale, rotation, and shake effects
+
+<wave s*3>      's' is speed: the wave plays 3 times faster
+<wave i=0.2>    'i' is phase between characters: each following character lags behind by 20% of the effect's duration
+<shake a*2 s*3> multiple parameters can be combined in one tag
+</>             closes all open effect tags
+```
+
+#### Controlling effects from code
+By default, effects play automatically when the text changes. Disable `autoPlayEffects` to play them manually.
+```csharp
+textAnimator.EffectSetPlaying(true); // play all effects with the default TextAnimatorSettings.effectFadeInDuration
+textAnimator.EffectSetPlaying(true, "shake", fadeDuration: 0f); // instantly play only the '<shake>' effects without the fade-in
+textAnimator.EffectSetPlaying(false); // fade out all effects with the default TextAnimatorSettings.effectFadeOutDuration
+
+// toggle one specific effect tag from textAnimator.parsedTags
+bool isEffectPlaying = textAnimator.EffectIsPlaying(effectTag);
+textAnimator.EffectSetPlaying(!isEffectPlaying, effectTag);
+```
+
+#### EffectCreate(RangeInt range, EffectSettings effectSettings)
+Animates a range of characters from code without a predefined effect preset. The method returns a regular **`Tween`**, so the animation can be added to a Sequence, awaited, or stopped like any other tween.
+```csharp
+// Make the character at 'charIndex' jump once
+Tween jump = textAnimator.EffectCreate(new RangeInt(charIndex, 1), new TextAnimator.EffectSettings(TextAnimator.TweenType.Offset) {
+    endValue = new TweenAnimation.ValueWrapper { vector2 = new Vector2(0f, 0.5f) },
+    duration = 0.15f,
+    ease = Ease.OutQuad,
+    cycles = 2
+});
+```
+
+#### SetCharsVisible(bool isVisible, RangeInt? range = null)
+Instantly shows or hides the whole text or a range of characters without modifying the text itself. Hidden characters still occupy their place in the text layout.
+```csharp
+textAnimator.SetCharsVisible(false); // hide the whole text
+textAnimator.SetCharsVisible(true, new RangeInt(0, 5)); // show the first 5 characters
+```
+
+### Typewriter
+When `autoPlayTypewriter` is enabled (default), the typewriter reveals the text every time it changes. To play the typewriter manually, call **`TypewriterShow()`**. It returns a `Sequence`, so the typewriter can be awaited, used in coroutines, or completed to reveal the whole text instantly.
+```csharp
+async void ShowDialogue(string text) {
+    textAnimator.SetText(text);
+    await textAnimator.TypewriterShow();
+    Debug.Log("The typewriter has finished.");
+}
+
+// Skip the typewriter and reveal the whole text instantly
+textAnimator.typewriterAnimation.Complete();
+
+// Hide the text character by character
+textAnimator.TypewriterHide();
+
+// Hide the text starting from the last character
+textAnimator.TypewriterHide(true);
+```
+
+The typewriter supports different kinds of pauses: between characters, punctuation marks, words, sentences, etc. All typewriter settings can be configured in [TextAnimatorSettings](#textanimatorsettings).  
+
+List of supported typewriter tags:
+```
+<speed=2>               sets the typewriter speed to 2
+<speed*0.5>             multiplies the current speed by 0.5
+<waitfor=1.5>           pauses the typewriter for 1.5 seconds
+<waitfor>               pauses the typewriter for 1 second
+<waitinput>             waits until the player presses any key or button
+<waitinput timeout=3>   waits for any input, but no longer than 3 seconds
+<waitinput=submit>      waits for an InputActionReference named 'submit' defined in TextAnimatorSettings.waitInputActions (Input System only)
+{pop}text{/pop}         overrides the TextAnimatorSettings.defaultTypewriterShowPreset of the wrapped characters with the 'pop' preset
+{up a*10 s*0.5}text{/up}  preset tags support the 'a' and 's' effect parameters: 10 times the amplitude, half the speed
+{#up}text{/#up}         overrides the TextAnimatorSettings.defaultTypewriterHidePreset of the wrapped characters with the 'up' preset
+{/}                     closes all typewriter show preset tags
+{/#}                    closes all typewriter hide preset tags
+<?event>                custom typewriter event, see TypewriterGetNextTag(out RichTextTag textTag)
+<?event s=Hello f=1.5>  custom typewriter event with any number of custom parameters
+
+<speed>, <waitfor>, and <waitinput> only apply when the typewriter shows the text.
+```
+
+
+### Typewriter events
+Event tags like **`<?eventName>`** let you run custom code when the typewriter reaches a specific place in the text: shake the camera, play a sound, etc. Process the events in `Update()` with **`TypewriterGetNextTag()`**. Events support any number of custom parameters.
+```csharp
+// textAnimator.SetText("Watch out!<?shakeCamera strength=0.5> The bridge is collapsing!");
+
+void Update() {
+    while (textAnimator.TypewriterGetNextTag(out var textTag)) {
+        if (textTag.type == TextAnimator.RichTextTagType.Event && textTag.name.SequenceEqual("shakeCamera")) {
+            foreach (var parameter in textTag.parameters) {
+                if (parameter.name.SequenceEqual("strength") && parameter.floatValue is float strength) {
+                    Tween.ShakeCamera(Camera.main, strength);
+                    break;
+                }
+            }
+        }
+    }
+}
+```
+
+Use **`TypewriterGetCurrentCount()`** to know how many characters the typewriter has revealed. For example, to play a typing sound:
+```csharp
+int prevCharCount;
+
+void Update() {
+    int charCount = textAnimator.TypewriterGetCurrentCount();
+    if (charCount != prevCharCount) {
+        prevCharCount = charCount;
+        typingSound.Play();
+    }
+}
+```
+
+### TextAnimatorSettings
+Effect and typewriter presets are stored in the **TextAnimatorSettings** prefab, which is created at `Assets/Plugins/PrimeTween/TextAnimatorSettings.prefab` when a TextAnimator is added to a scene for the first time. Customize the prefab directly, or create a prefab variant with 'Assets/Create/Prefab Variant' to give some texts a different style. A preset can contain multiple effects that combine and play simultaneously.
+
+Adding a new effect or typewriter preset is as simple as pressing the "+" button in the Inspector: no need to write custom scripts or recompile any code.
+- `phaseBetweenChars`: delays the animation of each following character, producing a wave that travels along the text.
+- `randomPhaseBetweenChars`, `phaseBetweenCharsRange`: picks the delay between every two neighboring characters randomly from the from..to range, producing an irregular wave.
+- `charVertexPhaseHorizontal/Vertical`: delays the animation between the vertices of a character, so the character deforms instead of moving as a whole. Color animations get a per-character gradient.
+- `perVertexStrength`: the strength of the effect for each of the four character vertices, for example, to create a shearing effect.
+- `pivot`, `useQuadPivot`: the pivot to scale and rotate characters around.
+
+<img src="Documentation/text_animator_settings.png" width="50%">
+
 Migrating from DOTween to PrimeTween
 ---
 PrimeTween and DOTween don't conflict with each other and can be used in one project. You can check out all PrimeTween's performance benefits in your current DOTween project without breaking anything.
@@ -719,6 +890,7 @@ DOTween.To(getter, setter, to, speed)     --> Tween.Custom(new TweenSettings<flo
 
 textMeshPro.DOText(...)         --> discussions.unity.com/t/926420/159 
                                 --> or see TypewriterAnimatorExample.cs in Demo
+                                --> or use textAnimator.TypewriterShow(), see #text-animator
 text.DOCounter()                --> discussions.unity.com/t/926420/80
 transform.DOJump()              --> discussions.unity.com/t/926420/4
 transform.DOPath()              --> discussions.unity.com/t/926420/158
